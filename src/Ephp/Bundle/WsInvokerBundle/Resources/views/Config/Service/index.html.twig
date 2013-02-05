@@ -1,0 +1,39 @@
+{% extends 'EphpWsInvokerBundle::layout.html.twig' %}
+
+{% block admin_content %}
+<h1>Config\Service list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Actions</th>
+            <th>Name</th>
+            <th>Method</th>
+            <th>Uri</th>
+            <th>Last Call</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>
+                <a href="{{ path('admin_service_show', { 'id': entity.id }) }}">show</a><br/>
+                <a href="{{ path('admin_service_edit', { 'id': entity.id }) }}">edit</a>
+            </td>
+            <td>{{ entity.name }}<br/><small>on "{{ entity.host.name }}"</small></td>
+            <td>{{ entity.method }}</td>
+            <td>{{ entity.uri }}</td>
+            <td>{% if entity.laststatuscode > 0 %}{{ entity.lastcallat|date('Y-m-d H:i:s') }}<br/>Status Code: {{ entity.laststatuscode }}{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('admin_service_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+{% endblock %}

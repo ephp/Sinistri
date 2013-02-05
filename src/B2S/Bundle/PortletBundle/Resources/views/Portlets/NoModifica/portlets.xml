@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <portlets>
+        <portlet layout="default">
+            <nome>Disabilita pulsanti</nome>
+            <descrizione>Disabilita i pulsanti di modifica e i todo</descrizione>
+            <pubblico>0</pubblico>
+            <privato>1</privato>
+            <aree>
+                <area>Profilo</area>
+                <area>Showroom</area>
+            </aree>
+        </portlet>
+    </portlets>
+</data>

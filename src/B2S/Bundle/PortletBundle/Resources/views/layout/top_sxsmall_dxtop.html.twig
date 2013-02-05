@@ -1,0 +1,27 @@
+<script type="text/javascript">
+    var portlets = [];
+</script>    
+<section class=" clearfix" >
+    {% if portlets.pc_top is defined %}
+        <section class="no-margin clearfix" id="pc_top">
+            {% for portlet in portlets.pc_top %}
+                {% render portlet.action with portlet.params %}
+            {% endfor %}
+        </section>
+    {% endif %}
+    <section class="coldx left no-margin" id="pc_sx">
+        {% if portlets.pc_sx is defined %}
+            {% for portlet in portlets.pc_sx %}
+                {% render portlet.action with portlet.params %}
+            {% endfor %}
+        {% endif %}
+    </section>
+    <section class="colsx right no-margin" id="pc_dx">
+        {% if portlets.pc_dx is defined %}
+            {% for portlet in portlets.pc_dx %}
+                {% render portlet.action with portlet.params %}
+            {% endfor %}
+        {% endif %}
+    </section>
+</section>
+{% include 'B2SPortletBundle:layout:js.html.twig' %}       

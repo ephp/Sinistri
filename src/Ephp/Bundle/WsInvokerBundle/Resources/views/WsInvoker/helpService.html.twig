@@ -1,0 +1,71 @@
+{% extends 'BringOutWebBundle::admin.html.twig' %}
+
+{% block content %}
+<h1>{{ service.name }}</h1>
+<h2>Descrizione del servizio</h2>
+<p>{{ service.description }}</p>
+<h2>URI</h2>
+<p>{{ service.uri }}</p>
+<h2>Method</h2>
+<p>{{ service.method }}</p>
+{% if(service.header) %}
+    <h2>Header</h2>
+    <p><pre><tt>{{ service.header }}</tt></pre></p>
+{% endif %}
+{% if(service.example) %}
+    <h2>PostData atteso</h2>
+    <p><pre><tt>{{ service.example }}</tt></pre></p>
+{% endif %}
+{% if(service.fields.count() > 0) %}
+    <h2>Descrizione parametri</h2>
+    <p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parametro</th>
+                    <th>Obbligatorio</th>
+                    <th>Descrizione</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for field in service.fields %}
+                    <tr>
+                        <td>{{ field.field }}</td>
+                        <td>{{ field.required }}</td>
+                        <td>{{ field.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </p>
+{% endif %}
+{% if(service.output) %}
+    <h2>Response 200</h2>
+    <p><pre><tt>{{ service.output }}</tt></pre></p>
+{% endif %}
+{% if(service.outFields.count() > 0) %}
+    <h2>Descrizione output</h2>
+    <p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parametro</th>
+                    <th>Presente</th>
+                    <th>Descrizione</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for field in service.outFields %}
+                    <tr>
+                        <td>{{ field.field }}</td>
+                        <td>{{ field.required }}</td>
+                        <td>{{ field.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </p>
+{% endif %}
+<a href="{{ path('help', { 'group_name': service.group.name }) }}">Torna indietro</a>
+{% endblock %}
+

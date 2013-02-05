@@ -1,13 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <title>{% block title %}Sinistri{% endblock %}</title>
+        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/ephpsinistri/css/ephp.css') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div id="symfony-wrapper">
+            <div id="symfony-header">
+                <img src="{{ asset('bundles/ephpsinistri/images/logo.png') }}" alt="Symfony logo" />
+            </div>
+
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-message">
+                    <em>Notice</em>: {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+            {% block content_header %}
+                <ul id="menu">
+                    <li><a href="#">Importa Tabellone</a></li>
+                </ul>
+
+                <div style="clear: both"></div>
+            {% endblock %}
+
+            <div class="symfony-content">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+        </div>
     </body>
 </html>

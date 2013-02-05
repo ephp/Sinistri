@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    {% if tab is not defined %}
+        {% set tab = 'this' %}
+    {% endif %}
+    {% if ready is defined and ready %}
+        $(document).ready(function() {
+            attivaPortlets(portlets, '{{tab}}');
+        });
+    {% else %}
+        attivaPortlets(portlets, '{{tab}}');
+    {% endif %}
+</script>    

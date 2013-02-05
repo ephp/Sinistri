@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Scheda
+{% endblock %}
+
+{% block content %}
+<h1>Scheda</h1>
+
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Anno</th>
+            <th>Dasc</th>
+            <th>Tpa</th>
+            <th>Claimant</th>
+            <th>Soi</th>
+            <th>First_reserve</th>
+            <th>Amount_reserved</th>
+            <th>Sa</th>
+            <th>Offerta_nostra</th>
+            <th>Offerta_loro</th>
+            <th>Recupero_offerta_nostra</th>
+            <th>Recupero_offerta_loro</th>
+            <th>Note</th>
+            <th>Operazioni</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.anno }}</td>
+            <td>{% if entity.dasc %}{{ entity.dasc|date('Y-m-d H:i:s') }}{% endif%}</td>
+            <td>{{ entity.tpa }}</td>
+            <td>{{ entity.claimant }}</td>
+            <td>{{ entity.soi }}</td>
+            <td>{{ entity.firstreserve }}</td>
+            <td>{{ entity.amountreserved }}</td>
+            <td>{{ entity.sa }}</td>
+            <td>{{ entity.offertanostra }}</td>
+            <td>{{ entity.offertaloro }}</td>
+            <td>{{ entity.recuperooffertanostra }}</td>
+            <td>{{ entity.recuperooffertaloro }}</td>
+            <td>{{ entity.note }}</td>
+            <td>
+                    <button type="button">
+                        <a href="{{ path('tabellone_show', { 'id': entity.id }) }}">show</a>
+                    </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

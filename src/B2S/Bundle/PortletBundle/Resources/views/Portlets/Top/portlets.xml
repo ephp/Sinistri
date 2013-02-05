@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <portlets>
+        <portlet layout="default">
+            <nome>Intestazione Portlet Container</nome>
+            <descrizione>Mostra barra grigia</descrizione>
+            <pubblico>1</pubblico>
+            <privato>0</privato>
+            <aree>
+                <area>Profilo</area>
+                <area>Showroom</area>
+            </aree>
+        </portlet>
+    </portlets>
+</data>

@@ -1,0 +1,82 @@
+{% extends 'EphpWsInvokerBundle::layout.html.twig' %}
+
+{% block admin_content %}
+<hgroup>
+    <h1>Sessione {{ session.id }}</h1>
+    <h2>Utente {{ session.username }}</h2>
+</hgroup>
+<a href="{{ path('analyze_root') }}">Torna indietro</a>
+{% for call in session.calls %}
+<div style="margin-bottom: 20px;">
+    <hgroup>
+        <h2>Chiamata: {{ call.id }} - {% if call.service %} {{ call.service.name }} {% else %} Noname {% endif %}</h2>
+    </hgroup>
+    <div style="display: table-row">
+        <div style="width: 300px; float: left; font-weight: bold">Data richiesta</div>
+        <div style="width: 300px; float: left; font-weight: bold">Durata</div>
+        <div style="width: 200px; float: left; font-weight: bold"><a href="javascript: $('#dettagli_{{ call.id }}').toggle()">Mostra dettagli</a></div>
+        <div style="width: 300px; float: left">{{ call.sendedAt|date('d-m-Y G:i:s') }}</div>
+        <div style="width: 300px; float: left">{{ call.duration }} secondi</div>
+    </div>
+    <dl style="margin-bottom: 5px; display: none" id="dettagli_{{ call.id }}">
+        <dt style="font-weight: bold">Request</dt>
+        <dd><pre style="background-color: #eeeeee; padding:5px;">{{ call.request }}</pre></dt>
+        <dt style="font-weight: bold">Response</dt>
+        <dd><pre style="background-color: #eeeeee; padding:5px;">{{ call.response }}</pre></dd>
+    </dl>
+
+    <table>
+        <tr>
+            <th>Dettagli</th>
+            <th>Url</th>
+            <th>Method</th>
+            <th>Invio</th>
+            <th>Status Code</th>
+            <th>Ricevuto</th>
+            <th>Durata</th>
+        </tr>
+    {% for request in call.requests %}
+    <tr>
+        <td><a href="javascript: $('#dett_{{ request.id }}').toggle()">{{ request.id }}</a></td>
+        <td>{{ request.url }}</td>
+        <td>{{ request.method }}</td>
+        <td>{{ request.sendedAt|date('d-m-Y G:i:s') }}</td>
+        <td>{{ request.response.statusCode }}</td>
+        <td>{{ request.response.receivedAt|date('d-m-Y G:i:s') }}</td>
+        <td>{{ request.response.time }}</td>
+    </tr>
+    <tr style="display: none" id="dett_{{ request.id }}">
+        <td colspan="7">
+            <table>
+                <tr>
+                    <th>&nbsp;</th>
+        {% if request.xml != null %}                   
+                    <th>Request</th>
+        {% endif %}
+                    <th>Response</th>
+                </tr>
+        {% if request.response.header != null %}                   
+                <tr>
+                    <th>Header</th>
+            {% if request.xml != null %}                   
+                    <td><tt>{{ request.header|nl2br }}</tt></td>
+            {% endif %}
+                    <td><pre>{{ request.response.header }}</pre></td>
+                </tr>
+        {% endif %}
+                <tr>
+                    <th>Body</th>
+        {% if request.xml != null %}                   
+                    <td><pre>{{ request.xml }}</pre></td>
+        {% endif %}
+                    <td><pre>{{ request.response.xml }}</pre></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endfor %}
+{% endblock %}
+

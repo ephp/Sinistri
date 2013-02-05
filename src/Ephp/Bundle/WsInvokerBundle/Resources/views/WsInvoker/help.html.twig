@@ -1,0 +1,11 @@
+{% extends 'BringOutWebBundle::admin.html.twig' %}
+
+{% block content %}
+<h1>Servizi {{ group }}</h1>
+<ul>
+{% for service in services %}
+    <li><a href="{{ path('help_service', { 'service_name': service.name }) }}">{{ service.name }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
+

@@ -1,0 +1,37 @@
+{% extends 'EphpWsInvokerBundle::layout.html.twig' %}
+
+{% block admin_content %}
+<h1>Help\Service list</h1>
+
+<ul>
+    <li>
+        <a href="{{ path('admin_help_new') }}">
+            Nuovo servizio
+        </a>
+    </li>
+</ul>
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Actions</th>
+            <th>Gruppo</th>
+            <th>Nome</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>
+                <a href="{{ path('admin_help_show', { 'id': entity.id }) }}">show</a>
+                <a href="{{ path('admin_help_edit', { 'id': entity.id }) }}">edit</a>
+                <a href="{{ path('admin_help_field', { 'service': entity.id }) }}">fields</a>
+                <a href="{{ path('admin_help_output', { 'service': entity.id }) }}">output</a>
+            </td>
+            <td>{{ entity.group.name }}</td>
+            <td>{{ entity.name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

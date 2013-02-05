@@ -1,0 +1,19 @@
+{% extends 'BringOutWebBundle::admin.html.twig' %}
+
+{% block title %}BringOut - Admin{% endblock %}
+
+{% block content %}
+        <nav class="hmenu">
+            <ul>
+                <li><a href="{{ path('analyze_root') }}">Analisi Log</a></li>
+                <li><a href="{{ path('admin_group') }}">Admin Gruppi</a></li>
+                <li><a href="{{ path('admin_host') }}">Admin Host</a></li>
+                <li><a href="{{ path('admin_service') }}">Admin Service</a></li>
+                <li><a href="{{ path('admin_help') }}">Admin Help</a></li>
+            </ul>
+        </nav>
+    <div class="admincontent">
+            {% block admin_content %}
+            {% endblock %}
+    </div>
+{% endblock %}

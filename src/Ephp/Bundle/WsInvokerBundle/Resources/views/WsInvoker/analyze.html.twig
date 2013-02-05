@@ -1,0 +1,22 @@
+{% extends 'EphpWsInvokerBundle::layout.html.twig' %}
+
+{% block admin_content %}
+<h1>Sessioni</h1>
+<table>
+    <tr>
+        <th>Dettagli</th>
+        <th>Utente</th>
+        <th>Messaggio</th>
+        <th>Scadenza</th>
+    </tr>
+{% for session in sessions %}
+    <tr>
+        <td><a href="{{ path('analyze_session', { 'session_id': session.id }) }}">{{ session.id }}</a></td>
+        <td>{{ session.username }}</td>
+        <td>{{ session.message }}</td>
+        <td>{{ session.expiredAt|date('d-m-Y G:i:s') }}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+

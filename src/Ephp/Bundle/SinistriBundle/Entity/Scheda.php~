@@ -1,0 +1,139 @@
+<?php
+
+namespace Ephp\Bundle\SinistriBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Scheda
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Ephp\Bundle\SinistriBundle\Entity\SchedaRepository")
+ */
+class Scheda
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Ospedale")
+     * @ORM\JoinColumn(name="ospedale_id", referencedColumnName="id")
+     */
+    private $ospedale;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="anno", type="integer")
+     */
+    private $anno;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Gestore")
+     * @ORM\JoinColumn(name="gestore_id", referencedColumnName="id")
+     */
+    private $gestore;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dasc", type="date", nullable=true)
+     */
+    private $dasc;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tpa", type="integer")
+     */
+    private $tpa;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="claimant", type="string", length=255)
+     */
+    private $claimant;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="soi", type="string", length=1, nullable=true)
+     */
+    private $soi;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="first_reserve", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $first_reserve;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="amount_reserved", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $amount_reserved;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Stato")
+     * @ORM\JoinColumn(name="stato_id", referencedColumnName="id")
+     */
+    private $stato;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="sa", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $sa;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="offerta_nostra", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $offerta_nostra;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="offerta_loro", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $offerta_loro;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="recupero_offerta_nostra", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $recupero_offerta_nostra;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="recupero_offerta_loro", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $recupero_offerta_loro;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Priorita")
+     * @ORM\JoinColumn(name="priorita_id", referencedColumnName="id")
+     */
+    private $priorita;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
+
+}

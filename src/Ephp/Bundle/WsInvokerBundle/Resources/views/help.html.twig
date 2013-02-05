@@ -1,0 +1,15 @@
+{% extends 'BringOutWebBundle::admin.html.twig' %}
+
+{% block title %}BringOut - Admin{% endblock %}
+
+{% block content %}
+        <nav>
+            <ul id="menu">
+                <li><a href="{{ path('help', { 'group_name': 'I18N' } ) }}">I18N</a></li>{% extends 'BringOutWebBundle::admin.html.twig' %}
+            </ul>
+        </nav>
+    <div class="symfony-content">
+            {% block admin_content %}
+            {% endblock %}
+    </div>
+{% endblock %}

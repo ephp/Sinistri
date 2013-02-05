@@ -1,0 +1,38 @@
+{% extends 'EphpWsInvokerBundle::layout.html.twig' %}
+
+{% block admin_content %}
+<h1>Config\Host</h1>
+<ul>
+    <li>
+        <a href="{{ path('admin_host_new') }}">
+            Aggiungi Host
+        </a>
+    </li>
+</ul>
+
+<table class="records_list" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Operazioni</th>
+            <th>Name</th>
+            <th>Host</th>
+            <th>Note</th>
+            <th>Last Call</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>
+                <a href="{{ path('admin_host_edit', { 'id': entity.id }) }}">Modifica</a>
+            </td>
+            <td>{{ entity.name }}</td>
+            <td>{{ entity.host }}</td>
+            <td>{{ entity.note }}</td>
+            <td>{% if entity.laststatuscode > 0 %}{{ entity.lastcallat|date('Y-m-d H:i:s') }}<br/>Status Code: {{ entity.laststatuscode }}{% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
