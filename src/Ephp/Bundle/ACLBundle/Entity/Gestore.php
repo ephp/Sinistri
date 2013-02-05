@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Gestore
  *
  * @ORM\Table(name="acl_gestori")
- * @ORM\Entity(repositoryClass="Ephp\Bundle\SinistriBundle\Entity\GestoreRepository")
+ * @ORM\Entity(repositoryClass="Ephp\Bundle\ACLBundle\Entity\GestoreRepository")
  */
 class Gestore
 {

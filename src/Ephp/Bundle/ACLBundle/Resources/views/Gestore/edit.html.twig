@@ -1,0 +1,30 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Gestore
+{% endblock %}
+
+{% block content %}
+<h1>Modifica Gestore</h1>
+
+<form action="{{ path('gestori_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    {{ form_widget(edit_form) }}
+    <p>
+        <button type="submit">Salva</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('gestori') }}">
+            Torna indietro
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('gestori_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Elimina</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

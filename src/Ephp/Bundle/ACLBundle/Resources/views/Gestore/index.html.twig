@@ -1,0 +1,38 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Gestori
+{% endblock %}
+
+{% block content %}
+<h1>Gestori</h1>
+
+<button type="button">
+    <a href="{{ path('gestori_new') }}">Nuovo Gestore</a>
+</button>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Sigla</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Operazioni</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.sigla }}</td>
+            <td>{{ entity.nome }}</td>
+            <td>{{ entity.email }}</td>
+            <td>
+                <button type="button">
+                    <a href="{{ path('gestori_edit', { 'id': entity.id }) }}">Modifica</a>
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

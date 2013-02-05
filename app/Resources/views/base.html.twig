@@ -21,18 +21,20 @@
     <body>
         <div id="symfony-wrapper">
             <div id="symfony-header">
-                <img src="{{ asset('bundles/ephpsinistri/images/logo.png') }}" alt="Symfony logo" />
+                <a href="{{ path('home') }}"><img src="{{ asset('bundles/ephpsinistri/images/logo.png') }}" alt="JFclaims logo" /></a>
             </div>
 
             {% for flashMessage in app.session.flashbag.get('notice') %}
                 <div class="flash-message">
-                    <em>Notice</em>: {{ flashMessage }}
+                    <em>Attenzione</em>: {{ flashMessage }}
                 </div>
             {% endfor %}
 
             {% block content_header %}
                 {% if app.user %}
                     <ul class="menu">
+                        <li><a href="{{ path('gestori') }}">Gestori</a></li>
+                        <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
                         <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
                     </ul>
                 {% endif %}
@@ -45,6 +47,10 @@
                         <h1>Benvenuto su JF Claims</h1>
                         <p>Il portale è in fase di sviluppo... ma cosa c'è per ora?</p>
                         <dl>
+                            <dt>Gestori</dt>
+                            <dd>Inserisci e modifica i gestori delle pratiche</dd>
+                            <dt>Ospedali</dt>
+                            <dd>Inserisci e modifica gli ospedali</dd>
                             <dt>Tabellone</dt>
                             <dd>Visualizza e filtra per Ospedale, Anno e Gestore le pratiche</dd>
                             <dt>Importazione tabellone da csv di Google Drive</dt>

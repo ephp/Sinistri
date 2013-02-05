@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Ospedale
+{% endblock %}
+
+{% block content %}
+<h1>Nuovo Ospedale</h1>
+
+<form action="{{ path('ospedali_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Salva</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('ospedali') }}">
+            Torna indietro
+        </a>
+    </li>
+</ul>
+{% endblock %}

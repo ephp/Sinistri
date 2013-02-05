@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Gestore
+{% endblock %}
+
+{% block content %}
+<h1>Nuovo Gestore</h1>
+
+<form action="{{ path('gestori_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Salva</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('gestori') }}">
+            Torna indietro
+        </a>
+    </li>
+</ul>
+{% endblock %}

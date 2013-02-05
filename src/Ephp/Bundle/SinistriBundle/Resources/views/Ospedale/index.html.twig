@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Ospedali
+{% endblock %}
+
+{% block content %}
+<h1>Ospedali</h1>
+
+<button type="button">
+    <a href="{{ path('ospedali_new') }}">Nuovo Ospedale</a>
+</button>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Sigla</th>
+            <th>Nome</th>
+            <th>Operazioni</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.sigla }}</td>
+            <td>{{ entity.nome }}</td>
+            <td>
+                <button type="button">
+                    <a href="{{ path('ospedali_edit', { 'id': entity.id }) }}">edit</a>
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
