@@ -14,10 +14,16 @@ security:
         in_memory:
             memory:
                 users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    jfclaims:  { password: aleantasc, roles: [ 'ROLE_USER' ] }
+                    eph: { password: livorno, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
+        basic:
+            pattern: ^/
+            provider: in_memory
+            stateless: true
+            http_basic:
+                realm: "JFC Area"      
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
