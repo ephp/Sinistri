@@ -127,16 +127,6 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
-     * @Route("-upload", name="tabellone_upload")
-     * @Template()
-     */
-    public function uploadAction() {
-        return array();
-    }
-
-    /**
-     * Lists all Scheda entities.
-     *
      * @Route("-uploadSingle", name="tabellone_upload_single")
      * @Template("EphpDragDropBundle:DragDrop:single.html.php")
      */
@@ -147,7 +137,17 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
-     * @Route("-import", name="tabellone_import", defaults={"_format"="json"})
+     * @Route("-upload", name="tabellone_upload_drive")
+     * @Template()
+     */
+    public function uploadAction() {
+        return array();
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-import-drive", name="tabellone_import_drive", defaults={"_format"="json"})
      * @Template()
      */
     public function importAction() {

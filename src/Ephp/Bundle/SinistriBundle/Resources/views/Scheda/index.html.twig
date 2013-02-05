@@ -12,11 +12,14 @@
 {% endif %}
 {% block title %}{{titolo}}{% endblock %}
 
+{% block header %}
+    {% if gestore is not defined %}
+        <button><a href="{{ path('tabellone_upload_drive') }}">Importa da Google Drive</a></button>
+    {% endif %}
+{% endblock %}
+
 {% block content_header %}
     <h2>Ospedali</h2>
-    {% if gestore is not defined %}
-        <button><a href="{{ path('tabellone_upload') }}">Importa Tabellone</a></button>
-    {% endif %}
     <div style="clear: both"></div>
     <ul class="menu">
         {% if gestore is defined %}

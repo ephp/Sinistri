@@ -3,7 +3,7 @@
 {% block content %}
 <form action="#" method="post" class="p_input" id="fileupload" onsubmit="return false;">
     <script type="text/javascript">
-        var url_import_tabellone = '{{ path('tabellone_import') }}';
+        var url_import_tabellone = '{{ path('tabellone_import_drive') }}';
         var url_tabellone = '{{ path('tabellone') }}';
         function singleUploadDoneCB(file) {
             $('#documento_tmb').html('Caricamento in corso<br/>');
