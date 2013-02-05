@@ -31,15 +31,26 @@
             {% endfor %}
 
             {% block content_header %}
-                <ul id="menu">
-                    <li><a href="{{ path('tabellone_upload') }}">Importa Tabellone</a></li>
-                </ul>
-
+                {% if app.user %}
+                    <ul class="menu">
+                        <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
+                    </ul>
+                {% endif %}
                 <div style="clear: both"></div>
             {% endblock %}
 
             <div class="symfony-content">
                 {% block content %}
+                    {% if app.user %}
+                        <h1>Benvenuto su JF Claims</h1>
+                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora?</p>
+                        <dl>
+                            <dt>Tabellone</dt>
+                            <dd>Visualizza e filtra per Ospedale, Anno e Gestore le pratiche</dd>
+                            <dt>Importazione tabellone da csv di Google Drive</dt>
+                            <dd>È possibile importare i dati inseriti sui fogli di lavoro di Google Drive in modo massivo e veloce, usando semplicemente il Drag & Drop del file all'interno del sito.</dd>
+                        </dl>
+                    {% endif %}
                 {% endblock %}
             </div>
 
