@@ -292,3 +292,57 @@ ul#menu
     margin-right: 10px;
     display: inline;
 }
+
+ul.menu
+{
+    float: left;
+    margin-bottom: 20px;
+    padding-left: 0;
+}
+
+.menu li:after { 
+    content: " | "; 
+}
+
+.menu li:last-child:after { 
+    content: ""; 
+}
+
+.menu li
+{
+    padding-left: 0;
+    margin-right: 10px;
+    display: inline;
+}
+
+.clearer 
+{
+    line-height: 0px;
+    height: 0px;
+    margin: 0;
+    font-size: 0;
+    clear: both;
+}
+
+table.records_list {
+    width: 100%;
+}
+
+.records_list tr {
+    border-right: 1px solid #222222;
+    border-bottom: 1px solid #222222;
+}
+.records_list th {
+    background-color: #222222;
+    color: #EEEEEE;
+    margin: 2px;
+    padding: 2px;
+    border-left: 1px solid #222222;
+}
+.records_list td {
+    background-color: #EEEEEE;
+    color: #222222;
+    margin: 2px;
+    padding: 2px;
+    border-left: 1px solid #222222;
+}

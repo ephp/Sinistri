@@ -1,14 +1,15 @@
 <?php if(false): ?>
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('css/FileUpload/bootstrap.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('css/FileUpload/bootstrap-image-gallery.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('css/FileUpload/jquery.fileupload-ui.css') ?>">
-<script src="<?php echo $view['assets']->getUrl('js/jQuery/jquery.ui.widget.js') ?>"></script>
-<script src="http://blueimp.github.com/JavaScript-Templates/tmpl.min.js"></script>
-<script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
-<script src="//<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.iframe-transport.js') ?>"></script>
-<script src="//<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.fileupload.js') ?>"></script>
-<script src="//<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.fileupload-ui.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.xdr-transport.js') ?>"></script>
+<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('ephpdragdrop/css/FileUpload/bootstrap.min.css') ?>">
+<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('ephpdragdrop/css/FileUpload/bootstrap-image-gallery.min.css') ?>">
+<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('ephpdragdrop/css/FileUpload/jquery.fileupload-ui.css') ?>">
+<script src="<?php echo $view['assets']->getUrl('/js/jquery/jquery.ui.widget.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/blueimp/tmpl.min.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/blueimp/load-image.min.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.iframe-transport.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.fileupload.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.fileupload-fp.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.fileupload-ui.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/locale.js') ?>"></script>
 <?php endif; ?>
 <style type="text/css">
     

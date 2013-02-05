@@ -1,0 +1,26 @@
+{% extends "::base.html.twig" %}
+
+{% block content %}
+<form action="#" method="post" class="p_input" id="fileupload" onsubmit="return false;">
+    <script type="text/javascript">
+        var url_import_tabellone = '{{ path('tabellone_import') }}';
+        var url_tabellone = '{{ path('tabellone') }}';
+        function singleUploadDoneCB(file) {
+            $('#documento_tmb').html('Caricamento in corso<br/>');
+            $.post(url_import_tabellone, {file: file}, function(out) {
+                $('#documento_tmb').append('Sono stati importate '+out.schede_aggiunte+' schede e aggiorante'+out.schede_aggiornate+' schede<br/>');
+                window.location = url_tabellone;
+            });
+        }
+    </script>
+    <input type="hidden" id="documento" name="documento" value="" />
+    {% render 'EphpSinistriBundle:Scheda:uploadSingle' with {
+                'field': 'documento',
+                'values': '',
+                'dir': 'import_tabellone', 
+                'mimetype': '/(\\.|\\/)(csv)$/i'
+    } %}
+</form>
+{% endblock %}
+
+

@@ -1,55 +1,173 @@
 {% extends '::base.html.twig' %}
+{% set titolo = 'Tabellone' %}
+{% set route = 'tabellone' %}
+{% if ospedale != '' %}
+    {% set titolo = ospedale.nome %}
+{% endif %}
+{% if anno != '' %}
+    {% set titolo = titolo ~ ' 20' ~ anno %}
+{% endif %}
+{% if gestore is defined %}
+    {% set titolo = gestore.nome ~ ' | ' ~ titolo %}
+{% endif %}
+{% block title %}{{titolo}}{% endblock %}
 
-{% block title %}
-Scheda
+{% block content_header %}
+    <h2>Ospedali</h2>
+    {% if gestore is not defined %}
+        <button><a href="{{ path('tabellone_upload') }}">Importa Tabellone</a></button>
+    {% endif %}
+    <div style="clear: both"></div>
+    <ul class="menu">
+        {% if gestore is defined %}
+            <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tutti</a></li>
+        {% else %}
+            <li><a href="{{ path('tabellone') }}">Tutti</a></li>
+        {% endif %}
+        {% for osp in ospedali %}
+            {% if gestore is defined %}
+                <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': osp.sigla}) }}">{{osp.nome}}</a></li>
+            {% else %}
+                <li><a href="{{ path('tabellone', {'ospedale': osp.sigla}) }}">{{osp.nome}}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% if gestori is defined %}
+        <div style="clear: both"></div>
+        <h2>Gestori</h2>
+        <div style="clear: both"></div>
+        <ul class="menu">
+            <li><a href="{{ path('tabellone') }}">Tutti</a></li>
+            {% for ges in gestori %}
+                <li><a href="{{ path('tabellone_gestore', {'gestore': ges.sigla}) }}">{{ges.nome}}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div style="clear: both"></div>
+
 {% endblock %}
 
 {% block content %}
-<h1>Scheda</h1>
+<h1>{{titolo}}</h1>
 
-
+{% set colspan = 7 %}
+<button class="na"><a href="javascript:$('.na').toggle()">Nascondi non assegnati</a></button>
+<button class="na" style="display: none"><a href="javascript:$('.na').toggle()">Mostra non assegnati</a></button>
+<button class="ng"><a href="javascript:$('.ng').toggle()">Nascondi senza gestore</a></button>
+<button class="ng" style="display: none"><a href="javascript:$('.ng').toggle()">Mostra senza gestore</a></button>
+<button class="cg"><a href="javascript:$('.cg').toggle()">Nascondi con gestore</a></button>
+<button class="cg" style="display: none"><a href="javascript:$('.cg').toggle()">Mostra con gestore</a></button>
 <table class="records_list">
     <thead>
         <tr>
-            <th>Anno</th>
+            {% if mode <= 1 %}
+                {% set colspan = 9 %}
+                <th>Ospedale</th>
+            {% endif %}
+            {% if mode <= 2 %}
+                {% if mode > 1 %}
+                    {% set colspan = 8 %}
+                {% endif %}
+                <th>Anno</th>
+            {% endif %}
             <th>Dasc</th>
             <th>Tpa</th>
             <th>Claimant</th>
+            {% if gestore is not defined %}
+                {% set colspan = colspan + 1 %}
+                <th>Gestore</th>
+            {% endif %}
             <th>Soi</th>
-            <th>First_reserve</th>
-            <th>Amount_reserved</th>
-            <th>Sa</th>
-            <th>Offerta_nostra</th>
-            <th>Offerta_loro</th>
-            <th>Recupero_offerta_nostra</th>
-            <th>Recupero_offerta_loro</th>
-            <th>Note</th>
+            <th>Stato</th>
+            <th>Priorita</th>
             <th>Operazioni</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
-        <tr>
-            <td>{{ entity.anno }}</td>
-            <td>{% if entity.dasc %}{{ entity.dasc|date('Y-m-d H:i:s') }}{% endif%}</td>
-            <td>{{ entity.tpa }}</td>
+        <tr class="{% if not entity.gestore %}ng{% else %}cg{% endif %}{% if not entity.dasc %} na{% endif %}">
+            {% if mode <= 1 %}
+                {% if gestore is defined %}
+                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
+                {% else %}
+                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
+                {% endif %}
+            {% endif %}
+            {% if mode <= 2 %}
+                {% if gestore is defined %}
+                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno }}</abbr></td>
+                {% else %}
+                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno }}</abbr></td>
+                {% endif %}
+            {% endif %}
+            <td style="text-align: center">{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}</td>
+            <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno }}/{{ entity.tpa }}</td>
             <td>{{ entity.claimant }}</td>
-            <td>{{ entity.soi }}</td>
-            <td>{{ entity.firstreserve }}</td>
-            <td>{{ entity.amountreserved }}</td>
-            <td>{{ entity.sa }}</td>
-            <td>{{ entity.offertanostra }}</td>
-            <td>{{ entity.offertaloro }}</td>
-            <td>{{ entity.recuperooffertanostra }}</td>
-            <td>{{ entity.recuperooffertaloro }}</td>
-            <td>{{ entity.note }}</td>
+            {% if gestore is not defined %}
+                <td style="text-align: center" class="chg">{% if entity.gestore %}<abbr title="{{ entity.gestore.sigla }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla}) }}'">{{ entity.gestore.sigla }}</abbr>{% endif%}</td>
+            {% endif %}
+            <td style="text-align: center">{{ entity.soi }}</td>
+            <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
+            <td style="text-align: center">{% if entity.priorita %}{{ entity.priorita.priorita }}{% endif%}</td>
             <td>
                     <button type="button">
-                        <a href="{{ path('tabellone_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('tabellone_show', { 'id': entity.id }) }}">Apri</a>
                     </button>
+                    <button type="button">
+                        <a href="javascript:$('#detail_{{ entity.id }}').toggle()">Dettagli</a>
+                    </button>
+            </td>
+        </tr>
+        <tr style="display: none" id="detail_{{ entity.id }}">
+            <td colspan="{{ colspan }}">
+                <table class="records_list">
+                    <thead>
+                        <tr>
+                            <th>First Reserve</th>
+                            <th>Amount Reserved</th>
+                            <th>Sa</th>
+                            <th>Offerta Nostra</th>
+                            <th>Offerta Loro</th>
+                            <th>Recupero Offerta Nostra</th>
+                            <th>Recupero Offerta Loro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ entity.firstReserve }}</td>
+                            <td>{{ entity.amountReserved }}</td>
+                            <td>{{ entity.sa }}</td>
+                            <td>{{ entity.offertaNostra }}</td>
+                            <td>{{ entity.offertaLoro }}</td>
+                            <td>{{ entity.recuperoOffertaNostra }}</td>
+                            <td>{{ entity.recuperoOffertaLoro }}</td>
+                        </tr>
+                            <th>Note</th>
+                            <td colspan="6">Note: {{ entity.note }}</td>
+                        <tr>
+                        </tr>
+                    </tbody>
+                </table>
             </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+<div style="display: none">
+    <form name="gestore" id="assegna_gestore">
+        {% if gestori is defined %}
+        <select name="gestore[gestore]">
+            <option value="">Nessuno</option>
+            {% for ges in gestori %}
+                <option value="{{ ges.sigla }}">{{ges.nome}}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
+    </form>
+</div>
+<script type="text/javascript">
+    $('.chg').click(function(){
+        
+    });
+</script>
 {% endblock %}

@@ -1,22 +1,20 @@
-<?php if(false): ?>
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('css/FileUpload/bootstrap.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('css/FileUpload/bootstrap-image-gallery.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('css/FileUpload/jquery.fileupload-ui.css') ?>">
-<script src="<?php echo $view['assets']->getUrl('js/jQuery/jquery.ui.widget.js') ?>"></script>
-<script src="http://blueimp.github.com/JavaScript-Templates/tmpl.min.js"></script>
-<script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
-<script src="//<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.iframe-transport.js') ?>"></script>
-<script src="//<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.fileupload.js') ?>"></script>
-<script src="//<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.fileupload-ui.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('js/jQuery/FileUpload/jquery.xdr-transport.js') ?>"></script>
-<?php endif; ?>
+<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/css/FileUpload/bootstrap.min.css') ?>">
+<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/css/FileUpload/bootstrap-image-gallery.min.css') ?>">
+<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/css/FileUpload/jquery.fileupload-ui.css') ?>">
+<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/blueimp/tmpl.min.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/blueimp/load-image.min.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.iframe-transport.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.fileupload.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.fileupload-fp.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.fileupload-ui.js') ?>"></script>
+<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/locale.js') ?>"></script>
 <style type="text/css">
     
     #<?php echo $id ?>row, #<?php echo $field ?>_tmb {
         border: 1px dashed #999;
         padding: 5px;
         display: block;
-        width: 90px;
+        width: 400px;
         height: 90px;
         position: relative;
         float: left;
@@ -44,7 +42,7 @@
             <img src="<?php echo $tmb ?>" alt="anteprima" />
         <?php endif; ?>
     </div>
-    <button id="<?php echo $field ?>_delete" type="button" class="button-orange left" onclick="cancella_img_<?php echo $field ?>()">Elimina</button>
+    <button id="<?php echo $field ?>_delete" type="button" class="button-orange left" onclick="cancella_<?php echo $field ?>()">Elimina</button>
 </div>
 <?php
 // Questo DIV è la progress bar
@@ -128,10 +126,65 @@
     $('#<?php echo $id ?>').fileupload({
         dataType: 'json',
         url: '/upload.php',
-        autoUpload: true,
         <?php if($mimetype): ?>acceptFileTypes: <?php echo $mimetype; ?>,<?php endif; ?>
-        minFileSize: 1024,
-        maxFileSize: 3145728
+        <?php if($minFileSize): ?>minFileSize: <?php echo $minFileSize; ?>,<?php endif; ?>
+        <?php if($maxFileSize): ?>maxFileSize: <?php echo $maxFileSize; ?>,<?php endif; ?>
+        autoUpload: true,
+        progressall: function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progressbar').css(
+                'width',
+                progress + '%'
+            );
+        },
+        add: function(e, data) {
+            var that = $(this).data('fileupload'),
+                files = data.files;
+            that._adjustMaxNumberOfFiles(-files.length);
+            data.isAdjusted = true;
+            data.files.valid = data.isValidated = that._validate(files);
+            if(!data.isValidated){
+                n = 0;
+                filesname = "",
+                $.each(files, function (index, file) {
+                    if(that._hasError(file)) {
+                        switch(that._hasError(file)) {
+                            <?php if($minFileSize): ?>
+                            case 'minFileSize':
+                                fancyAlert('Il documento ' +file.name+' è troppo piccolo (max: <?php echo $minFileSize ?> byte)');
+                                resetAddButton();
+                                break;
+                            <?php endif; ?>
+                            <?php if($maxFileSize): ?>
+                            case 'maxFileSize':
+                                fancyAlert('Il documento ' +file.name+' è troppo grande (max: <?php echo $maxFileSize ?> byte)');
+                                resetAddButton();
+                                break;
+                            <?php endif; ?>
+                            <?php if($mimetype): ?>
+                            case 'acceptFileTypes':
+                                fancyAlert('Il documento ' +file.name+' non è del tipo accettato (<?php echo str_replace(array('$/i','/','(','.','|',')'), array('','','','','',''), $mimetype) ?>)');
+                                resetAddButton();
+                                break;
+                            <?php endif; ?>
+                            default:
+                                fancyAlert('Errore sul documento ' +file.name+': '+that._hasError(file));     
+                                resetAddButton();
+                            }
+                    }
+                });
+                $('#<?php echo $id ?>_bt_reset').hide();
+            }
+            data.context = that._renderUpload(files)
+                .appendTo(that._files)
+                .data('data', data);
+            // Force reflow:
+            data.context.addClass('in');
+            if ((that.options.autoUpload || data.autoUpload) &&
+                    data.isValidated) {
+                data.submit();
+            }
+        }
     });
     $('#<?php echo $id ?>')
     .bind('fileuploaddone', function (e, data) {
@@ -142,7 +195,11 @@
         }
         if(response.form_id == drag_drop_form_id) {
             $('#<?php echo $field ?>').val(response.url);
-            $('#<?php echo $field ?>_tmb').html('<img src="'+response.thumbnail_url+'" alt="preview" />');
+            if(response.thumbnail_url) {
+                $('#<?php echo $field ?>_tmb').html('<img src="'+response.thumbnail_url+'" alt="preview" />');
+            } else {
+                $('#<?php echo $field ?>_tmb').html(response.url);
+            }
             $('#<?php echo $field ?>_tmb').show();
             $('#<?php echo $field ?>_delete').show();
             $('#<?php echo $id ?>_bt_add').hide();
@@ -150,6 +207,9 @@
             $('.<?php echo $id ?>_row').hide();
             $('#<?php echo $id ?>_bt_reset').hide();
             $('#table_files_<?php echo $field ?>').html('');
+        }
+        if(testFunction('singleUploadDoneCB')) {
+            singleUploadDoneCB(response.url);
         }
     })
     .bind('fileuploadfail', function (e, data) {
@@ -169,7 +229,7 @@
     
     delete_url = <?php echo $delete ? "'{$delete}'" : "false" ?>;
     
-    function cancella_img_<?php echo $field ?>() {
+    function cancella_<?php echo $field ?>() {
         if(delete_url != false) {
             $.ajax({
                 url: delete_url,

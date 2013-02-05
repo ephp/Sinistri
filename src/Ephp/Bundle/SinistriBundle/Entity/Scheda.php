@@ -64,7 +64,7 @@ class Scheda
     /**
      * @var string
      *
-     * @ORM\Column(name="soi", type="string", length=1, nullable=true)
+     * @ORM\Column(name="soi", type="string", length=2, nullable=true)
      */
     private $soi;
 
