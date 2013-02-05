@@ -1,0 +1,62 @@
+<tr id="riga_{{ entity.id }}" class="r ng ca" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}" gestore="">
+    {% if mode <= 1 %}
+        {% if gestore is defined %}
+            <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
+        {% else %}
+            <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
+        {% endif %}
+    {% endif %}
+    {% if mode <= 2 %}
+        {% if gestore is defined %}
+            <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno2 }}</abbr></td>
+        {% else %}
+            <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno2 }}</abbr></td>
+        {% endif %}
+    {% endif %}
+    <td style="text-align: center">{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}</td>
+    <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
+    <td>{{ entity.claimant }}</td>
+    {% if gestore is not defined %}
+        <td style="text-align: center" class="chg"><a href="#fb_assegna_gestore" class="fancybox">Assegna</a></td>
+    {% endif %}
+    <td style="text-align: center">{{ entity.soi }}</td>
+    <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
+    <td style="text-align: center">{% if entity.priorita %}{{ entity.priorita.priorita }}{% endif%}</td>
+    <td>
+        <button type="button">
+            <a href="javascript:$('#detail_{{ entity.id }}').toggle()">Dettagli</a>
+        </button>
+    </td>
+</tr>
+<tr style="display: none" id="detail_{{ entity.id }}">
+    <td colspan="{{ colspan }}">
+        <table class="records_list">
+            <thead>
+                <tr>
+                    <th>First Reserve</th>
+                    <th>Amount Reserved</th>
+                    <th>Sa</th>
+                    <th>Offerta Nostra</th>
+                    <th>Offerta Loro</th>
+                    <th>Recupero Offerta Nostra</th>
+                    <th>Recupero Offerta Loro</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ entity.firstReserve }} €</td>
+                    <td>{{ entity.amountReserved }} €</td>
+                    <td>{{ entity.sa }} €</td>
+                    <td>{{ entity.offertaNostra }} €</td>
+                    <td>{{ entity.offertaLoro }} €</td>
+                    <td>{{ entity.recuperoOffertaNostra }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}</td>
+                    <td>{{ entity.recuperoOffertaLoro }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}</td>
+                </tr>
+                <tr>
+                    <th>Note</th>
+                    <td colspan="6">{{ entity.note }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>

@@ -51,12 +51,7 @@
 <h1>{{titolo}}</h1>
 
 {% set colspan = 7 %}
-<button class="na"><a href="javascript:$('.na').toggle()">Nascondi non assegnati</a></button>
-<button class="na" style="display: none"><a href="javascript:$('.na').toggle()">Mostra non assegnati</a></button>
-<button class="ng"><a href="javascript:$('.ng').toggle()">Nascondi senza gestore</a></button>
-<button class="ng" style="display: none"><a href="javascript:$('.ng').toggle()">Mostra senza gestore</a></button>
-<button class="cg"><a href="javascript:$('.cg').toggle()">Nascondi con gestore</a></button>
-<button class="cg" style="display: none"><a href="javascript:$('.cg').toggle()">Mostra con gestore</a></button>
+{% include 'EphpSinistriBundle:Scheda:index/filtri.html.twig' %}
 <table class="records_list">
     <thead>
         <tr>
@@ -85,71 +80,15 @@
     </thead>
     <tbody>
     {% for entity in entities %}
-        <tr class="{% if not entity.gestore %}ng{% else %}cg{% endif %}{% if not entity.dasc %} na{% endif %}" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}">
-            {% if mode <= 1 %}
-                {% if gestore is defined %}
-                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
-                {% else %}
-                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
-                {% endif %}
+        {% if not entity.dasc %}
+            {% include 'EphpSinistriBundle:Scheda:index/riga_inattiva.html.twig' %}
+        {% else %}
+            {% if not entity.gestore %}
+                {% include 'EphpSinistriBundle:Scheda:index/riga_attivabile.html.twig' %}
+            {% else %}
+                {% include 'EphpSinistriBundle:Scheda:index/riga_attiva.html.twig' %}
             {% endif %}
-            {% if mode <= 2 %}
-                {% if gestore is defined %}
-                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno2 }}</abbr></td>
-                {% else %}
-                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno2 }}</abbr></td>
-                {% endif %}
-            {% endif %}
-            <td style="text-align: center">{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}</td>
-            <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
-            <td>{{ entity.claimant }}</td>
-            {% if gestore is not defined %}
-            <td style="text-align: center" class="chg"><a href="#fb_assegna_gestore" class="fancybox">{% if entity.gestore %}<abbr title="{{ entity.gestore.sigla }}"{# onclick="window.location = '{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla}) }}'" #}>{{ entity.gestore.sigla }}</abbr>{% else %}-{% endif %}</a></td>
-            {% endif %}
-            <td style="text-align: center">{{ entity.soi }}</td>
-            <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
-            <td style="text-align: center">{% if entity.priorita %}{{ entity.priorita.priorita }}{% endif%}</td>
-            <td>
-                    <button type="button">
-                        <a href="{{ path('tabellone_show', { 'id': entity.id }) }}">Apri</a>
-                    </button>
-                    <button type="button">
-                        <a href="javascript:$('#detail_{{ entity.id }}').toggle()">Dettagli</a>
-                    </button>
-            </td>
-        </tr>
-        <tr style="display: none" id="detail_{{ entity.id }}">
-            <td colspan="{{ colspan }}">
-                <table class="records_list">
-                    <thead>
-                        <tr>
-                            <th>First Reserve</th>
-                            <th>Amount Reserved</th>
-                            <th>Sa</th>
-                            <th>Offerta Nostra</th>
-                            <th>Offerta Loro</th>
-                            <th>Recupero Offerta Nostra</th>
-                            <th>Recupero Offerta Loro</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ entity.firstReserve }}</td>
-                            <td>{{ entity.amountReserved }}</td>
-                            <td>{{ entity.sa }}</td>
-                            <td>{{ entity.offertaNostra }}</td>
-                            <td>{{ entity.offertaLoro }}</td>
-                            <td>{{ entity.recuperoOffertaNostra }}</td>
-                            <td>{{ entity.recuperoOffertaLoro }}</td>
-                        </tr>
-                            <th>Note</th>
-                            <td colspan="6">Note: {{ entity.note }}</td>
-                        <tr>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
+        {% endif %}
     {% endfor %}
     </tbody>
 </table>
@@ -170,6 +109,16 @@
 </div>
 {% endif %}
 <script type="text/javascript">
+    $('#find_claimant').keyup(function(){
+        q = $(this).val().toLowerCase();
+        $('.r').hide().each(function() {
+           t = $(this).attr('titolo').toLowerCase();
+           if(t.search(q) >= 0) {
+               $(this).show();
+           }
+        });
+    });
+    
     {% if gestore is not defined and gestori is defined %}
         $('.chg').click(function(){
             tr = $(this).closest('tr');
@@ -180,7 +129,7 @@
         function assegnaGestore() {
             form = $('#assegna_gestore_scheda');
             $.post('{{ path('tabellone_assegna_gestore') }}', form.serialize(), function(out) {
-                
+                window.location = out.redirect;
             })
         }
     {% endif %}

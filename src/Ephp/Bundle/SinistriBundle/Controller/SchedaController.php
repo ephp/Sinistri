@@ -6,6 +6,7 @@ use Ephp\Bundle\DragDropBundle\Controller\DragDropController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Ephp\Bundle\ACLBundle\Entity\Gestore;
 use Ephp\Bundle\SinistriBundle\Entity\Scheda;
 
 /**
@@ -94,6 +95,38 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
+     * @Route("-assegna-gestore-scheda", name="tabellone_assegna_gestore", defaults={"_format"="json"})
+     * @Template()
+     */
+    public function assegnaGestoreAction() {
+        $req = $this->getRequest()->get('scheda');
+        $em = $this->getEm();
+        
+        $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        
+        $scheda = $_scheda->find($req['id']);
+        /* @var $scheda Scheda */
+        $gestore = $_gestore->findOneBy(array('sigla' => $req['gestore']));
+        /* @var $gestore Gestore */
+        
+        $genera = is_null($scheda->getGestore());
+        try{
+            $scheda->setGestore($gestore);
+            $em->persist($scheda);
+            $em->flush();
+            if($genera) {
+                // TODO
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('redirect' => $this->generateUrl('tabellone_show', array('id' => $scheda->getId())))));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
      * @Route("-upload", name="tabellone_upload")
      * @Template()
      */
@@ -109,16 +142,6 @@ class SchedaController extends DragDropController {
      */
     public function uploadSingleAction() {
         return $this->singleFile();
-    }
-
-    /**
-     * Lists all Scheda entities.
-     *
-     * @Route("-assegna-gestore-scheda", name="tabellone_assegna_gestore", defaults={"_format"="json"})
-     * @Template()
-     */
-    public function assegnaGestoreAction() {
-        $scheda = $this->getRequest()->get('file');
     }
 
     /**
