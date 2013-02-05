@@ -40,7 +40,7 @@ class SchedaController extends DragDropController {
         }
         $ospedali = $_ospedale->findBy(array(), array('sigla' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
-        return array('entities' => $entities, 'mode' => $mode, 'ospedale' => $ospedale, 'anno' => $anno, 'ospedali' => $ospedali, 'gestori' => $gestori, 'anni' => range(7, date('y')));
+        return array('entities' => $entities, 'mode' => $mode, 'ospedale' => $ospedale, 'anno' => $anno < 10 ? '0'.$anno : $anno, 'ospedali' => $ospedali, 'gestori' => $gestori, 'anni' => range(7, date('y')));
     }
     /**
      * Lists all Scheda entities.
@@ -68,7 +68,7 @@ class SchedaController extends DragDropController {
         }
         $ospedali = $_ospedale->findBy(array(), array('sigla' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
-        return array('entities' => $entities, 'mode' => $mode, 'ospedale' => $ospedale, 'anno' => $anno, 'gestore' => $gestore, 'ospedali' => $ospedali, 'gestori' => $gestori, 'anni' => range(7, date('y')));
+        return array('entities' => $entities, 'mode' => $mode, 'ospedale' => $ospedale, 'anno' => $anno < 10 ? '0'.$anno : $anno, 'gestore' => $gestore, 'ospedali' => $ospedali, 'gestori' => $gestori, 'anni' => range(7, date('y')));
     }
 
     /**
@@ -109,6 +109,16 @@ class SchedaController extends DragDropController {
      */
     public function uploadSingleAction() {
         return $this->singleFile();
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-assegna-gestore-scheda", name="tabellone_assegna_gestore", defaults={"_format"="json"})
+     * @Template()
+     */
+    public function assegnaGestoreAction() {
+        $scheda = $this->getRequest()->get('file');
     }
 
     /**

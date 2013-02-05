@@ -4,7 +4,7 @@
 {% if ospedale != '' %}
     {% set titolo = ospedale.nome %}
 {% endif %}
-{% if anno != '' %}
+{% if anno != '0' %}
     {% set titolo = titolo ~ ' 20' ~ anno %}
 {% endif %}
 {% if gestore is defined %}
@@ -85,7 +85,7 @@
     </thead>
     <tbody>
     {% for entity in entities %}
-        <tr class="{% if not entity.gestore %}ng{% else %}cg{% endif %}{% if not entity.dasc %} na{% endif %}">
+        <tr class="{% if not entity.gestore %}ng{% else %}cg{% endif %}{% if not entity.dasc %} na{% endif %}" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}">
             {% if mode <= 1 %}
                 {% if gestore is defined %}
                     <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
@@ -95,16 +95,16 @@
             {% endif %}
             {% if mode <= 2 %}
                 {% if gestore is defined %}
-                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno }}</abbr></td>
+                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno2 }}</abbr></td>
                 {% else %}
-                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno }}</abbr></td>
+                    <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}" onclick="window.location = '{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}'">{{ entity.anno2 }}</abbr></td>
                 {% endif %}
             {% endif %}
             <td style="text-align: center">{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}</td>
-            <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno }}/{{ entity.tpa }}</td>
+            <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
             <td>{{ entity.claimant }}</td>
             {% if gestore is not defined %}
-                <td style="text-align: center" class="chg">{% if entity.gestore %}<abbr title="{{ entity.gestore.sigla }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla}) }}'">{{ entity.gestore.sigla }}</abbr>{% endif%}</td>
+            <td style="text-align: center" class="chg"><a href="#fb_assegna_gestore" class="fancybox">{% if entity.gestore %}<abbr title="{{ entity.gestore.sigla }}"{# onclick="window.location = '{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla}) }}'" #}>{{ entity.gestore.sigla }}</abbr>{% else %}-{% endif %}</a></td>
             {% endif %}
             <td style="text-align: center">{{ entity.soi }}</td>
             <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
@@ -153,21 +153,36 @@
     {% endfor %}
     </tbody>
 </table>
-<div style="display: none">
-    <form name="gestore" id="assegna_gestore">
-        {% if gestori is defined %}
-        <select name="gestore[gestore]">
+{% if gestore is not defined and gestori is defined %}
+<div style="display: none" id="fb_assegna_gestore">
+    <form id="assegna_gestore_scheda">
+        <h2>Assegna il gestore a <span id="assegna_gestore_a"></span></h2>
+        <div style="clear: both"></div>
+        <select name="scheda[gestore]" id="scheda_gestore">
             <option value="">Nessuno</option>
             {% for ges in gestori %}
                 <option value="{{ ges.sigla }}">{{ges.nome}}</option>
             {% endfor %}
         </select>
-        {% endif %}
+        <input type="hidden" name="scheda[id]" id="scheda_id" value="" />    
+        <button type="button" onclick="assegnaGestore()">Assegna</button>
     </form>
 </div>
+{% endif %}
 <script type="text/javascript">
-    $('.chg').click(function(){
-        
-    });
+    {% if gestore is not defined and gestori is defined %}
+        $('.chg').click(function(){
+            tr = $(this).closest('tr');
+            $('#assegna_gestore_a').text(tr.attr('titolo'));
+            $('#scheda_id').val(tr.attr('riga'));
+            $('#scheda_gestore').val(tr.attr('gestore'));
+        });
+        function assegnaGestore() {
+            form = $('#assegna_gestore_scheda');
+            $.post('{{ path('tabellone_assegna_gestore') }}', form.serialize(), function(out) {
+                
+            })
+        }
+    {% endif %}
 </script>
 {% endblock %}

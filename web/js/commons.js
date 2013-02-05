@@ -679,3 +679,16 @@ function removeFile(url) {
         }
     });
 }
+
+function attivaFancybox() {
+    $('.fancybox').fancybox({
+        hideOnOverlayClick: false,
+        transitionIn: 'elastic',
+        padding:3,
+        margin:0
+    });
+}
+
+$(document).ready(function(){
+    attivaFancybox();
+});

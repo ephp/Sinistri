@@ -537,4 +537,8 @@ class Scheda
     {
         return $this->priorita;
     }
+    
+    public function getAnno2() {
+        return $this->anno < 10 ? '0'.$this->anno : $this->anno;
+    }
 }
