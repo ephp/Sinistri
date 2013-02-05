@@ -1,3 +1,8 @@
+ephp_acl:
+    resource: "@EphpACLBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 ephp_sinistri:
     resource: "@EphpSinistriBundle/Controller/"
     type:     annotation

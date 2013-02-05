@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new Ephp\Bundle\DragDropBundle\EphpDragDropBundle(),
             new Ephp\Bundle\SinistriBundle\EphpSinistriBundle(),
             new B2S\Bundle\PortletBundle\B2SPortletBundle(),
+            new Ephp\Bundle\ACLBundle\EphpACLBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

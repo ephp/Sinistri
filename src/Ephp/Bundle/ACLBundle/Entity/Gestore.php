@@ -1,13 +1,13 @@
 <?php
 
-namespace Ephp\Bundle\SinistriBundle\Entity;
+namespace Ephp\Bundle\ACLBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Gestore
  *
- * @ORM\Table(name="sx_gestori")
+ * @ORM\Table(name="acl_gestori")
  * @ORM\Entity(repositoryClass="Ephp\Bundle\SinistriBundle\Entity\GestoreRepository")
  */
 class Gestore
