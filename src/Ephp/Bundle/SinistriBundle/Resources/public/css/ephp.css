@@ -357,3 +357,19 @@ table.records_list {
     padding: 2px;
     border-left: 1px solid #222222;
 }
+
+tr.bg-white td {
+    background-color: #EEEEEE !important;
+}
+
+tr.bg-red td {
+    background-color: #EEBBBB !important;
+}
+
+tr.bg-yellow td {
+    background-color: #EEEEBB !important;
+}
+
+tr.bg-gray td {
+    background-color: #BBBBBB !important;
+}

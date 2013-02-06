@@ -1,4 +1,4 @@
-<tr id="riga_{{ entity.id }}" class="r cg ca" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}" gestore="{{ entity.gestore.sigla }}">
+<tr id="riga_{{ entity.id }}" class="r cg ca bg-{{ entity.priorita.css }}" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}" gestore="{{ entity.gestore.sigla }}" priorita="{{ entity.priorita.id }}">
     {% if mode <= 1 %}
         {% if gestore is defined %}
             <td style="text-align: center"><abbr title="{{ entity.ospedale.nome }}" onclick="window.location = '{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}'">{{ entity.ospedale.sigla|upper }}</abbr></td>
@@ -21,7 +21,7 @@
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
     <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
-    <td style="text-align: center">{% if entity.priorita %}{{ entity.priorita.priorita }}{% endif%}</td>
+    <td style="text-align: center" class="chp"><a href="#fb_cambia_priorita" class="fancybox">{{ entity.priorita.priorita }}</a></td>
     <td>
         <button type="button">
             <a href="javascript:$('#detail_{{ entity.id }}').toggle()">Dettagli</a>

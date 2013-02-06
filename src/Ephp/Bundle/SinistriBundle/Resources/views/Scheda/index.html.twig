@@ -96,21 +96,34 @@
     </tbody>
 </table>
 {% if gestore is not defined and gestori is defined %}
-<div style="display: none" id="fb_assegna_gestore">
-    <form id="assegna_gestore_scheda">
-        <h2>Assegna il gestore a <span id="assegna_gestore_a"></span></h2>
+    <div style="display: none" id="fb_assegna_gestore">
+        <form id="assegna_gestore_scheda">
+            <h2>Assegna il gestore a <span id="assegna_gestore_a"></span></h2>
+            <div style="clear: both"></div>
+            <select name="scheda[gestore]" id="scheda_gestore">
+                <option value="">Nessuno</option>
+                {% for ges in gestori %}
+                    <option value="{{ ges.sigla }}">{{ges.nome}}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="scheda[id]" id="scheda_id" value="" />    
+            <button type="button" onclick="assegnaGestore()">Assegna</button>
+        </form>
+    </div>
+{% endif %}
+<div style="display: none" id="fb_cambia_priorita">
+    <form id="cambia_priorita_scheda">
+        <h2>Cambia priorità <span id="cambia_priorita_a"></span></h2>
         <div style="clear: both"></div>
-        <select name="scheda[gestore]" id="scheda_gestore">
-            <option value="">Nessuno</option>
-            {% for ges in gestori %}
-                <option value="{{ ges.sigla }}">{{ges.nome}}</option>
+        <select name="priorita[priorita]" id="priorita_priorita">
+            {% for pri in priorita %}
+                <option value="{{ pri.id }}">{{pri.priorita}}</option>
             {% endfor %}
         </select>
-        <input type="hidden" name="scheda[id]" id="scheda_id" value="" />    
-        <button type="button" onclick="assegnaGestore()">Assegna</button>
+        <input type="hidden" name="priorita[id]" id="priorita_id" value="" />    
+        <button type="button" onclick="assegnaPriorita()">Cambia</button>
     </form>
 </div>
-{% endif %}
 <script type="text/javascript">
     $('#find_claimant').keyup(function(){
         q = $(this).val().toLowerCase();
@@ -136,5 +149,27 @@
             })
         }
     {% endif %}
+    
+    $('.chp').click(function(){
+        tr = $(this).closest('tr');
+        $('#cambia_priorita_a').text(tr.attr('titolo'));
+        $('#priorita_id').val(tr.attr('riga'));
+        $('#priorita_priorita').val(tr.attr('priorita'));
+    });
+    function assegnaPriorita() {
+        form = $('#cambia_priorita_scheda');
+        $.post('{{ path('tabellone_cambia_priorita') }}', form.serialize(), function(out) {
+            riga = $('#riga_'+$('#priorita_id').val());
+            riga.removeClass('bg-white')
+                .removeClass('bg-red')
+                .removeClass('bg-yellow')
+                .removeClass('bg-gray')
+                .addClass(out.css);
+            if(out.js != '') {
+                eval(out.js);
+            }
+            $.fancybox.close();
+        })
+    }
 </script>
 {% endblock %}
