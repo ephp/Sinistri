@@ -174,7 +174,7 @@ class SchedaController extends DragDropController {
         } catch (\Exception $e) {
             throw $e;
         }
-        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('css' => 'bg-'.$priorita->getCss(), 'js' => $priorita->getOnChange())));
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $priorita->getId(), 'label' => $priorita->getPriorita(), 'css' => 'bg-'.$priorita->getCss(), 'js' => $priorita->getOnChange())));
     }
 
     /**

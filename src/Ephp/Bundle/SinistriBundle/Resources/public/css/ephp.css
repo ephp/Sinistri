@@ -358,6 +358,11 @@ table.records_list {
     border-left: 1px solid #222222;
 }
 
+tr.bg-transparent td {
+    background-color: #EEEEEE !important;
+    color: #AAAAAA !important;
+}
+
 tr.bg-white td {
     background-color: #EEEEEE !important;
 }
@@ -367,9 +372,10 @@ tr.bg-red td {
 }
 
 tr.bg-yellow td {
-    background-color: #EEEEBB !important;
+    background-color: #EEEE77 !important;
 }
 
 tr.bg-gray td {
     background-color: #BBBBBB !important;
+    color: #999999 !important;
 }
