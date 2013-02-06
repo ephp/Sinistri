@@ -104,7 +104,7 @@ class SchedaController extends DragDropController {
      * @Template()
      */
     public function showAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getEm();
 
         $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
 

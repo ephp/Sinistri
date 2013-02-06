@@ -363,6 +363,10 @@ tr.bg-transparent td {
     color: #AAAAAA !important;
 }
 
+tr.bg-transparent td a {
+    color: rgb(128, 204, 255) !important;
+}
+
 tr.bg-white td {
     background-color: #EEEEEE !important;
 }

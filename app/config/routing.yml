@@ -1,3 +1,8 @@
+ephp_calendar:
+    resource: "@EphpCalendarBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 ephp_acl:
     resource: "@EphpACLBundle/Controller/"
     type:     annotation
