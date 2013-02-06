@@ -121,7 +121,6 @@ class SchedaController extends DragDropController {
      * Lists all Scheda entities.
      *
      * @Route("-assegna-gestore-scheda", name="tabellone_assegna_gestore", defaults={"_format"="json"})
-     * @Template()
      */
     public function assegnaGestoreAction() {
         $req = $this->getRequest()->get('scheda');
@@ -148,12 +147,11 @@ class SchedaController extends DragDropController {
         }
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('redirect' => $this->generateUrl('tabellone_show', array('id' => $scheda->getId())))));
     }
-    
+
     /**
      * Lists all Scheda entities.
      *
      * @Route("-cambia-priorita-scheda", name="tabellone_cambia_priorita", defaults={"_format"="json"})
-     * @Template()
      */
     public function cambiaPrioritaAction() {
         $req = $this->getRequest()->get('priorita');
@@ -174,7 +172,54 @@ class SchedaController extends DragDropController {
         } catch (\Exception $e) {
             throw $e;
         }
-        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $priorita->getId(), 'label' => $priorita->getPriorita(), 'css' => 'bg-'.$priorita->getCss(), 'js' => $priorita->getOnChange())));
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $priorita->getId(), 'label' => $priorita->getPriorita(), 'css' => 'bg-' . $priorita->getCss(), 'js' => $priorita->getOnChange())));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-autoupdate", name="tabellone_autoupdate", defaults={"_format"="json"})
+     */
+    public function autoupdateAction() {
+        $req = $this->getRequest()->get('pratica');
+        $em = $this->getEm();
+
+        $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
+        $scheda = $_scheda->find($req['id']);
+        /* @var $scheda Scheda */
+        try {
+            switch ($req['field']) {
+                case 'firstReserve':
+                    $scheda->setFirstReserve($req['value']);
+                    break;
+                case 'amountReserved':
+                    $scheda->setAmountReserved($req['value']);
+                    break;
+                case 'sa':
+                    $scheda->setSa($req['value']);
+                    break;
+                case 'offertaNostra':
+                    $scheda->setOffertaNostra($req['value']);
+                    break;
+                case 'offertaLoro':
+                    $scheda->setOffertaLoro($req['value']);
+                    break;
+                case 'recuperoOffertaNostra':
+                    $scheda->setRecuperoOffertaNostra($req['value']);
+                    break;
+                case 'recuperoOffertaLoro':
+                    $scheda->setRecuperoOffertaLoro($req['value']);
+                    break;
+                case 'note':
+                    $scheda->setNote($req['value']);
+                    break;
+            }
+            $em->persist($scheda);
+            $em->flush();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($req));
     }
 
     /**
@@ -201,7 +246,6 @@ class SchedaController extends DragDropController {
      * Lists all Scheda entities.
      *
      * @Route("-import-drive", name="tabellone_import_drive", defaults={"_format"="json"})
-     * @Template()
      */
     public function importAction() {
         $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);

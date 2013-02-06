@@ -379,3 +379,22 @@ tr.bg-gray td {
     background-color: #BBBBBB !important;
     color: #999999 !important;
 }
+
+input.autoupdate {
+    border: none;
+    background: none;
+    width: 140px;
+    text-align: right;
+    margin: 2px;
+    padding: 0px;
+}
+
+textarea.autoupdate {
+    border: none;
+    background: none;
+    width: 640px;
+    text-align: left;
+    margin: 2px;
+    padding: 0px;
+}
+

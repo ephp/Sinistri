@@ -47,17 +47,17 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ entity.firstReserve }} €</td>
-                    <td>{{ entity.amountReserved }} €</td>
-                    <td>{{ entity.sa }} €</td>
-                    <td>{{ entity.offertaNostra }} €</td>
-                    <td>{{ entity.offertaLoro }} €</td>
-                    <td>{{ entity.recuperoOffertaNostra }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}</td>
-                    <td>{{ entity.recuperoOffertaLoro }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}</td>
+                    <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="firstReserve" value="{{ entity.firstReserve }}"/> €</td>
+                    <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{{ entity.amountReserved }}"/> €</td>
+                    <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="sa" value="{{ entity.sa }}"/> €</td>
+                    <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="offertaNostra" value="{{ entity.offertaNostra }}"/> €</td>
+                    <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="offertaLoro" value="{{ entity.offertaLoro }}"/> €</td>
+                    <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaNostra" value="{{ entity.recuperoOffertaNostra }}" id="recuperoOffertaNostra_{{ entity.id }}" /> <span class="um" target="recuperoOffertaNostra_{{ entity.id }}"></span></td>
+                    <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaLoro" value="{{ entity.recuperoOffertaLoro }}" id="recuperoOffertaLoro_{{ entity.id }}"/>  <span class="um" target="recuperoOffertaLoro_{{ entity.id }}"></span></td>
                 </tr>
                 <tr>
                     <th>Note</th>
-                    <td colspan="6">{{ entity.note }}</td>
+                    <td colspan="6"><textarea class="autoupdate autogrow" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
                 </tr>
             </tbody>
         </table>

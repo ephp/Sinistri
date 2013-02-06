@@ -43,18 +43,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>{{ entity.firstReserve }} €</td>
-                    <td>{{ entity.amountReserved }} €</td>
-                    <td>{{ entity.sa }} €</td>
-                    <td>{{ entity.offertaNostra }} €</td>
-                    <td>{{ entity.offertaLoro }} €</td>
-                    <td>{{ entity.recuperoOffertaNostra }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}</td>
-                    <td>{{ entity.recuperoOffertaLoro }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}</td>
-                </tr>
-                <tr>
-                    <th>Note</th>
-                    <td colspan="6">{{ entity.note }}</td>
+                <tr class="bg-transparent">
+                    <td>{% if entity.firstReserve %}{{ entity.firstReserve }} €{% endif %}</td>
+                    <td>{% if entity.amountReserved %}{{ entity.amountReserved }} €{% endif %}</td>
+                    <td>{% if entity.sa %}{{ entity.sa }} €{% endif %}</td>
+                    <td>{% if entity.offertaNostra %}{{ entity.offertaNostra }} €{% endif %}</td>
+                    <td>{% if entity.offertaLoro %}{{ entity.offertaLoro }} €{% endif %}</td>
+                    <td>{% if entity.recuperoOffertaNostra %}{{ entity.recuperoOffertaNostra }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}{% endif %}</td>
+                    <td>{% if entity.recuperoOffertaLoro %}{{ entity.recuperoOffertaLoro }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}{% endif %}</td>
                 </tr>
             </tbody>
         </table>

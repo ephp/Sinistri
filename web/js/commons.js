@@ -691,4 +691,5 @@ function attivaFancybox() {
 
 $(document).ready(function(){
     attivaFancybox();
+    $(".autogrow").autoGrow();
 });
