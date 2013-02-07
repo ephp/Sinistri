@@ -60,7 +60,7 @@ class SchedaController extends DragDropController {
      * Lists all Scheda entities.
      *
      * @Route("-gestore_{gestore}/{ospedale}/{anno}", name="tabellone_gestore", defaults={"ospedale"="", "anno"=""})
-     * @Template("EphpSinistriBundle:scheda:index.html.twig")
+     * @Template("EphpSinistriBundle:Scheda:index.html.twig")
      */
     public function gestoreAction($gestore, $ospedale, $anno) {
         $em = $this->getEm();
