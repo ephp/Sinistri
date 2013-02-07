@@ -148,15 +148,15 @@ class SchedaController extends DragDropController {
                     $evento->setTitolo($tipo->getNome());
                     $em->persist($evento);
                     $em->flush();
-                    $entity->addEventi($evento);
                 }
                 $em->commit();
+                return $this->redirect($this->generateUrl('tabellone_show', array('id' => $id)));
             } catch (\Exception $e) {
                 $em->rollback();
                 throw $e;
             }
         }
-
+        
         return array(
             'entity' => $entity,
         );
