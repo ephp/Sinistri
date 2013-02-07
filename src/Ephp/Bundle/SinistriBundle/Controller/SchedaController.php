@@ -136,13 +136,11 @@ class SchedaController extends DragDropController {
                     $tipo = $this->getTipoEvento($gen['tipo']);
                     $evento = new Evento();
                     $evento->setCalendario($cal);
-                    $evento->setData($data);
                     $evento->setDataOra($data);
                     $evento->setDeltaG($gen['giorni']);
                     $evento->setGiornoIntero(true);
                     $evento->setImportante(true);
                     $evento->setNote('');
-                    $evento->setOra($data);
                     $evento->setOrdine($i + 1);
                     $evento->setRischedulazione(true);
                     $evento->setScheda($entity);
@@ -287,6 +285,41 @@ class SchedaController extends DragDropController {
      */
     public function uploadAction() {
         return array();
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-aggiungi-evento/{id}", name="tabellone_aggiungi_evento")
+     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     */
+    public function aggiungiEventoAction($id) {
+        $req = $this->getRequest()->get('evento');
+        $em = $this->getEm();
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+
+        $data = \DateTime::createFromFormat('d/m/Y', $req['data']);
+        $cal = $this->getCalendar();
+        $tipo = $this->getTipoEvento('OTH');
+        $evento = new Evento();
+        $evento->setCalendario($cal);
+        $evento->setDataOra($data);
+        $evento->setDeltaG(0);
+        $evento->setGiornoIntero(true);
+        $evento->setImportante(false);
+        $evento->setNote($req['note']);
+        $evento->setOrdine(0);
+        $evento->setRischedulazione(false);
+        $evento->setScheda($entity);
+        $evento->setTipo($tipo);
+        $evento->setTitolo($req['titolo']);
+        $em->persist($evento);
+        $em->flush();
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
     }
 
     /**

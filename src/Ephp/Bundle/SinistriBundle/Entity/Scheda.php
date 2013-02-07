@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="sx_tabellone")
  * @ORM\Entity(repositoryClass="Ephp\Bundle\SinistriBundle\Entity\SchedaRepository")
  */
-class Scheda
-{
+class Scheda {
+
     /**
      * @var integer
      *
@@ -140,14 +140,14 @@ class Scheda
      * @var \Doctrine\Common\Collections\ArrayCollection
      * 
      * @ORM\OneToMany(targetEntity="Evento", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
+     * @ORM\OrderBy({"data_ora" = "ASC"}) 
      */
     private $eventi;
-    
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->eventi = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -156,8 +156,7 @@ class Scheda
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -167,10 +166,9 @@ class Scheda
      * @param integer $anno
      * @return Scheda
      */
-    public function setAnno($anno)
-    {
+    public function setAnno($anno) {
         $this->anno = $anno;
-    
+
         return $this;
     }
 
@@ -179,8 +177,7 @@ class Scheda
      *
      * @return integer 
      */
-    public function getAnno()
-    {
+    public function getAnno() {
         return $this->anno;
     }
 
@@ -190,19 +187,18 @@ class Scheda
      * @return integer 
      */
     public function getAnno2() {
-        return $this->anno < 10 ? '0'.$this->anno : $this->anno;
+        return $this->anno < 10 ? '0' . $this->anno : $this->anno;
     }
-    
+
     /**
      * Set dasc
      *
      * @param \DateTime $dasc
      * @return Scheda
      */
-    public function setDasc($dasc)
-    {
+    public function setDasc($dasc) {
         $this->dasc = $dasc;
-    
+
         return $this;
     }
 
@@ -211,8 +207,7 @@ class Scheda
      *
      * @return \DateTime 
      */
-    public function getDasc()
-    {
+    public function getDasc() {
         return $this->dasc;
     }
 
@@ -222,10 +217,9 @@ class Scheda
      * @param integer $tpa
      * @return Scheda
      */
-    public function setTpa($tpa)
-    {
+    public function setTpa($tpa) {
         $this->tpa = $tpa;
-    
+
         return $this;
     }
 
@@ -234,8 +228,7 @@ class Scheda
      *
      * @return integer 
      */
-    public function getTpa()
-    {
+    public function getTpa() {
         return $this->tpa;
     }
 
@@ -245,10 +238,9 @@ class Scheda
      * @param string $claimant
      * @return Scheda
      */
-    public function setClaimant($claimant)
-    {
+    public function setClaimant($claimant) {
         $this->claimant = $claimant;
-    
+
         return $this;
     }
 
@@ -257,8 +249,7 @@ class Scheda
      *
      * @return string 
      */
-    public function getClaimant()
-    {
+    public function getClaimant() {
         return $this->claimant;
     }
 
@@ -268,10 +259,9 @@ class Scheda
      * @param string $soi
      * @return Scheda
      */
-    public function setSoi($soi)
-    {
+    public function setSoi($soi) {
         $this->soi = $soi;
-    
+
         return $this;
     }
 
@@ -280,8 +270,7 @@ class Scheda
      *
      * @return string 
      */
-    public function getSoi()
-    {
+    public function getSoi() {
         return $this->soi;
     }
 
@@ -291,10 +280,9 @@ class Scheda
      * @param float $firstReserve
      * @return Scheda
      */
-    public function setFirstReserve($firstReserve)
-    {
+    public function setFirstReserve($firstReserve) {
         $this->first_reserve = $firstReserve;
-    
+
         return $this;
     }
 
@@ -303,8 +291,7 @@ class Scheda
      *
      * @return float 
      */
-    public function getFirstReserve()
-    {
+    public function getFirstReserve() {
         return $this->first_reserve;
     }
 
@@ -314,10 +301,9 @@ class Scheda
      * @param float $amountReserved
      * @return Scheda
      */
-    public function setAmountReserved($amountReserved)
-    {
+    public function setAmountReserved($amountReserved) {
         $this->amount_reserved = $amountReserved;
-    
+
         return $this;
     }
 
@@ -326,8 +312,7 @@ class Scheda
      *
      * @return float 
      */
-    public function getAmountReserved()
-    {
+    public function getAmountReserved() {
         return $this->amount_reserved;
     }
 
@@ -337,10 +322,9 @@ class Scheda
      * @param float $sa
      * @return Scheda
      */
-    public function setSa($sa)
-    {
+    public function setSa($sa) {
         $this->sa = $sa;
-    
+
         return $this;
     }
 
@@ -349,8 +333,7 @@ class Scheda
      *
      * @return float 
      */
-    public function getSa()
-    {
+    public function getSa() {
         return $this->sa;
     }
 
@@ -360,10 +343,9 @@ class Scheda
      * @param float $offertaNostra
      * @return Scheda
      */
-    public function setOffertaNostra($offertaNostra)
-    {
+    public function setOffertaNostra($offertaNostra) {
         $this->offerta_nostra = $offertaNostra;
-    
+
         return $this;
     }
 
@@ -372,8 +354,7 @@ class Scheda
      *
      * @return float 
      */
-    public function getOffertaNostra()
-    {
+    public function getOffertaNostra() {
         return $this->offerta_nostra;
     }
 
@@ -383,10 +364,9 @@ class Scheda
      * @param float $offertaLoro
      * @return Scheda
      */
-    public function setOffertaLoro($offertaLoro)
-    {
+    public function setOffertaLoro($offertaLoro) {
         $this->offerta_loro = $offertaLoro;
-    
+
         return $this;
     }
 
@@ -395,8 +375,7 @@ class Scheda
      *
      * @return float 
      */
-    public function getOffertaLoro()
-    {
+    public function getOffertaLoro() {
         return $this->offerta_loro;
     }
 
@@ -406,10 +385,9 @@ class Scheda
      * @param float $recuperoOffertaNostra
      * @return Scheda
      */
-    public function setRecuperoOffertaNostra($recuperoOffertaNostra)
-    {
+    public function setRecuperoOffertaNostra($recuperoOffertaNostra) {
         $this->recupero_offerta_nostra = $recuperoOffertaNostra;
-    
+
         return $this;
     }
 
@@ -418,8 +396,7 @@ class Scheda
      *
      * @return float 
      */
-    public function getRecuperoOffertaNostra()
-    {
+    public function getRecuperoOffertaNostra() {
         return $this->recupero_offerta_nostra;
     }
 
@@ -429,10 +406,9 @@ class Scheda
      * @param float $recuperoOffertaLoro
      * @return Scheda
      */
-    public function setRecuperoOffertaLoro($recuperoOffertaLoro)
-    {
+    public function setRecuperoOffertaLoro($recuperoOffertaLoro) {
         $this->recupero_offerta_loro = $recuperoOffertaLoro;
-    
+
         return $this;
     }
 
@@ -441,8 +417,7 @@ class Scheda
      *
      * @return float 
      */
-    public function getRecuperoOffertaLoro()
-    {
+    public function getRecuperoOffertaLoro() {
         return $this->recupero_offerta_loro;
     }
 
@@ -452,10 +427,9 @@ class Scheda
      * @param string $note
      * @return Scheda
      */
-    public function setNote($note)
-    {
+    public function setNote($note) {
         $this->note = $note;
-    
+
         return $this;
     }
 
@@ -464,8 +438,7 @@ class Scheda
      *
      * @return string 
      */
-    public function getNote()
-    {
+    public function getNote() {
         return $this->note;
     }
 
@@ -475,10 +448,9 @@ class Scheda
      * @param \Ephp\Bundle\SinistriBundle\Entity\Ospedale $ospedale
      * @return Scheda
      */
-    public function setOspedale(\Ephp\Bundle\SinistriBundle\Entity\Ospedale $ospedale = null)
-    {
+    public function setOspedale(\Ephp\Bundle\SinistriBundle\Entity\Ospedale $ospedale = null) {
         $this->ospedale = $ospedale;
-    
+
         return $this;
     }
 
@@ -487,8 +459,7 @@ class Scheda
      *
      * @return \Ephp\Bundle\SinistriBundle\Entity\Ospedale 
      */
-    public function getOspedale()
-    {
+    public function getOspedale() {
         return $this->ospedale;
     }
 
@@ -498,10 +469,9 @@ class Scheda
      * @param \Ephp\Bundle\ACLBundle\Entity\Gestore $gestore
      * @return Scheda
      */
-    public function setGestore(\Ephp\Bundle\ACLBundle\Entity\Gestore $gestore = null)
-    {
+    public function setGestore(\Ephp\Bundle\ACLBundle\Entity\Gestore $gestore = null) {
         $this->gestore = $gestore;
-    
+
         return $this;
     }
 
@@ -510,8 +480,7 @@ class Scheda
      *
      * @return \Ephp\Bundle\ACLBundle\Entity\Gestore 
      */
-    public function getGestore()
-    {
+    public function getGestore() {
         return $this->gestore;
     }
 
@@ -521,10 +490,9 @@ class Scheda
      * @param \Ephp\Bundle\SinistriBundle\Entity\Stato $stato
      * @return Scheda
      */
-    public function setStato(\Ephp\Bundle\SinistriBundle\Entity\Stato $stato = null)
-    {
+    public function setStato(\Ephp\Bundle\SinistriBundle\Entity\Stato $stato = null) {
         $this->stato = $stato;
-    
+
         return $this;
     }
 
@@ -533,8 +501,7 @@ class Scheda
      *
      * @return \Ephp\Bundle\SinistriBundle\Entity\Stato 
      */
-    public function getStato()
-    {
+    public function getStato() {
         return $this->stato;
     }
 
@@ -544,10 +511,9 @@ class Scheda
      * @param \Ephp\Bundle\SinistriBundle\Entity\Priorita $priorita
      * @return Scheda
      */
-    public function setPriorita(\Ephp\Bundle\SinistriBundle\Entity\Priorita $priorita = null)
-    {
+    public function setPriorita(\Ephp\Bundle\SinistriBundle\Entity\Priorita $priorita = null) {
         $this->priorita = $priorita;
-    
+
         return $this;
     }
 
@@ -556,21 +522,19 @@ class Scheda
      *
      * @return \Ephp\Bundle\SinistriBundle\Entity\Priorita 
      */
-    public function getPriorita()
-    {
+    public function getPriorita() {
         return $this->priorita;
     }
-    
+
     /**
      * Add eventi
      *
      * @param \Ephp\Bundle\SinistriBundle\Entity\Evento $eventi
      * @return Scheda
      */
-    public function addEventi(\Ephp\Bundle\SinistriBundle\Entity\Evento $eventi)
-    {
+    public function addEventi(\Ephp\Bundle\SinistriBundle\Entity\Evento $eventi) {
         $this->eventi[] = $eventi;
-    
+
         return $this;
     }
 
@@ -579,8 +543,7 @@ class Scheda
      *
      * @param \Ephp\Bundle\SinistriBundle\Entity\Evento $eventi
      */
-    public function removeEventi(\Ephp\Bundle\SinistriBundle\Entity\Evento $eventi)
-    {
+    public function removeEventi(\Ephp\Bundle\SinistriBundle\Entity\Evento $eventi) {
         $this->eventi->removeElement($eventi);
     }
 
@@ -589,8 +552,8 @@ class Scheda
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getEventi()
-    {
+    public function getEventi() {
         return $this->eventi;
     }
+
 }

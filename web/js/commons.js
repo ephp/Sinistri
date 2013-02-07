@@ -6,7 +6,7 @@ function distanza(da_lat, da_lon, a_lat, a_lon) {
 }
 
 function deg2rad(radians) {
-    return radians * (Math.PI/180);
+    return radians * (Math.PI / 180);
 }
 
 function km(distanza) {
@@ -41,24 +41,24 @@ var fileUploadErrors = {
 
 /* CONTROLLO ERRORE PER I FORM */
 function erroreForm(campo, messaggio) {
-    campo.closest('div').append('<div class="form-alert">'+messaggio+'</div>');
+    campo.closest('div').append('<div class="form-alert">' + messaggio + '</div>');
     campo.addClass('alert-red');
-    campo.focus(function(){
+    campo.focus(function() {
         $(this).removeClass('alert-red');
     });
     return false;
 }
 /* PROTOTYPE PER STRINGHE */
-String.prototype.swapcase = function(){
-    return this.replace(/([a-z]+)|([A-Z]+)/g,function($0,$1,$2){
+String.prototype.swapcase = function() {
+    return this.replace(/([a-z]+)|([A-Z]+)/g, function($0, $1, $2) {
         return ($1) ? $0.toUpperCase() : $0.toLowerCase();
     });
 }
 
 function sanitize(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
-            $(this).val($(this).val().remove(/[^a-zA-Z0-9 \-\_\.\,\;\:\'\?\!\"àéèìòù]/g/s));
+    fields.forEach(function(field) {
+        field.change(function() {
+            $(this).val($(this).val().remove(/[^a-zA-Z0-9 \-\_\.\,\;\:\'\?\!\"àéèìòù]/g / s));
         });
     });
 }
@@ -68,24 +68,69 @@ function urlify(text) {
         return '<a href="' + url + '">' + url + '</a>';
     })
 }
+function sanitizeDate(fields) {
+    fields.forEach(function(field) {
+        field.change(function() {
+            value = $(this).val().toLowerCase();
+            d = new Date();
+            if (value.endsWith('gg') || value == 'oggi' || value == 'domani') {
+                switch (value) {
+                    case '0gg':
+                    case 'oggi':
+                        break;
+                    case '1gg':
+                    case 'domani':
+                        d = calcolaData(d, 1);
+                        break;
+                    default:
+                        nd = parseInt(value.substr(0, value.length - 2));
+                        d = calcolaData(d, nd);
+                        break;
+                }
+                g = d.getUTCDate() < 10 ? '0'+d.getUTCDate() : d.getUTCDate();
+                m = d.getUTCMonth() < 9 ? '0'+(d.getUTCMonth() + 1) : (d.getUTCMonth() + 1);
+                a = d.getUTCFullYear();
+                $(this).val(g+'/'+m+'/'+a);
+            } else {
+                numeri = $(this).val().replace(/\-/g, "/").replace(/\./g, "/").replace(/\//g, " ").words();
+                if(numeri.length == 3) {
+                    console.log(numeri);
+                    d.setUTCDate(parseInt(numeri[0], 10));
+                    d.setUTCMonth(parseInt(numeri[1], 10));
+                    d.setUTCFullYear(parseInt(numeri[2], 10) < 100 ? 2000 + parseInt(numeri[2], 10) : parseInt(numeri[2], 10));
+                } 
+                g = d.getUTCDate() < 10 ? '0'+d.getUTCDate() : d.getUTCDate();
+                m = d.getUTCMonth() == 0 ? 12 : (d.getUTCMonth() < 10 ? '0'+(d.getUTCMonth()) : (d.getUTCMonth()));
+                a = d.getUTCFullYear();
+                $(this).val(g+'/'+m+'/'+a);
+            }
+        });
+    });
+}
+function calcolaData(date, giorni) {
+  var giorno = 86400000;
+  var utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+  var new_date = new Date(utc + giorni * giorno);
+  return new_date;
+}
 function sanitizeCurrency(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             value = $(this).val().replace(",", ".").remove(/[^0-9\.]/g);
             n = 0;
             i = 0;
             nc = 0;
             value.chars(function(c) {
-                if(c == '.'){
+                if (c == '.') {
                     n++;
-                } 
-                if(n == 2){
+                }
+                if (n == 2) {
                     i = nc;
                     n++;
-                } 
+                }
                 nc++;
             });
-            if(n > 1) {
+            if (n > 1) {
                 value = value.substring(0, i);
                 value = Math.abs(parseFloat(value == '' || value == '.' ? 0 : value));
                 $(this).val(value.toFixed(2));
@@ -97,55 +142,55 @@ function sanitizeCurrency(fields) {
     });
 }
 function sanitizeTelefono(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().remove(/[^0-9 \-\.]/g));
         });
     });
 }
 function sanitizeSkype(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().remove(/[^a-zA-Z0-9\-\.]/g));
         });
     });
 }
 function sanitizeUrl(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             _sanitizeUrl($(this))
         });
     });
 }
 function _sanitizeUrl(field) {
-    if(!field.val().startsWith(/http(s)?:\/\//) && field.val().trim() != '') {
-        field.val('http://'+field.val());
+    if (!field.val().startsWith(/http(s)?:\/\//) && field.val().trim() != '') {
+        field.val('http://' + field.val());
     }
 }
 function sanitizeHtml(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val(optimizeHtml($(this).val(), false));
         });
     });
 }
 function sanitizeHtmlMin(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val(optimizeHtml($(this).val(), true));
         });
     });
 }
 function optimizeHtml(val, min) {
     text = val;
-    if(min) {
+    if (min) {
         text = text.stripTags('a', 'div', 'span', 'ol', 'ul', 'li', 'dl', 'dt', 'dd');
         text = text.removeTags('script', 'img', 'hr');
     } else {
         text = text.stripTags('a', 'div', 'span');
         text = text.removeTags('script', 'img', 'hr');
     }
-    text = text.stripTags('table', 'tbody', 'tr', 'th', 'td', 'thead', 'h1', 'h2', 'h3','h4','h5', 'hr');
+    text = text.stripTags('table', 'tbody', 'tr', 'th', 'td', 'thead', 'h1', 'h2', 'h3', 'h4', 'h5', 'hr');
     text = text.remove(/<p>[ ]*<\/p>/g);
     text = text.remove(/<\/strong><strong>/g);
     text = text.remove(/<\/em><em>/g);
@@ -155,59 +200,59 @@ function optimizeHtml(val, min) {
     text = text.replace(/<li><p>/g, '<li>');
     text = text.replace(/<\/p><\/li>/g, '</li>');
     text = text.replace(/\\/g, '');
-    
+
     //alert(text);
-    
+
     return text;
 }
 function floatField(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().remove(/[^0-9\.\,]/g).replace(',', '.'));
         });
     });
 }
 function capitalize(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().capitalize());
         });
     });
 }
 function capitalizeAll(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().titleize());
         });
     });
 }
 function uppercase(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().toUpperCase());
         });
     });
 }
 function lowercase(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().toLowerCase());
         });
     });
 }
 function sanitize_regex(fields, regex) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().remove(regex));
         });
     });
 }
 function autoCheckEmail(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().trim());
-            if($(this).val() != '') {
-                if(!checkEmail($(this).val())) {
+            if ($(this).val() != '') {
+                if (!checkEmail($(this).val())) {
                     fancyAlert('Email non valida');
                     $(this).val('');
                 }
@@ -223,11 +268,11 @@ function checkEmail(email) {
     return false;
 }
 function autoCheckSito(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().trim());
-            if($(this).val() != '') {
-                if(!checkSito($(this).val())) {
+            if ($(this).val() != '') {
+                if (!checkSito($(this).val())) {
                     fancyAlert('Pagina internet non valida');
                     $(this).val('');
                 }
@@ -243,11 +288,11 @@ function checkSito(url) {
     return false;
 }
 function autoCheckCF(fields) {
-    fields.forEach(function(field){
-        field.change(function(){
+    fields.forEach(function(field) {
+        field.change(function() {
             $(this).val($(this).val().trim());
-            if($(this).val() != '') {
-                if(!checkCF($(this).val()) && !checkPI($(this).val())) {
+            if ($(this).val() != '') {
+                if (!checkCF($(this).val()) && !checkPI($(this).val())) {
                     fancyAlert('Codie Fiscale non valido');
                     $(this).val('');
                 }
@@ -264,7 +309,7 @@ function checkCF(cf) {
 }
 function checkCAP(cap) {
     re = /^[0-9]{5}$/;
-    if ((cap+'').match(re)) {
+    if ((cap + '').match(re)) {
         return true;
     }
     return false;
@@ -284,47 +329,47 @@ function getMatchRegexp(subject, re) {
 }
 
 function setPlaceholder(field, value) {
-    if(field.val() == '')
+    if (field.val() == '')
         field.defaultvalue(value);
 }
 
 /* CHECK VARIABILI */
-function is_int(input){
-    return typeof(input)=='number'&&parseInt(input)==input;
+function is_int(input) {
+    return typeof(input) == 'number' && parseInt(input) == input;
 }
-function is_string(input){
-    return typeof(input)=='string';
+function is_string(input) {
+    return typeof(input) == 'string';
 }
 
 function testVariabile(variabile) {
-    return !(eval('window.'+variabile) === undefined);
+    return !(eval('window.' + variabile) === undefined);
 }
 
 function testFunction(funzione) {
-    fx = eval('window.'+funzione);
-    
+    fx = eval('window.' + funzione);
+
     //alert(fx);
-    
-    if(fx === undefined) {
+
+    if (fx === undefined) {
         return false;
-    //  alert("UND");
+        //  alert("UND");
     }
     //alert("def");
     return typeof(fx) == 'function';
-    
+
 }
 
 function checkVariabili(exist) {
-    if(!(testVariabile('noCheck') && noCheck)) {
-        if(typeof exist == 'string') {
-            if(eval('window.'+exist) === undefined) {
-                alert("Definire '"+exist+"' per continuare");
+    if (!(testVariabile('noCheck') && noCheck)) {
+        if (typeof exist == 'string') {
+            if (eval('window.' + exist) === undefined) {
+                alert("Definire '" + exist + "' per continuare");
             }
         }
-        if(typeof exist == 'object') {
-            exist.forEach(function(variabile){
-                if(eval('window.'+variabile) === undefined) {
-                    alert("Definire '"+variabile+"' per continuare");
+        if (typeof exist == 'object') {
+            exist.forEach(function(variabile) {
+                if (eval('window.' + variabile) === undefined) {
+                    alert("Definire '" + variabile + "' per continuare");
                 }
             });
         }
@@ -333,12 +378,12 @@ function checkVariabili(exist) {
 
 function setCampiObbligatori(check, callback) {
     ok = true;
-    check.forEach(function(campo_form){
-        label = $('label[for="'+campo_form.attr('id')+'"]');       
+    check.forEach(function(campo_form) {
+        label = $('label[for="' + campo_form.attr('id') + '"]');
         label.addClass('obbligatorio');
-        campo_form.change(function(){
+        campo_form.change(function() {
             checkCampiObbligatori(check, callback);
-        }).keyup(function(){
+        }).keyup(function() {
             checkCampiObbligatori(check, callback);
         });
         ok = ok && campo_form.val().trim() != '';
@@ -348,11 +393,11 @@ function setCampiObbligatori(check, callback) {
 
 function checkCampiObbligatori(check, callback) {
     ok = true;
-    check.forEach(function(campo_form){
+    check.forEach(function(campo_form) {
         ok = ok && (campo_form.val().trim() != '');
-    //alert(campo_form.attr('id')+' ('+(ok ? 1 : 0)+')');
+        //alert(campo_form.attr('id')+' ('+(ok ? 1 : 0)+')');
     });
-    eval(callback+'('+(ok?'true':'false')+')');
+    eval(callback + '(' + (ok ? 'true' : 'false') + ')');
 }
 
 /***********
@@ -360,7 +405,7 @@ function checkCampiObbligatori(check, callback) {
  ***********/
 
 function serialize(_obj) {
-    if(_obj == null) 
+    if (_obj == null)
         return 'null';
     // Let Gecko browsers do this the easy way
     if (typeof _obj.toSource !== 'undefined' && typeof _obj.callee === 'undefined')
@@ -379,7 +424,7 @@ function serialize(_obj) {
             return _obj;
             break;
 
-        // for JSON format, strings need to be wrapped in quotes
+            // for JSON format, strings need to be wrapped in quotes
         case 'string':
             return '\'' + _obj + '\'';
             break;
@@ -390,7 +435,7 @@ function serialize(_obj) {
             {
                 str = '[';
                 var i, len = _obj.length;
-                for (i = 0; i < len-1; i++) {
+                for (i = 0; i < len - 1; i++) {
                     str += serialize(_obj[i]) + ',';
                 }
                 str += serialize(_obj[i]) + ']';
@@ -418,31 +463,31 @@ function fancyAlert(msg) {
         modal: true,
         padding: 3,
         margin: 0,
-        content: "<div class=\"alert\"><h3>"+msg+"</h3><div style=\"text-align:center;margin-top:40px;\"><button class=\"button-orange large\" id=\"fancy-ok\" type=\"button\" onclick=\"jQuery.fancybox.close();\" >OK</button></div></div>"
+        content: "<div class=\"alert\"><h3>" + msg + "</h3><div style=\"text-align:center;margin-top:40px;\"><button class=\"button-orange large\" id=\"fancy-ok\" type=\"button\" onclick=\"jQuery.fancybox.close();\" >OK</button></div></div>"
     });
 }
 
 var fancyConfirmResult;
-function fancyConfirm(msg,ok_txt,ko_txt,callback) {
+function fancyConfirm(msg, ok_txt, ko_txt, callback) {
     jQuery.fancybox({
-        modal : true,
+        modal: true,
         padding: 3,
         margin: 0,
-        content: "<div class=\"alert\"><h3>"+msg+"</h3><div style=\"text-align:right;margin-top:10px;\"><button id=\"fbc_ok\" onClick=\"javascript:fancyConfirmOk()\" class=\"button-orange large\" type=\"button\" value=\""+ok_txt+"\">"+ok_txt+"</button><button id=\"fbc_ko\" onClick=\"javascript:fancyConfirmKo()\" class=\"button-orange large\" type=\"button\" id=\"fancyConfirm_cancel\" value=\""+ko_txt+"\">"+ko_txt+"</button></div></div>",
-        beforeClose : function() {
-            eval(callback+"("+(fancyConfirmResult?"true":"false")+")");
+        content: "<div class=\"alert\"><h3>" + msg + "</h3><div style=\"text-align:right;margin-top:10px;\"><button id=\"fbc_ok\" onClick=\"javascript:fancyConfirmOk()\" class=\"button-orange large\" type=\"button\" value=\"" + ok_txt + "\">" + ok_txt + "</button><button id=\"fbc_ko\" onClick=\"javascript:fancyConfirmKo()\" class=\"button-orange large\" type=\"button\" id=\"fancyConfirm_cancel\" value=\"" + ko_txt + "\">" + ko_txt + "</button></div></div>",
+        beforeClose: function() {
+            eval(callback + "(" + (fancyConfirmResult ? "true" : "false") + ")");
         }
     });
 }
 function fancyConfirmOk() {
-    fancyConfirmResult = true; 
+    fancyConfirmResult = true;
     jQuery.fancybox.close();
 }
 function fancyConfirmKo() {
-    fancyConfirmResult = false; 
+    fancyConfirmResult = false;
     jQuery.fancybox.close();
 }
- 
+
 function removeObj(id) {
     $(id).remove();
 }
@@ -454,7 +499,7 @@ function switch_tabs(obj, tabContent) {
     obj.closest('ul').children().children('a').removeClass("active");
     var id = obj.attr("rel");
 
-    $('#'+id).show();
+    $('#' + id).show();
     obj.addClass("active");
 }
 
@@ -462,8 +507,8 @@ function switch_class_tabs(obj, tabContent) {
     $(tabContent).hide();
     obj.closest('ul').children().children('a').removeClass("active");
     var id = obj.attr("rel");
-    
-    $('.'+id).show();
+
+    $('.' + id).show();
     obj.addClass("active");
 }
 
@@ -481,7 +526,7 @@ var opts = {
     trail: 20, // Afterglow percentage
     shadow: false, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/32
+    opacity: 1 / 32
 };
 
 var optsbigdef = {
@@ -494,7 +539,7 @@ var optsbigdef = {
     trail: 20, // Afterglow percentage
     shadow: false, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/32
+    opacity: 1 / 32
 };
 
 var optsbig = {
@@ -507,10 +552,10 @@ var optsbig = {
     trail: 20, // Afterglow percentage
     shadow: false, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/8
+    opacity: 1 / 8
 };
 
-var optsbigtab = { /* spinner grande per i tabs */
+var optsbigtab = {/* spinner grande per i tabs */
     lines: 64, // The number of lines to draw
     length: 8, // The length of each line
     width: 5, // The line thickness
@@ -520,10 +565,10 @@ var optsbigtab = { /* spinner grande per i tabs */
     trail: 20, // Afterglow percentage
     shadow: false, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/8
+    opacity: 1 / 8
 };
 
-var optsbigfancy = { /* spinner grande per i tabs */
+var optsbigfancy = {/* spinner grande per i tabs */
     lines: 16, // The number of lines to draw
     length: 0, // The length of each line
     width: 5, // The line thickness
@@ -533,7 +578,7 @@ var optsbigfancy = { /* spinner grande per i tabs */
     trail: 20, // Afterglow percentage
     shadow: true, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/8
+    opacity: 1 / 8
 };
 
 var optsbar = {
@@ -546,7 +591,7 @@ var optsbar = {
     trail: 20, // Afterglow percentage
     shadow: false, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/8
+    opacity: 1 / 8
 };
 
 /* spinner piccolo per i bottoni scuri */
@@ -561,7 +606,7 @@ var optsbut = {
     trail: 20, // Afterglow percentage
     shadow: false, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/8
+    opacity: 1 / 8
 };
 
 /* spinner piccolo per i bottoni chiari */
@@ -576,20 +621,20 @@ var optsbutblack = {
     trail: 20, // Afterglow percentage
     shadow: false, // Whether to render a shadow
     hwaccel: true, // Whether to use hardware acceleration
-    opacity: 1/32
+    opacity: 1 / 32
 };
 
 /* definizione variabili spinners */
 /*
-var spinnerDef = new Spinner(opts).spin(); // grigio medie dimensioni, da abbinare a "preloader" (uso di default)
-var spinnerBigDef = new Spinner(optsbigdef).spin(); // grigio grande, da abbinare a "preloader"
-var spinnerBig = new Spinner(optsbig).spin(); // bianco grande, da abbinare a "preloader-util"
-var spinnerBigTab = new Spinner(optsbigtab).spin(); // bianco molto grande, da abbinare a "preloader-util" (usato per i grandi contenuti come i cambi di tab)
-var spinnerBigFancy = new Spinner(optsbigfancy).spin(); // grigio molto grande, da abbinare Fancybox
-var spinnerBar = new Spinner(optsbar).spin(); // da abbinare a "preloader-bar"
-var spinnerBut = new Spinner(optsbut).spin(); // bianco piccolo, da abbinare a "preloader-button"
-var spinnerButBlack = new Spinner(optsbutblack).spin(); // nero piccolo, da abbinare a "preloader-button"
-*/
+ var spinnerDef = new Spinner(opts).spin(); // grigio medie dimensioni, da abbinare a "preloader" (uso di default)
+ var spinnerBigDef = new Spinner(optsbigdef).spin(); // grigio grande, da abbinare a "preloader"
+ var spinnerBig = new Spinner(optsbig).spin(); // bianco grande, da abbinare a "preloader-util"
+ var spinnerBigTab = new Spinner(optsbigtab).spin(); // bianco molto grande, da abbinare a "preloader-util" (usato per i grandi contenuti come i cambi di tab)
+ var spinnerBigFancy = new Spinner(optsbigfancy).spin(); // grigio molto grande, da abbinare Fancybox
+ var spinnerBar = new Spinner(optsbar).spin(); // da abbinare a "preloader-bar"
+ var spinnerBut = new Spinner(optsbut).spin(); // bianco piccolo, da abbinare a "preloader-button"
+ var spinnerButBlack = new Spinner(optsbutblack).spin(); // nero piccolo, da abbinare a "preloader-button"
+ */
 /*---------------------------*/
 
 /*   attivazioni varie */
@@ -607,15 +652,15 @@ loadContentCache = [];
 loadContentPreload = [];
 loadContenteReady = true;
 
-function loadContent(url, target, idOfObj, param){
-    if(!param) {
+function loadContent(url, target, idOfObj, param) {
+    if (!param) {
         param = {};
     }
-    key = url+target+idOfObj+serialize(param);
+    key = url + target + idOfObj + serialize(param);
     $(idOfObj).fadeIn(250).append('<div id="preloader-icon">&nbsp;</div>');
-    if(loadContenteReady) {
+    if (loadContenteReady) {
         loadContenteReady = false;
-        if(!loadContentCache.find(key)) {
+        if (!loadContentCache.find(key)) {
             loadContentCache.add(key);
             spinnerButBlack.spin();
             $('#preloader-icon').append(spinnerButBlack.el);
@@ -623,28 +668,28 @@ function loadContent(url, target, idOfObj, param){
                 url: url,
                 data: param,
                 context: document.body,
-                success: function(data){
+                success: function(data) {
                     loadContentPreload[key] = data;
                     $(target).html(data);
                     spinnerButBlack.stop();
                     removeObj('#preloader-icon');
-            
+
                     $('html').click(function() {
                         $(idOfObj).fadeOut(250);
                     });
-                    $(target).click(function(event){
+                    $(target).click(function(event) {
                         event.stopPropagation();
                     });
-                    
+
                     loadContenteReady = true;
-                } 
+                }
             })
         } else {
             $(target).html(loadContentPreload[key]);
             $('html').click(function() {
                 $(idOfObj).fadeOut(250);
             });
-            $(target).click(function(event){
+            $(target).click(function(event) {
                 event.stopPropagation();
             });
             loadContenteReady = true;
@@ -653,29 +698,29 @@ function loadContent(url, target, idOfObj, param){
 }
 
 function setPositionBallon(_baloon, _target) {
-    baloon = $('#'+_baloon);
-    target = $('#'+_target).offset();
+    baloon = $('#' + _baloon);
+    target = $('#' + _target).offset();
     baloon.offset({
-        left: target.left, 
+        left: target.left,
         top: target.top + 10
     });
 }
-function scrollTo(o,s){
+function scrollTo(o, s) {
     var d = $(o).offset().top;
     $("html:not(:animated),body:not(:animated)").animate({
         scrollTop: d
-    }, s, 'swing'); 
+    }, s, 'swing');
 }
 
 
-is_explorer = navigator.appName=="Microsoft Internet Explorer";
+is_explorer = navigator.appName == "Microsoft Internet Explorer";
 
 function removeFile(url) {
     $.ajax({
         url: url,
         type: 'DELETE',
         success: function(msg) {
-        //alert(msg);
+            //alert(msg);
         }
     });
 }
@@ -684,12 +729,12 @@ function attivaFancybox() {
     $('.fancybox').fancybox({
         hideOnOverlayClick: false,
         transitionIn: 'elastic',
-        padding:3,
-        margin:0
+        padding: 3,
+        margin: 0
     });
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     attivaFancybox();
     $(".autogrow").autoGrow();
 });

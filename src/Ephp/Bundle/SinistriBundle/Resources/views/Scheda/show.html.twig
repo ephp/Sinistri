@@ -7,78 +7,71 @@ Scheda sinistro
 {% block content %}
 <h1>{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
 
-<div style="float: right; width: 33%; min-width: 300px;">
-    <table class="record_properties">
+<div style="float: left; width: 340px; margin-right: 10px;">
+    <table class="records_list">
         <tbody>
             <tr>
-                <th>Soi</th>
-                <td>{{ entity.soi }}</td>
+                <th colspan="2">Gestore</th>
             </tr>
             <tr>
-                <th>First_reserve</th>
-                <td>{{ entity.firstreserve }}</td>
+                <td colspan="2">{{ entity.gestore.nome }}</td>
             </tr>
             <tr>
                 <th>Amount_reserved</th>
-                <td>{{ entity.amountreserved }}</td>
-            </tr>
-            <tr>
                 <th>Sa</th>
-                <td>{{ entity.sa }}</td>
             </tr>
             <tr>
-                <th>Offerta_nostra</th>
-                <td>{{ entity.offertanostra }}</td>
+                <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{{ entity.amountReserved }}"/> €</td>
+                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="sa" value="{{ entity.sa }}"/> €</td>
             </tr>
             <tr>
-                <th>Offerta_loro</th>
-                <td>{{ entity.offertaloro }}</td>
+                <th>Offerta Nostra</th>
+                <th>Offerta Loro</th>
             </tr>
             <tr>
-                <th>Recupero_offerta_nostra</th>
-                <td>{{ entity.recuperooffertanostra }}</td>
+                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="offertaNostra" value="{{ entity.offertaNostra }}"/> €</td>
+                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="offertaLoro" value="{{ entity.offertaLoro }}"/> €</td>
             </tr>
             <tr>
-                <th>Recupero_offerta_loro</th>
-                <td>{{ entity.recuperooffertaloro }}</td>
+                <th>Recupero Offerta Nostra</th>
+                <th>Recupero Pfferta Loro</th>
             </tr>
             <tr>
-                <th>Note</th>
-                <td>{{ entity.note }}</td>
+                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaNostra" value="{{ entity.recuperoOffertaNostra }}" id="recuperoOffertaNostra_{{ entity.id }}" /> <span class="um" target="recuperoOffertaNostra_{{ entity.id }}"></span></td>
+                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaLoro" value="{{ entity.recuperoOffertaLoro }}" id="recuperoOffertaLoro_{{ entity.id }}"/>  <span class="um" target="recuperoOffertaLoro_{{ entity.id }}"></span></td>
+            </tr>
+            <tr>
+                <th colspan="2">Note</th>
+            </tr>
+            <tr>
+                <td colspan="2"><textarea class="autoupdate autogrow" style="float: right; width: 330px; min-width: 300px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
             </tr>
         </tbody>
     </table>
 </div>
-<div style="float: left; width: 66%">
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>Data</th>
-                <th>Titolo</th>
-                <th>Note</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for evento in entity.eventi %}
-                <tr>
-                    <td class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
-                    <td>{{ evento.dataOra|date('d-m-Y') }}</td>
-                    <td>{{ evento.titolo }}</td>
-                    <td>
-                        <button type="button">
-                            <a href="javascript:$('#note_{{ evento.id }}').toggle()">{% if evento.note %}Visualizza{% else %}Inserisci{% endif %}</a>
-                        </button>
-                    </td>
-                </tr>
-                <tr style="display: none" id="note_{{ evento.id }}">
-                    <td colspan="4"><textarea class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div style="float: left; width: 560px" id="tabella_container">
+    {% include 'EphpSinistriBundle:Scheda:show/tabella.html.twig' %}
 </div>
 <div style="clear: both"></div>
+<div style="display: none" id="fb_aggiungi_evento">
+    <form id="aggiungi_evento">
+        <h2>Aggiungi evento a {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h2>
+        <div style="clear: both"></div>
+        <label for="scheda_data">Data</label>
+        <div style="clear: both"></div>
+        <input type="text" name="evento[data]" id="scheda_data" class="cal_data" value="" /> <small>Inserire la data nel formato <b>gg/mm/aaaa</b> o le parole chiave <b>oggi</b>, <b>domani</b> o un numero seguito da <b>gg</b> (es: 5gg)</small>
+        <div style="clear: both"></div>
+        <label for="scheda_titolo">Titolo</label>
+        <div style="clear: both"></div>
+        <input type="text" name="evento[titolo]" id="scheda_titolo" style="width: 400px;" value=""/>  
+        <div style="clear: both"></div>
+        <label for="scheda_note">Note</label>
+        <div style="clear: both"></div>
+        <textarea style="background-color: #ffffff; border: 1px solid #dadada; width: 400px;" class="autogrow" name="evento[note]" id="scheda_note" placeholder="Inserisci qui le tue note"></textarea>
+        <div style="clear: both"></div>
+        <button type="button" onclick="aggiungiEvento()">Aggiungi</button>
+    </form>
+</div>
 
 <ul class="record_actions">
     <li>
@@ -87,4 +80,41 @@ Scheda sinistro
         </a>
     </li>
 </ul>
+
+<script type="text/javascript">
+    function aggiungiEvento() {
+        form = $('#aggiungi_evento');
+        $.post('{{ path('tabellone_aggiungi_evento', {'id': entity.id}) }}', form.serialize(), function(out) {
+            $('#tabella_container').html(out);
+            $.fancybox.close();
+            form.reset();
+        });
+    }
+    sanitizeCurrency([$('.currency')]);
+    sanitizeDate([$('.cal_data')]);
+    $('.autoupdate').change(function(){
+        val = $(this).val();
+        pratica = $(this).attr('pratica');
+        field = $(this).attr('name');
+        $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
+            checkUm();
+        });
+    });
+    function checkUm() {
+        $('.um').each(function(){
+            val = $('#'+$(this).attr('target')).val();
+            console.log(val);
+            if(val) {
+                if(parseFloat(val) <= 100){
+                    $(this).text('%');
+                } else {
+                    $(this).text('€');
+                }
+            } else {
+                $(this).text('');
+            }
+        });
+    }
+    checkUm();
+</script>
 {% endblock %}

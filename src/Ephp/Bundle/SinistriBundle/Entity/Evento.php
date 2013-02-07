@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Evento extends \Ephp\Bundle\CalendarBundle\Entity\Evento
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Scheda")
      * @ORM\JoinColumn(name="scheda_id", referencedColumnName="id")
      */
@@ -40,17 +31,6 @@ class Evento extends \Ephp\Bundle\CalendarBundle\Entity\Evento
      * @ORM\Column(name="delta_g", type="integer", nullable=true)
      */
     private $delta_g;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set ordine
