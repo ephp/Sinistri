@@ -67,6 +67,16 @@ Scheda
         </tr>
     </tbody>
 </table>
+<table class="record_properties">
+    <tbody>
+        {% for evento in entity.eventi %}
+            <tr>
+                <th>{{ evento.dataOra|date('l d-m-Y') }}</th>
+                <td>{{ evento.titolo }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 <ul class="record_actions">
     <li>

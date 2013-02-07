@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="cal_eventi_sx")
  * @ORM\Entity(repositoryClass="Ephp\Bundle\SinistriBundle\Entity\EventoRepository")
  */
-class Evento
+class Evento extends \Ephp\Bundle\CalendarBundle\Entity\Evento
 {
     /**
      * @var integer
@@ -50,29 +50,6 @@ class Evento
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set sinistro
-     *
-     * @param integer $sinistro
-     * @return Evento
-     */
-    public function setSinistro($sinistro)
-    {
-        $this->sinistro = $sinistro;
-    
-        return $this;
-    }
-
-    /**
-     * Get sinistro
-     *
-     * @return integer 
-     */
-    public function getSinistro()
-    {
-        return $this->sinistro;
     }
 
     /**

@@ -24,7 +24,7 @@ class Calendario
     /**
      * @var string
      *
-     * @ORM\Column(name="sigla", type="string", length=3)
+     * @ORM\Column(name="sigla", type="string", length=8)
      */
     private $sigla;
 

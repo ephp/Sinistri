@@ -136,6 +136,20 @@ class Scheda
      */
     private $note;
 
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="Evento", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
+     */
+    private $eventi;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->eventi = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -170,6 +184,15 @@ class Scheda
         return $this->anno;
     }
 
+    /**
+     * Get anno a due cifre
+     *
+     * @return integer 
+     */
+    public function getAnno2() {
+        return $this->anno < 10 ? '0'.$this->anno : $this->anno;
+    }
+    
     /**
      * Set dasc
      *
@@ -538,7 +561,36 @@ class Scheda
         return $this->priorita;
     }
     
-    public function getAnno2() {
-        return $this->anno < 10 ? '0'.$this->anno : $this->anno;
+    /**
+     * Add eventi
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Evento $eventi
+     * @return Scheda
+     */
+    public function addEventi(\Ephp\Bundle\SinistriBundle\Entity\Evento $eventi)
+    {
+        $this->eventi[] = $eventi;
+    
+        return $this;
+    }
+
+    /**
+     * Remove eventi
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Evento $eventi
+     */
+    public function removeEventi(\Ephp\Bundle\SinistriBundle\Entity\Evento $eventi)
+    {
+        $this->eventi->removeElement($eventi);
+    }
+
+    /**
+     * Get eventi
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEventi()
+    {
+        return $this->eventi;
     }
 }

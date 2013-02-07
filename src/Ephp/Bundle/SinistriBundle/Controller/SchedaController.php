@@ -7,8 +7,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ephp\Bundle\ACLBundle\Entity\Gestore;
+use Ephp\Bundle\CalendarBundle\Entity\Calendario;
+use Ephp\Bundle\SinistriBundle\Entity\Evento;
 use Ephp\Bundle\SinistriBundle\Entity\Priorita;
 use Ephp\Bundle\SinistriBundle\Entity\Scheda;
+use Ephp\Bundle\WsInvokerBundle\Functions\Funzioni;
 
 /**
  * Scheda controller.
@@ -107,9 +110,53 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
 
         $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+
+        if (count($entity->getEventi()) == 0) {
+            try {
+                $em->beginTransaction();
+                $cal = $this->getCalendar();
+                $generatore = array(
+                    array('tipo' => 'ASC', 'giorni' => 0),
+                    array('tipo' => 'VIM', 'giorni' => 10),
+                    array('tipo' => 'RPM', 'giorni' => 25),
+                    array('tipo' => 'RER', 'giorni' => 14),
+                    array('tipo' => 'RSA', 'giorni' => 14),
+                    array('tipo' => 'TAX', 'giorni' => 30),
+                    array('tipo' => 'TAX', 'giorni' => 14),
+                    array('tipo' => 'TAX', 'giorni' => 14)
+                );
+                $data = $entity->getDasc();
+                foreach ($generatore as $i => $gen) {
+                    $data = Funzioni::calcolaData($data, $gen['giorni']);
+                    $tipo = $this->getTipoEvento($gen['tipo']);
+                    $evento = new Evento();
+                    $evento->setCalendario($cal);
+                    $evento->setData($data);
+                    $evento->setDataOra($data);
+                    $evento->setDeltaG($gen['giorni']);
+                    $evento->setGiornoIntero(true);
+                    $evento->setImportante(true);
+                    $evento->setNote('');
+                    $evento->setOra($data);
+                    $evento->setOrdine($i + 1);
+                    $evento->setRischedulazione(true);
+                    $evento->setScheda($entity);
+                    $evento->setTipo($tipo);
+                    $evento->setTitolo($tipo->getNome());
+                    $em->persist($evento);
+                    $em->flush();
+                    $entity->addEventi($evento);
+                }
+                $em->commit();
+            } catch (\Exception $e) {
+                $em->rollback();
+                throw $e;
+            }
         }
 
         return array(
@@ -394,6 +441,34 @@ class SchedaController extends DragDropController {
         }
 
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('schede_aggiunte' => $schede_aggiunte, 'schede_aggiornate' => $schede_aggiornate)));
+    }
+
+    private function getTipoEvento($sigla) {
+        $cal = $this->getCalendar();
+        $_tipo = $this->getEm()->getRepository('EphpCalendarBundle:Tipo');
+        /* @var $_tipo \Ephp\Bundle\CalendarBundle\Entity\TipoRepository */
+        return $_tipo->findOneBy(array('sigla' => $sigla, 'calendario' => $cal->getId()));
+    }
+
+    private function getCalendar() {
+        $_cal = $this->getEm()->getRepository('EphpCalendarBundle:Calendario');
+        /* @var $_cal \Ephp\Bundle\CalendarBundle\Entity\CalendarioRepository */
+        $cal = $_cal->findOneBy(array('sigla' => 'JFC-SX'));
+        if (!$cal) {
+            $cal = $_cal->createCalendario('JFC-SX', 'JF-Claims Sinistri');
+            $_tipo = $this->getEm()->getRepository('EphpCalendarBundle:Tipo');
+            /* @var $_tipo \Ephp\Bundle\CalendarBundle\Entity\TipoRepository */
+            $_tipo->createTipo('ASC', 'Analisi Sinistri e Copertura', $cal);
+            $_tipo->createTipo('VIM', 'Verifica Incarichi e Medici', $cal);
+            $_tipo->createTipo('RPM', 'Ricerca Polizze e Medici', $cal);
+            $_tipo->createTipo('RER', 'Relazione e Riserva', $cal);
+            $_tipo->createTipo('RSA', 'Richiesta di SA', $cal);
+            $_tipo->createTipo('TAX', 'Trattative e Aggiornamenti', $cal);
+            $_tipo->createTipo('JWB', 'J-Web Claims', $cal);
+            $_tipo->createTipo('JUD', 'Udienze', $cal);
+            $_tipo->createTipo('OTH', 'Attività manuali', $cal);
+        }
+        return $cal;
     }
 
 }
