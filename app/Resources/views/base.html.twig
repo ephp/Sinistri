@@ -5,6 +5,7 @@
         <title>{% block title %}Sinistri{% endblock %}</title>
         <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" href="{{ asset('/bundles/ephpsinistri/css/ephp.css') }}" />
+        <link rel="stylesheet" href="{{ asset('/bundles/ephpcalendar/css/ephp.css') }}" />
         <link rel="stylesheet" href="{{ asset('/css/jquery/FancyBox/jquery.fancybox.css') }}" />
         <link rel="stylesheet" href="{{ asset('/css/jquery/FancyBox/helpers/jquery.fancybox-buttons.css') }}" />
         <link rel="stylesheet" href="{{ asset('/css/jquery/FancyBox/helpers/jquery.fancybox-thumbs.css') }}" />
@@ -70,7 +71,11 @@
                             <dt>Importazione tabellone da csv di Google Drive</dt>
                             <dd>È possibile importare i dati inseriti sui fogli di lavoro di Google Drive in modo massivo e veloce, usando semplicemente il Drag & Drop del file all'interno del sito.</dd>
                             <dt>Pratica</dt>
-                            <dd>Bozza di visualizzazione delle pratiche</dd>
+                            <dd>Visualizzazione delle pratiche<br/>
+                                <ul>
+                                    <li style="padding-bottom: 0px;">Creazione delle date automatiche</li>
+                                </ul>
+                            </dd>
                         </dl>
                     {% endif %}
                 {% endblock %}

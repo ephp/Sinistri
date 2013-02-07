@@ -1,82 +1,84 @@
 {% extends '::base.html.twig' %}
 
 {% block title %}
-Scheda
+Scheda sinistro
 {% endblock %}
 
 {% block content %}
-<h1>Scheda</h1>
+<h1>{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
 
-<table class="record_properties">
-    <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
-            <th>Anno</th>
-            <td>{{ entity.anno }}</td>
-        </tr>
-        <tr>
-            <th>Dasc</th>
-            <td>{{ entity.dasc|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Tpa</th>
-            <td>{{ entity.tpa }}</td>
-        </tr>
-        <tr>
-            <th>Claimant</th>
-            <td>{{ entity.claimant }}</td>
-        </tr>
-        <tr>
-            <th>Soi</th>
-            <td>{{ entity.soi }}</td>
-        </tr>
-        <tr>
-            <th>First_reserve</th>
-            <td>{{ entity.firstreserve }}</td>
-        </tr>
-        <tr>
-            <th>Amount_reserved</th>
-            <td>{{ entity.amountreserved }}</td>
-        </tr>
-        <tr>
-            <th>Sa</th>
-            <td>{{ entity.sa }}</td>
-        </tr>
-        <tr>
-            <th>Offerta_nostra</th>
-            <td>{{ entity.offertanostra }}</td>
-        </tr>
-        <tr>
-            <th>Offerta_loro</th>
-            <td>{{ entity.offertaloro }}</td>
-        </tr>
-        <tr>
-            <th>Recupero_offerta_nostra</th>
-            <td>{{ entity.recuperooffertanostra }}</td>
-        </tr>
-        <tr>
-            <th>Recupero_offerta_loro</th>
-            <td>{{ entity.recuperooffertaloro }}</td>
-        </tr>
-        <tr>
-            <th>Note</th>
-            <td>{{ entity.note }}</td>
-        </tr>
-    </tbody>
-</table>
-<table class="record_properties">
-    <tbody>
-        {% for evento in entity.eventi %}
+<div style="float: right; width: 33%; min-width: 300px;">
+    <table class="record_properties">
+        <tbody>
             <tr>
-                <th>{{ evento.dataOra|date('l d-m-Y') }}</th>
-                <td>{{ evento.titolo }}</td>
+                <th>Soi</th>
+                <td>{{ entity.soi }}</td>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            <tr>
+                <th>First_reserve</th>
+                <td>{{ entity.firstreserve }}</td>
+            </tr>
+            <tr>
+                <th>Amount_reserved</th>
+                <td>{{ entity.amountreserved }}</td>
+            </tr>
+            <tr>
+                <th>Sa</th>
+                <td>{{ entity.sa }}</td>
+            </tr>
+            <tr>
+                <th>Offerta_nostra</th>
+                <td>{{ entity.offertanostra }}</td>
+            </tr>
+            <tr>
+                <th>Offerta_loro</th>
+                <td>{{ entity.offertaloro }}</td>
+            </tr>
+            <tr>
+                <th>Recupero_offerta_nostra</th>
+                <td>{{ entity.recuperooffertanostra }}</td>
+            </tr>
+            <tr>
+                <th>Recupero_offerta_loro</th>
+                <td>{{ entity.recuperooffertaloro }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ entity.note }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div style="float: left; width: 66%">
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Data</th>
+                <th>Titolo</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for evento in entity.eventi %}
+                <tr>
+                    <td class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
+                    <td>{{ evento.dataOra|date('d-m-Y') }}</td>
+                    <td>{{ evento.titolo }}</td>
+                    <td>
+                        <button type="button">
+                            <a href="javascript:$('#note_{{ evento.id }}').toggle()">{% if evento.note %}Visualizza{% else %}Inserisci{% endif %}</a>
+                        </button>
+                    </td>
+                </tr>
+                <tr style="display: none" id="note_{{ evento.id }}">
+                    <td colspan="4"><textarea class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div style="clear: both"></div>
 
 <ul class="record_actions">
     <li>
