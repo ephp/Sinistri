@@ -13,14 +13,7 @@
                 <td class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
                 <td>{{ evento.dataOra|date('d-m-Y') }}</td>
                 <td>{{ evento.titolo }}</td>
-                <td>
-                    <button type="button">
-                        <a href="javascript:$('#note_{{ evento.id }}').toggle()">{% if evento.note %}Visualizza{% else %}Inserisci note{% endif %}</a>
-                    </button>
-                </td>
-            </tr>
-            <tr style="display: none" id="note_{{ evento.id }}">
-                <td colspan="4"><textarea style="width: 550px" class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
+                <td><textarea style="width: 550px" class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
             </tr>
         {% endfor %}
         <tr>

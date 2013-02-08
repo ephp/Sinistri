@@ -421,12 +421,12 @@ class SchedaController extends DragDropController {
                                 break;
                             case 'first reserve':
                                 if ($dati[$index]) {
-                                    $scheda->setFirstReserve(str_replace(array('€', ' '), array('', ''), $dati[$index]));
+                                    $scheda->setFirstReserve($this->currency($dati[$index]));
                                 }
                                 break;
                             case 'amount reserved':
                                 if ($dati[$index]) {
-                                    $scheda->setAmountReserved(str_replace(array('€', ' '), array('', ''), $dati[$index]));
+                                    $scheda->setAmountReserved($this->currency($dati[$index]));
                                 }
                                 break;
                             case 'stato':
@@ -443,17 +443,17 @@ class SchedaController extends DragDropController {
                                 break;
                             case 'sa':
                                 if ($dati[$index]) {
-                                    $scheda->setSa(str_replace(array('€', ' '), array('', ''), $dati[$index]));
+                                    $scheda->setSa($this->currency($dati[$index]));
                                 }
                                 break;
                             case 'offerta ns':
                                 if ($dati[$index]) {
-                                    $scheda->setOffertaNostra(str_replace(array('€', ' '), array('', ''), $dati[$index]));
+                                    $scheda->setOffertaNostra($this->currency($dati[$index]));
                                 }
                                 break;
                             case 'offerta loro':
                                 if ($dati[$index]) {
-                                    $scheda->setOffertaLoro(str_replace(array('€', ' '), array('', ''), $dati[$index]));
+                                    $scheda->setOffertaLoro($this->currency($dati[$index]));
                                 }
                                 break;
                             case 'priorita':
@@ -464,12 +464,12 @@ class SchedaController extends DragDropController {
                                 break;
                             case 'recupero offerta ns':
                                 if ($dati[$index]) {
-                                    $scheda->setRecuperoOffertaNostra($dati[$index]);
+                                    $scheda->setRecuperoOffertaNostra($this->currency($dati[$index]));
                                 }
                                 break;
                             case 'recupero offerta loro':
                                 if ($dati[$index]) {
-                                    $scheda->setRecuperoOffertaLoro($dati[$index]);
+                                    $scheda->setRecuperoOffertaLoro($this->currency($dati[$index]));
                                 }
                                 break;
                             default: break;
@@ -509,6 +509,10 @@ class SchedaController extends DragDropController {
         }
 
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('schede_aggiunte' => $schede_aggiunte, 'schede_aggiornate' => $schede_aggiornate)));
+    }
+
+    private function currency($euro) {
+        return str_replace(array('€', '.', ',', ' '), array('', '', '.', ''), $euro);
     }
 
     private function getTipoEvento($sigla) {
