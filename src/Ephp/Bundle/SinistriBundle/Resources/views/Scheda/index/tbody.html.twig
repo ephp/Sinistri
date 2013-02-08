@@ -1,0 +1,25 @@
+{% if colspan is not defined %}
+    {% set colspan = 7 %}
+    {% if mode <= 1 %}
+        {% set colspan = 9 %}
+    {% endif %}
+    {% if mode <= 2 %}
+        {% if mode > 1 %}
+            {% set colspan = 8 %}
+        {% endif %}
+    {% endif %}
+    {% if gestore is not defined %}
+        {% set colspan = colspan + 1 %}
+    {% endif %}
+{% endif %}
+{% for entity in entities %}
+    {% if not entity.dasc %}
+        {% include 'EphpSinistriBundle:Scheda:index/riga_inattiva.html.twig' %}
+    {% else %}
+        {% if not entity.gestore %}
+            {% include 'EphpSinistriBundle:Scheda:index/riga_attivabile.html.twig' %}
+        {% else %}
+            {% include 'EphpSinistriBundle:Scheda:index/riga_attiva.html.twig' %}
+        {% endif %}
+    {% endif %}
+{% endfor %}

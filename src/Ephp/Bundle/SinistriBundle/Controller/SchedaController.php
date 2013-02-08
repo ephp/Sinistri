@@ -35,14 +35,14 @@ class SchedaController extends DragDropController {
         if ($ospedale && $anno) {
             $mode = 3;
             $ospedale = $_ospedale->findOneBy(array('sigla' => $ospedale));
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedale->getId(), 'anno' => $anno), array('anno' => 'ASC'));
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedale->getId(), 'anno' => $anno), array('anno' => 'ASC'), 100);
         } elseif ($ospedale) {
             $mode = 2;
             $ospedale = $_ospedale->findOneBy(array('sigla' => $ospedale));
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedale->getId()), array('anno' => 'ASC'));
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedale->getId()), array('anno' => 'ASC'), 100);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array('anno' => 'ASC'));
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array('anno' => 'ASC'), 100);
         }
         $ospedali = $_ospedale->findBy(array(), array('sigla' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
@@ -75,14 +75,14 @@ class SchedaController extends DragDropController {
         if ($ospedale && $anno) {
             $mode = 3;
             $ospedale = $_ospedale->findOneBy(array('sigla' => $ospedale));
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedale->getId(), 'anno' => $anno), array('anno' => 'ASC'));
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedale->getId(), 'anno' => $anno), array('anno' => 'ASC'), 100);
         } elseif ($ospedale) {
             $mode = 2;
             $ospedale = $_ospedale->findOneBy(array('sigla' => $ospedale));
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedale->getId()), array('anno' => 'ASC'));
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedale->getId()), array('anno' => 'ASC'), 100);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId()), array('anno' => 'ASC'));
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId()), array('anno' => 'ASC'), 100);
         }
         $ospedali = $_ospedale->findBy(array(), array('sigla' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
@@ -97,6 +97,41 @@ class SchedaController extends DragDropController {
             'gestori' => $gestori,
             'priorita' => $priorita,
             'anni' => range(7, date('y'))
+        );
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-scroll_{pagina}/{gestore}/{ospedale}/{anno}", name="tabellone_scroll")
+     * @Template("EphpSinistriBundle:Scheda:index/tbody.html.twig")
+     */
+    public function scrollAction($pagina, $gestore, $ospedale, $anno) {
+        $em = $this->getEm();
+        $mode = 1;
+        if ($ospedale != 'TUTTI' && $anno != 'TUTTI') {
+            $mode = 3;
+        } elseif ($ospedale != 'TUTTI') {
+            $mode = 2;
+        }
+        $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $params = array();
+        if ($anno != 'TUTTI') {
+            $params['anno'] = $anno;
+        }
+        if ($ospedale != 'TUTTI') {
+            $ospedale = $_ospedale->findOneBy(array('sigla' => $ospedale));
+            $params['ospedale'] = $ospedale->getId();
+        }
+        if ($gestore != 'TUTTI') {
+            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+            $params['gestore'] = $gestore->getId();
+        }
+        $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy($params, array('anno' => 'ASC'), 100, 100 * $pagina);
+        return array(
+            'entities' => $entities,
+            'mode' => $mode,
         );
     }
 
