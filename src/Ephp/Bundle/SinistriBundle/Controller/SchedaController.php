@@ -384,7 +384,7 @@ class SchedaController extends DragDropController {
                 try {
                     $conn->beginTransaction();
                     $data = \DateTime::createFromFormat('d/m/Y', $dati[2]);
-                    $tipo = $this->getTipoEvento($dati[1] ? str_replace('SIN', 'UDT', $dati[1]) : 'OTH');
+                    $tipo = $this->getTipoEvento($dati[1] ? str_replace('SIN', 'CNT', $dati[1]) : 'OTH');
                     $evento = new Evento();
                     $evento->setCalendario($cal);
                     $evento->setDataOra($data);
@@ -397,8 +397,41 @@ class SchedaController extends DragDropController {
                     $evento->setScheda($entity);
                     $evento->setTipo($tipo);
                     $evento->setTitolo($dati[3]);
-                    $em->persist($evento);
-                    $em->flush();
+                    
+                    $like = array(
+                                'calendario' => $cal->getId(),
+                                'tipo' => $tipo->getId(),
+                                'scheda' => $entity->getId(),
+                                'titolo' => $evento->getTitolo(),
+                            );
+                    if(in_array($tipo->getSigla(), array('JWB', 'CNT', 'RVP', 'RIS'))) {
+                        $like['note'] = $evento->getNote();
+                    }
+                    
+                    $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy($like);
+//                    Funzioni::vd($old);
+                    if (!$olds) {
+                        $em->persist($evento);
+                        $em->flush();
+                    } else {
+                        $data->setTime(0, 0, 0);
+                        $save = true;
+                        foreach($olds as $old) {
+                            $old->getDataOra()->setTime(0, 0, 0);
+                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                                $save = false;
+                                if($tipo->getSigla() == 'OTH') {
+                                    $old->setNote($dati[4]);
+                                    $em->persist($old);
+                                    $em->flush();
+                                }
+                            }
+                        }
+                        if($save) {
+                            $em->persist($evento);
+                            $em->flush();
+                        }
+                    }
 
                     $conn->commit();
                 } catch (\Exception $e) {
