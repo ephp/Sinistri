@@ -206,16 +206,11 @@
             nextSelector : '#page_nav a',  // selector for the NEXT link (to page 2)
             itemSelector : '.r',     // selector for all items you'll retrieve
             loading: {
-                finishedMsg: '<tr><td colspan="{{ colspan }}">Pratiche finite</td></tr>',
+                finishedMsg: 'Fine',
                 msgText: 'Attendere',
                 img: 'http://i.imgur.com/qkKy8.gif'
             }
 
-        },
-        // call Isotope as a callback
-        function( newElements ) {
-            console.log(newElements);
-            $container.isotope( 'appended', $( newElements ) ); 
         });
     });
 </script>
