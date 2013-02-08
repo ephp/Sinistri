@@ -191,7 +191,7 @@ class SchedaController extends DragDropController {
                 throw $e;
             }
         }
-        
+
         return array(
             'entity' => $entity,
         );
@@ -354,6 +354,288 @@ class SchedaController extends DragDropController {
         $evento->setTitolo($req['titolo']);
         $em->persist($evento);
         $em->flush();
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-calendario-google/{id}", name="calendario_import_google")
+     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     */
+    public function calGoogleAction($id) {
+        $colonne = array('id', 'tipo', 'data', 'titolo', 'note');
+        set_time_limit(3600);
+        $em = $this->getEm();
+        $conn = $em->getConnection();
+        $req = $this->getRequest()->get('import');
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+
+        $cal = $this->getCalendar();
+        $csv = $req['csv'];
+        $righe = explode("\n", str_replace(array("\r", "\n\n"), array("\n", "\n"), $csv));
+        foreach ($righe as $riga) {
+            $dati = explode("\t", $riga);
+            if (count($dati) > 5 && $dati[3] && !in_array($dati[1], array('ASC', 'VIM', 'RPM', 'RER', 'RSA', 'TA1', 'TA2', 'TA3')))
+                try {
+                    $conn->beginTransaction();
+                    $data = \DateTime::createFromFormat('d/m/Y', $dati[2]);
+                    $tipo = $this->getTipoEvento($dati[1] ? str_replace('SIN', 'UDT', $dati[1]) : 'OTH');
+                    $evento = new Evento();
+                    $evento->setCalendario($cal);
+                    $evento->setDataOra($data);
+                    $evento->setDeltaG(0);
+                    $evento->setGiornoIntero(true);
+                    $evento->setImportante(false);
+                    $evento->setNote($dati[4]);
+                    $evento->setOrdine(0);
+                    $evento->setRischedulazione(false);
+                    $evento->setScheda($entity);
+                    $evento->setTipo($tipo);
+                    $evento->setTitolo($dati[3]);
+                    $em->persist($evento);
+                    $em->flush();
+
+                    $conn->commit();
+                } catch (\Exception $e) {
+                    $conn->rollback();
+                    throw $e;
+                }
+        }
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-calendario-jweb/{id}", name="calendario_import_jweb")
+     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     */
+    public function calJWebAction($id) {
+        $colonne = array('data', 'autore', 'titolo', 'note');
+        set_time_limit(3600);
+        $em = $this->getEm();
+        $conn = $em->getConnection();
+        $req = $this->getRequest()->get('import');
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+
+        $cal = $this->getCalendar();
+        $csv = $req['csv'];
+        $righe = explode("\n", str_replace(array("\r", "\n\n"), array("\n", "\n"), $csv));
+        foreach ($righe as $riga) {
+            $dati = explode("\t", $riga);
+            if (count($dati) >= 4) {
+                try {
+                    $conn->beginTransaction();
+                    $data = \DateTime::createFromFormat('d/m/Y', substr($dati[0], 0, 10));
+                    /* @var $data \DateTime */
+                    $tipo = $this->getTipoEvento('JWB');
+                    $evento = new Evento();
+                    $evento->setCalendario($cal);
+                    $evento->setDataOra($data);
+                    $evento->setDeltaG(0);
+                    $evento->setGiornoIntero(true);
+                    $evento->setImportante(false);
+                    $evento->setNote($dati[3] . ($dati[1] ? "({$dati[1]})" : ''));
+                    $evento->setOrdine(0);
+                    $evento->setRischedulazione(false);
+                    $evento->setScheda($entity);
+                    $evento->setTipo($tipo);
+                    $evento->setTitolo($dati[2]);
+                    $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
+                                'calendario' => $cal->getId(),
+                                'tipo' => $tipo->getId(),
+                                'scheda' => $entity->getId(),
+                                'titolo' => $evento->getTitolo(),
+                                'note' => $evento->getNote(),
+                            ));
+//                    Funzioni::vd($old);
+                    if (!$olds) {
+                        $em->persist($evento);
+                        $em->flush();
+                    } else {
+                        $data->setTime(0, 0, 0);
+                        $save = true;
+                        foreach($olds as $old) {
+                            $old->getDataOra()->setTime(0, 0, 0);
+                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                                $save = false;
+                            }
+                        }
+                        if($save) {
+                            $em->persist($evento);
+                            $em->flush();
+                        }
+                    }
+
+                    $conn->commit();
+                } catch (\Exception $e) {
+                    $conn->rollback();
+                    throw $e;
+                }
+            }
+        }
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-import-cancelleria/{id}", name="calendario_import_cancelleria")
+     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     */
+    public function calCancelleriaTelematicaAction($id) {
+        $colonne = array('data', 'titolo', 'note');
+        set_time_limit(3600);
+        $em = $this->getEm();
+        $conn = $em->getConnection();
+        $req = $this->getRequest()->get('import');
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+
+        $cal = $this->getCalendar();
+        $csv = $req['csv'];
+        $righe = explode("\n", str_replace(array("\r", "\n\n"), array("\n", "\n"), $csv));
+        foreach ($righe as $riga) {
+            $dati = explode("\t", $riga);
+            if (count($dati) >= 3) {
+                try {
+                    $conn->beginTransaction();
+                    $data = \DateTime::createFromFormat('d/m/Y', substr($dati[0], 0, 10));
+                    /* @var $data \DateTime */
+                    $tipo = $this->getTipoEvento('CNT');
+                    $evento = new Evento();
+                    $evento->setCalendario($cal);
+                    $evento->setDataOra($data);
+                    $evento->setDeltaG(0);
+                    $evento->setGiornoIntero(true);
+                    $evento->setImportante(false);
+                    $evento->setNote($dati[2]);
+                    $evento->setOrdine(0);
+                    $evento->setRischedulazione(false);
+                    $evento->setScheda($entity);
+                    $evento->setTipo($tipo);
+                    $evento->setTitolo($dati[1]);
+                    $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
+                                'calendario' => $cal->getId(),
+                                'tipo' => $tipo->getId(),
+                                'scheda' => $entity->getId(),
+                                'titolo' => $evento->getTitolo(),
+                                'note' => $evento->getNote(),
+                            ));
+//                    Funzioni::vd($old);
+                    if (!$olds) {
+                        $em->persist($evento);
+                        $em->flush();
+                    } else {
+                        $data->setTime(0, 0, 0);
+                        $save = true;
+                        foreach($olds as $old) {
+                            $old->getDataOra()->setTime(0, 0, 0);
+                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                                $save = false;
+                            }
+                        }
+                        if($save) {
+                            $em->persist($evento);
+                            $em->flush();
+                        }
+                    }
+
+                    $conn->commit();
+                } catch (\Exception $e) {
+                    $conn->rollback();
+                    throw $e;
+                }
+            }
+        }
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-import-ravinale/{id}", name="calendario_import_ravinale")
+     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     */
+    public function calRavinaleTelematicaAction($id) {
+        $colonne = array('data', 'note');
+        set_time_limit(3600);
+        $em = $this->getEm();
+        $conn = $em->getConnection();
+        $req = $this->getRequest()->get('import');
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+
+        $cal = $this->getCalendar();
+        $csv = $req['csv'];
+        $righe = explode("\n", str_replace(array("\r", "\n\n"), array("\n", "\n"), $csv));
+        foreach ($righe as $riga) {
+            $dati = explode("\t", $riga);
+            if (count($dati) >= 2) {
+                try {
+                    $conn->beginTransaction();
+                    $data = \DateTime::createFromFormat('d/m/Y', substr($dati[0], 0, 10));
+                    /* @var $data \DateTime */
+                    $tipo = $this->getTipoEvento('RVP');
+                    $evento = new Evento();
+                    $evento->setCalendario($cal);
+                    $evento->setDataOra($data);
+                    $evento->setDeltaG(0);
+                    $evento->setGiornoIntero(true);
+                    $evento->setImportante(false);
+                    $evento->setNote($dati[1]);
+                    $evento->setOrdine(0);
+                    $evento->setRischedulazione(false);
+                    $evento->setScheda($entity);
+                    $evento->setTipo($tipo);
+                    $evento->setTitolo('Ravinale Piemonte');
+                    $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
+                                'calendario' => $cal->getId(),
+                                'tipo' => $tipo->getId(),
+                                'scheda' => $entity->getId(),
+                                'note' => $evento->getNote(),
+                            ));
+//                    Funzioni::vd($old);
+                    if (!$olds) {
+                        $em->persist($evento);
+                        $em->flush();
+                    } else {
+                        $data->setTime(0, 0, 0);
+                        $save = true;
+                        foreach($olds as $old) {
+                            $old->getDataOra()->setTime(0, 0, 0);
+                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                                $save = false;
+                            }
+                        }
+                        if($save) {
+                            $em->persist($evento);
+                            $em->flush();
+                        }
+                    }
+
+                    $conn->commit();
+                } catch (\Exception $e) {
+                    $conn->rollback();
+                    throw $e;
+                }
+            }
+        }
         return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
     }
 
@@ -530,15 +812,17 @@ class SchedaController extends DragDropController {
             $cal = $_cal->createCalendario('JFC-SX', 'JF-Claims Sinistri');
             $_tipo = $this->getEm()->getRepository('EphpCalendarBundle:Tipo');
             /* @var $_tipo \Ephp\Bundle\CalendarBundle\Entity\TipoRepository */
-            $_tipo->createTipo('ASC', 'Analisi Sinistri e Copertura', $cal);
-            $_tipo->createTipo('VIM', 'Verifica Incarichi e Medici', $cal);
-            $_tipo->createTipo('RPM', 'Ricerca Polizze e Medici', $cal);
-            $_tipo->createTipo('RER', 'Relazione e Riserva', $cal);
-            $_tipo->createTipo('RSA', 'Richiesta di SA', $cal);
-            $_tipo->createTipo('TAX', 'Trattative e Aggiornamenti', $cal);
-            $_tipo->createTipo('JWB', 'J-Web Claims', $cal);
-            $_tipo->createTipo('JUD', 'Udienze', $cal);
-            $_tipo->createTipo('OTH', 'Attività manuali', $cal);
+            $_tipo->createTipo('ASC', 'Analisi Sinistri e Copertura', 'aaffaa', $cal);
+            $_tipo->createTipo('VIM', 'Verifica Incarichi e Medici', 'aaffaa', $cal);
+            $_tipo->createTipo('RPM', 'Ricerca Polizze e Medici', 'aaffaa', $cal);
+            $_tipo->createTipo('RER', 'Relazione e Riserva', 'aaffaa', $cal);
+            $_tipo->createTipo('RSA', 'Richiesta di SA', 'aaffaa', $cal);
+            $_tipo->createTipo('TAX', 'Trattative e Aggiornamenti', 'aaffaa', $cal);
+            $_tipo->createTipo('JWB', 'J-Web Claims', 'ffaaaa', $cal);
+            $_tipo->createTipo('CNT', 'Cancelleria Telematiche', 'aaffff', $cal);
+            $_tipo->createTipo('RVP', 'Ravinale Piemonte', 'ffaaff', $cal);
+            $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
+            $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
         }
         return $cal;
     }

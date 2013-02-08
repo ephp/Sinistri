@@ -4,10 +4,23 @@
 Scheda sinistro
 {% endblock %}
 
+{% block header %}
+<ul class="menu" style="float: right;">
+    <li><a href="javascript:attivaImport('Google','{{ path('calendario_import_google', {'id': entity.id}) }}')">Google</a></li>
+    <li><a href="javascript:attivaImport('JWeb-Claims','{{ path('calendario_import_jweb', {'id': entity.id}) }}')">JWeb-Claims</a></li>
+    <li><a href="javascript:attivaImport('Cancelleria Telematica','{{ path('calendario_import_cancelleria', {'id': entity.id}) }}')">Cancelleria Telematica</a></li>
+    <li><a href="javascript:attivaImport('Ravinale Piemonte','{{ path('calendario_import_ravinale', {'id': entity.id}) }}')">Ravinale Piemonte</a></li>
+</ul>
+<h2 style="float: right; margin-right: 10px;">Importa calendario:</h2>
+{% endblock %}
+        
 {% block content %}
 <h1>{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
 
-<div style="float: left; width: 340px; margin-right: 10px;">
+<div style="float: left; margin-left: 270px; width: auto;" id="tabella_container">
+    {% include 'EphpSinistriBundle:Scheda:show/tabella.html.twig' %}
+</div>
+<div style="position: absolute; width: 260px; margin-right: 10px;">
     <table class="records_list">
         <tbody>
             <tr>
@@ -17,40 +30,49 @@ Scheda sinistro
                 <td colspan="2">{{ entity.gestore.nome }}</td>
             </tr>
             <tr>
-                <th>Amount_reserved</th>
-                <th>Sa</th>
+                <th style="width: 50%; text-align: center">Amount Reserved</th>
+                <th style="width: 50%; text-align: center">Sa</th>
             </tr>
             <tr>
-                <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{{ entity.amountReserved }}"/> €</td>
-                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="sa" value="{{ entity.sa }}"/> €</td>
+                <td><input type="text" class="autoupdate currency" style="width:100px" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{{ entity.amountReserved }}"/> €</td>
+                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="sa" value="{{ entity.sa }}"/> €</td>
             </tr>
             <tr>
-                <th>Offerta Nostra</th>
-                <th>Offerta Loro</th>
+                <th style="width: 50%; text-align: center">Offerta Nostra</th>
+                <th style="width: 50%; text-align: center">Offerta Loro</th>
             </tr>
             <tr>
-                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="offertaNostra" value="{{ entity.offertaNostra }}"/> €</td>
-                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="offertaLoro" value="{{ entity.offertaLoro }}"/> €</td>
+                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="offertaNostra" value="{{ entity.offertaNostra }}"/> €</td>
+                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="offertaLoro" value="{{ entity.offertaLoro }}"/> €</td>
             </tr>
             <tr>
-                <th>Recupero Offerta Nostra</th>
-                <th>Recupero Pfferta Loro</th>
+                <th style="width: 50%; text-align: center">Recupero Offerta Nostra</th>
+                <th style="width: 50%; text-align: center">Recupero Offerta Loro</th>
             </tr>
             <tr>
-                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaNostra" value="{{ entity.recuperoOffertaNostra }}" id="recuperoOffertaNostra_{{ entity.id }}" /> <span class="um" target="recuperoOffertaNostra_{{ entity.id }}"></span></td>
-                <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaLoro" value="{{ entity.recuperoOffertaLoro }}" id="recuperoOffertaLoro_{{ entity.id }}"/>  <span class="um" target="recuperoOffertaLoro_{{ entity.id }}"></span></td>
+                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="recuperoOffertaNostra" value="{{ entity.recuperoOffertaNostra }}" id="recuperoOffertaNostra_{{ entity.id }}" /> <span class="um" target="recuperoOffertaNostra_{{ entity.id }}"></span></td>
+                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="recuperoOffertaLoro" value="{{ entity.recuperoOffertaLoro }}" id="recuperoOffertaLoro_{{ entity.id }}"/>  <span class="um" target="recuperoOffertaLoro_{{ entity.id }}"></span></td>
             </tr>
             <tr>
                 <th colspan="2">Note</th>
             </tr>
             <tr>
-                <td colspan="2"><textarea class="autoupdate autogrow" style="float: right; width: 330px; min-width: 300px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
+                <td colspan="2"><textarea class="autoupdate autogrow" style="float: right; width: 250px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
             </tr>
         </tbody>
     </table>
-</div>
-<div style="float: left; width: 560px" id="tabella_container">
-    {% include 'EphpSinistriBundle:Scheda:show/tabella.html.twig' %}
+    <ul class="record_actions" style="margin-top: 20px;">
+        <li>
+            <a href="{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla}) }}">
+                Torna al tabellone personale
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('tabellone') }}">
+                Torna al tabellone
+            </a>
+        </li>
+    </ul>
 </div>
 <div style="clear: both"></div>
 <div style="display: none" id="fb_aggiungi_evento">
@@ -72,14 +94,18 @@ Scheda sinistro
         <button type="button" onclick="aggiungiEvento()">Aggiungi</button>
     </form>
 </div>
+<script type="text/html" id="form_code">
+    <form idid="form_update" action="#" onsubmit="return false">
+        <h2 idid="form_titolo"></h2>
+        <button type="button" onclick="importa()">Importa</button>
+        <div style="clear: both"></div>
+        <label for="scheda_data">Fai copia incolla da web</label>
+        <div style="clear: both"></div>
+        <textarea style="background-color: #ffffff; border: 1px solid #dadada; width: 600px; height: 500px;" class="autogrow" name="import[csv]" placeholder="Copia qui il testo da web"></textarea>
+        <div style="clear: both"></div>
+    </form>
+</script>
 
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('tabellone') }}">
-            Torna indietro
-        </a>
-    </li>
-</ul>
 
 <script type="text/javascript">
     function aggiungiEvento() {
@@ -116,5 +142,16 @@ Scheda sinistro
         });
     }
     checkUm();
+    function attivaImport(tipo, url) {
+        $('#tabella_container').html($('#form_code').html().replace(/idid/g, 'id'));
+        $('#form_update').attr('action', url);
+        $('#form_titolo').text('Importa da '+tipo);
+    }
+    function importa() {
+        form = $('#form_update');
+        $.post(form.attr('action'), form.serialize(), function(out){
+            $('#tabella_container').html(out);
+        });
+    }
 </script>
 {% endblock %}

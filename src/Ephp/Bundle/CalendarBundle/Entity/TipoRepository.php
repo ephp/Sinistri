@@ -12,11 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class TipoRepository extends EntityRepository {
 
-    public function createTipo($sigla, $nome, Calendario $calendario) {
+    public function createTipo($sigla, $nome, $colore, Calendario $calendario) {
         $tipo = new Tipo();
         $tipo->setNome($nome);
         $tipo->setSigla($sigla);
         $tipo->setCalendario($calendario);
+        $tipo->setColore($colore);
         $this->getEntityManager()->persist($tipo);
         $this->getEntityManager()->flush();
         return $tipo;

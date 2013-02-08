@@ -41,6 +41,13 @@ class Tipo
      */
     private $nome;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="colore", type="string", length=6)
+     */
+    private $colore;
+
 
     /**
      * Get id
@@ -119,5 +126,28 @@ class Tipo
     public function getNome()
     {
         return $this->nome;
+    }
+
+    /**
+     * Set colore
+     *
+     * @param string $colore
+     * @return Tipo
+     */
+    public function setColore($colore)
+    {
+        $this->colore = $colore;
+    
+        return $this;
+    }
+
+    /**
+     * Get colore
+     *
+     * @return string 
+     */
+    public function getColore()
+    {
+        return $this->colore;
     }
 }

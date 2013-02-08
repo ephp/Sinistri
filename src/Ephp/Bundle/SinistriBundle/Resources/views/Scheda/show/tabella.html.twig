@@ -1,4 +1,4 @@
-<table class="records_list">
+<table class="records_list" style="width: 100%;">
     <thead>
         <tr>
             <th>&nbsp;</th>
@@ -9,11 +9,11 @@
     </thead>
     <tbody>
         {% for evento in entity.eventi %}
-            <tr>
-                <td class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
-                <td>{{ evento.dataOra|date('d-m-Y') }}</td>
-                <td>{{ evento.titolo }}</td>
-                <td><textarea style="width: 550px" class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
+            <tr style="background-color: #{{evento.tipo.colore}};">
+                <td style="background-color: transparent;" title="{{evento.tipo.sigla}}" class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
+                <td style="background-color: transparent;" nowrap>{{ evento.dataOra|date('d/m/Y') }}</td>
+                <td style="background-color: transparent;">{{ evento.titolo }}</td>
+                <td style="background-color: transparent;"><textarea style="width: 550px; height: 20px;" class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
             </tr>
         {% endfor %}
         <tr>

@@ -1,10 +1,14 @@
 .cal_important {
-    width: 32px;
-    height: 32px;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
     background: url(cal_important.png) no-repeat;
 }
 .cal_normal {
-    width: 32px;
-    height: 32px;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
     background: url(cal_normal.png) no-repeat;
 }
