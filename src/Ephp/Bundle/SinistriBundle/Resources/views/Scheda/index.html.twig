@@ -65,14 +65,16 @@
 <table class="records_list">
     <thead>
         <tr>
+            {% if gestore is defined %}
+                {% set colspan = colspan + 1 %}
+                <th>#</th>
+            {% endif %}
             {% if mode <= 1 %}
-                {% set colspan = 9 %}
+                {% set colspan = colspan + 1 %}
                 <th>Ospedale</th>
             {% endif %}
             {% if mode <= 2 %}
-                {% if mode > 1 %}
-                    {% set colspan = 8 %}
-                {% endif %}
+                {% set colspan = colspan + 1 %}
                 <th>Anno</th>
             {% endif %}
             <th>Dasc</th>

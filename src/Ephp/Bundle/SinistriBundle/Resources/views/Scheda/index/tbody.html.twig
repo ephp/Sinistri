@@ -1,3 +1,6 @@
+{% if index is not defined %}
+    {% set index = 1 %}
+{% endif %}
 {% if colspan is not defined %}
     {% set colspan = 7 %}
     {% if mode <= 1 %}
@@ -22,4 +25,5 @@
             {% include 'EphpSinistriBundle:Scheda:index/riga_attiva.html.twig' %}
         {% endif %}
     {% endif %}
+    {% set index = index + 1 %}
 {% endfor %}
