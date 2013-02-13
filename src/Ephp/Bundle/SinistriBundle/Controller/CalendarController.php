@@ -17,12 +17,10 @@ class CalendarController extends Controller {
      * Lists all Scheda entities.
      *
      * @Route("/{gestore}", name="calendario_sinistri", defaults={"gestore"=""})
-     * @Route("/{gestore}", name="calendario_sinistri_scroll", defaults={"gestore"=""})
      * @Template()
      */
     public function indexAction($gestore) {
         $em = $this->getEm();
-        $mode = 0;
         $_gestore = $em->getRepository('EphpACLBundle:Gestore');
         $calendario = $this->getCalendar();
         if ($gestore) {
@@ -34,11 +32,31 @@ class CalendarController extends Controller {
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
         return array(
             'entities' => $entities,
-            'mode' => $mode,
-            'ospedale' => $calendario,
             'gestore' => $gestore,
             'gestori' => $gestori,
             'anni' => range(7, date('y'))
+        );
+    }
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("/{gestore}/{pag}", name="calendario_sinistri_scroll", defaults={"gestore"=""})
+     * @Template("EphpSinistriBundle:Calendar:index/tbody.html.twig")
+     */
+    public function scrollAction($gestore, $pag) {
+        $em = $this->getEm();
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $calendario = $this->getCalendar();
+        if ($gestore) {
+            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore, 100, $pag * 100);
+        } else {
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null, 100, $pag * 100);
+        }
+        return array(
+            'entities' => $entities,
+            'gestore' => $gestore,
+            'index' => 100 * $pagina + 1, 
         );
     }
 
