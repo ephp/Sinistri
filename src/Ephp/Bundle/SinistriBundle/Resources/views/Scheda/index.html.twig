@@ -125,14 +125,12 @@
     </form>
 </div>
 <script type="text/javascript">
+    var filtro = {'.r': true, '.na': false, '.ng': false};
+    var filtro_nome = '';
+    
     $('#find_claimant').keyup(function(){
-        q = $(this).val().toLowerCase();
-        $('.r').hide().each(function() {
-           t = $(this).attr('titolo').toLowerCase();
-           if(t.search(q) >= 0) {
-               $(this).show();
-           }
-        });
+        filtro_nome = $(this).val().toLowerCase();
+        runFiltro();
     });
     
     {% if gestore is not defined and gestori is defined %}
@@ -199,6 +197,32 @@
         });
     }
     checkUm();
+    
+    function filtra(filter) {
+        filtro = filter;
+        runFiltro();
+    }
+    function runFiltro() {
+        if(filtro_nome != '') {
+            $('.r').hide().each(function() {
+               t = $(this).attr('titolo').toLowerCase();
+               if(t.search(filtro_nome) >= 0) {
+                   $(this).show();
+               }
+            });
+        } else {
+            oef = Object.extended(filtro);
+            oef.keys().each(function(key){
+                show = filtro[key];
+                if(show) {
+                    $(key).show();
+                } else {
+                    $(key).hide();
+                }
+            });
+        }
+    }
+
     $(function(){
         var $container = $('#tb_container');
         $container.infinitescroll({
@@ -210,7 +234,8 @@
                 msgText: 'Attendere',
                 img: 'http://i.imgur.com/qkKy8.gif'
             }
-
+        }, function() {
+            setTimeout(function(){runFiltro();}, 10);
         });
     });
 </script>

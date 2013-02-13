@@ -1,4 +1,4 @@
-<tr class="r ng na bg-transparent" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}">
+<tr style="display: none" class="r ng na bg-transparent" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}">
     {% if mode <= 1 %}
         {% if gestore is defined %}
             <td style="text-align: center"><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}"><abbr title="{{ entity.ospedale.nome }}">{{ entity.ospedale.sigla|upper }}</abbr></a></td>
