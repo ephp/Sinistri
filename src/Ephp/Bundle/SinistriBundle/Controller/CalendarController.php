@@ -40,18 +40,18 @@ class CalendarController extends Controller {
     /**
      * Lists all Scheda entities.
      *
-     * @Route("/{gestore}/{pag}", name="calendario_sinistri_scroll", defaults={"gestore"=""})
+     * @Route("/{gestore}/{pagina}", name="calendario_sinistri_scroll", defaults={"gestore"=""})
      * @Template("EphpSinistriBundle:Calendar:index/tbody.html.twig")
      */
-    public function scrollAction($gestore, $pag) {
+    public function scrollAction($gestore, $pagina) {
         $em = $this->getEm();
         $_gestore = $em->getRepository('EphpACLBundle:Gestore');
         $calendario = $this->getCalendar();
         if ($gestore) {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
-            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore, 100, $pag * 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore, 100, $pagina * 100);
         } else {
-            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null, 100, $pag * 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null, 100, $pagina * 100);
         }
         return array(
             'entities' => $entities,
