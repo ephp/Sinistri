@@ -1,0 +1,13 @@
+<tr id="riga_{{ entity.id }}" class="bg-white">
+    {% if gestore is defined %}
+        <th style="text-align: right;">{{ index }}</th>
+    {% endif %}
+    <td style="text-align: center">{{ entity.dataOra|date('d/m/Y') }}</td>
+    <td style="text-align: center">{{ entity.scheda.ospedale.sigla|upper }}/{{ entity.scheda.anno2 }}/{{ entity.scheda.tpa }}</td>
+    <td>{{ entity.scheda.claimant }}</td>
+    {% if gestore is not defined %}
+        <td style="text-align: center"><abbr title="{{ entity.scheda.gestore.nome }}">{{ entity.scheda.gestore.sigla }}</abbr></td>
+    {% endif %}
+    <td style="text-align: center">{{ entity.titolo }}</td>
+    <td style="text-align: center">{{ entity.note }}</td>
+</tr>

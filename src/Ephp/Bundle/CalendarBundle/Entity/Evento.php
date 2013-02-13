@@ -321,4 +321,6 @@ abstract class Evento
     {
         return $this->rischedulazione;
     }
+    
+    abstract public function getTwig();
 }

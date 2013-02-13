@@ -100,4 +100,8 @@ class Evento extends \Ephp\Bundle\CalendarBundle\Entity\Evento
     {
         return $this->scheda;
     }
+    
+    public function getTwig() {
+        return 'EphpSinistriBundle:Sinistri:Calendar/index/riga_evento.html.twig';
+    }
 }
