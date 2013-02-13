@@ -1,13 +1,14 @@
-<tr id="riga_{{ entity.id }}" class="bg-white">
-    {% if gestore is defined %}
+<tr id="riga_{{ entity.id }}" style="background-color: #{{ entity.tipo.colore }}">
+    {% if gestore != '' %}
         <th style="text-align: right;">{{ index }}</th>
     {% endif %}
-    <td style="text-align: center">{{ entity.dataOra|date('d/m/Y') }}</td>
-    <td style="text-align: center">{{ entity.scheda.ospedale.sigla|upper }}/{{ entity.scheda.anno2 }}/{{ entity.scheda.tpa }}</td>
-    <td>{{ entity.scheda.claimant }}</td>
-    {% if gestore is not defined %}
-        <td style="text-align: center"><abbr title="{{ entity.scheda.gestore.nome }}">{{ entity.scheda.gestore.sigla }}</abbr></td>
+    <td style="background-color: transparent;" title="{{entity.tipo.sigla}}" class="{% if entity.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
+    <td style="text-align: center; background-color: transparent;">{{ entity.dataOra|date('d/m/Y') }}</td>
+    <td style="text-align: center; background-color: transparent;">{{ entity.scheda.ospedale.sigla|upper }}/{{ entity.scheda.anno2 }}/{{ entity.scheda.tpa }}</td>
+    <td style="background-color: transparent;">{{ entity.scheda.claimant }}</td>
+    {% if gestore == '' %}
+        <td style="text-align: center; background-color: transparent;"><abbr title="{{ entity.scheda.gestore.nome }}">{{ entity.scheda.gestore.sigla }}</abbr></td>
     {% endif %}
-    <td style="text-align: center">{{ entity.titolo }}</td>
-    <td style="text-align: center">{{ entity.note }}</td>
+    <td style="background-color: transparent;">{{ entity.titolo }}</td>
+    <td style="background-color: transparent;">{{ entity.note }}</td>
 </tr>

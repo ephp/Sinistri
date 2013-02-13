@@ -2,7 +2,7 @@
 {% set titolo = 'Calendario sinistri' %}
 {% set params_gestore = 'TUTTI' %}
 {% set route = 'tabellone' %}
-{% if gestore is defined %}
+{% if gestore != '' %}
     {% set titolo = gestore.nome ~ ' | ' ~ titolo %}
     {% set params_gestore = gestore.sigla %}
 {% endif %}
@@ -10,17 +10,15 @@
 {% block title %}{{titolo}}{% endblock %}
 
 {% block content_header %}
-    {% if gestori is defined %}
-        <div style="clear: both"></div>
-        <h2>Gestori</h2>
-        <div style="clear: both"></div>
-        <ul class="menu">
-            <li><a href="{{ path('tabellone') }}">Tutti</a></li>
-            {% for ges in gestori %}
-                <li><a href="{{ path('tabellone_gestore', {'gestore': ges.sigla}) }}">{{ges.nome}}</a></li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <div style="clear: both"></div>
+    <h2>Gestori</h2>
+    <div style="clear: both"></div>
+    <ul class="menu">
+        <li><a href="{{ path('calendario_sinistri') }}">Tutti</a></li>
+        {% for ges in gestori %}
+            <li><a href="{{ path('calendario_sinistri', {'gestore': ges.sigla}) }}">{{ges.nome}}</a></li>
+        {% endfor %}
+    </ul>
     <div style="clear: both"></div>
 
 {% endblock %}
@@ -32,13 +30,14 @@
 <table class="records_list">
     <thead>
         <tr>
-            {% if gestore is defined %}
+            {% if gestore != '' %}
                 <th>#</th>
             {% endif %}
+            <th>&nbsp;</th>
             <th>Data</th>
             <th>Tpa</th>
             <th>Claimant</th>
-            {% if gestore is not defined %}
+            {% if gestore == '' %}
                 <th>Gestore</th>
             {% endif %}
             <th>Titolo</th>

@@ -17,7 +17,7 @@ class EventoRepository extends EntityRepository {
         $today->setTime(0, 0, 0);
         $q = $this->createQueryBuilder('e')
                 ->leftJoin('e.scheda', 's')
-                ->where('e.calendario > :cal')
+                ->where('e.calendario = :cal')
                 ->andwhere('e.data_ora > :oggi')
                 ->setParameter('cal', $calendario->getId())
                 ->setParameter('oggi', $today)

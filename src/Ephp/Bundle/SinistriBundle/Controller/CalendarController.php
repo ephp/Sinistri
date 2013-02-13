@@ -36,6 +36,7 @@ class CalendarController extends Controller {
             'entities' => $entities,
             'mode' => $mode,
             'ospedale' => $calendario,
+            'gestore' => $gestore,
             'gestori' => $gestori,
             'anni' => range(7, date('y'))
         );

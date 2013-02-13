@@ -43,6 +43,7 @@
                         <li><a href="{{ path('gestori') }}">Gestori</a></li>
                         <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
                         <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
+                        <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
                     </ul>
                 {% endif %}
                 <div style="clear: both"></div>
@@ -52,12 +53,19 @@
                 {% block content %}
                     {% if app.user %}
                         <h1>Benvenuto su JF Claims</h1>
-                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 13/02/2013 ore 15:00)</p>
+                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 13/02/2013 ore 21:00)</p>
                         <dl>
                             <dt>Gestori</dt>
                             <dd>Inserisci e modifica i gestori delle pratiche</dd>
                             <dt>Ospedali</dt>
                             <dd>Inserisci e modifica gli ospedali</dd>
+                            <dt style="color: red;">Calendario/Agenda</dt>
+                            <dd style="color: red;">Bozza di visualizzazione<br/>
+                                <ul>
+                                    <li style="padding-bottom: 0px;">Filtro per gestore</li>
+                                    <li style="padding-bottom: 0px;">Mostra solo gli eventi futuri</li>
+                                </ul>
+                            </dd>
                             <dt>Tabellone</dt>
                             <dd>Visualizza e visualizza le pratiche sinistri. Funzionalità attive<br/>
                                 <ul>
