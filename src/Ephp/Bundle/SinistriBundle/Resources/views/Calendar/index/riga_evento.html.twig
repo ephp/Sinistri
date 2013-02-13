@@ -5,7 +5,7 @@
     <td style="background-color: transparent;" title="{{entity.tipo.sigla}}" class="{% if entity.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
     <td style="text-align: center; background-color: transparent;">{{ entity.dataOra|date('d/m/Y') }}</td>
     <td style="text-align: center; background-color: transparent;">{{ entity.scheda.ospedale.sigla|upper }}/{{ entity.scheda.anno2 }}/{{ entity.scheda.tpa }}</td>
-    <td style="background-color: transparent;"><a href="{{ path('tabellone_scheda', {'id': entity.scheda.id}) }}">{{ entity.scheda.claimant }}</a></td>
+    <td style="background-color: transparent;"><a href="{{ path('tabellone_show', {'id': entity.scheda.id}) }}">{{ entity.scheda.claimant }}</a></td>
     {% if gestore == '' %}
         <td style="text-align: center; background-color: transparent;"><abbr title="{{ entity.scheda.gestore.nome }}">{{ entity.scheda.gestore.sigla }}</abbr></td>
     {% endif %}
