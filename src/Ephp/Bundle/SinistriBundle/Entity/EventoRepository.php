@@ -22,7 +22,8 @@ class EventoRepository extends EntityRepository {
                 ->setParameter('cal', $calendario->getId())
                 ->setParameter('oggi', $today)
                 ->setMaxResults($maxResults)
-                ->setFirstResult($firstResult);
+                ->setFirstResult($firstResult)
+                ->orderBy('e.data_ora', 'ASC');
         if($gestore) {
             $q->andWhere('s.gestore = :ges')
                 ->setParameter('ges', $gestore->getId());
