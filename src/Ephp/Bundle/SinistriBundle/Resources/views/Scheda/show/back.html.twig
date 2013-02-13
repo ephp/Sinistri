@@ -16,6 +16,11 @@
                 Generale
             </a>
         </li>
+        <li>
+            <a href="{{ path('calendario_sinistri', {'gestore': entity.gestore.sigla}) }}">
+                Calendario personale
+            </a>
+        </li>
         <li>Torna al tabellone generale</li>
         <li>
             <a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}">
@@ -30,6 +35,11 @@
         <li>
             <a href="{{ path('tabellone') }}">
                 Generale
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('calendario_sinistri') }}">
+                Calendario generale
             </a>
         </li>
     </ul>
