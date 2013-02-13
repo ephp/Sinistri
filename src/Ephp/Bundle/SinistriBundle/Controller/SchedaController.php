@@ -194,6 +194,7 @@ class SchedaController extends DragDropController {
 
         return array(
             'entity' => $entity,
+            'tipi' => $em->getRepository('EphpCalendarBundle:Tipo')->findBy(array('calendario' => $this->getEm()->getRepository('EphpCalendarBundle:Calendario')->findOneBy(array('sigla' => 'JFC-SX'))->getId())),
         );
     }
 

@@ -1,0 +1,36 @@
+<nav style="margin-top: 10px;">
+    <ul>
+        <li>Torna al tabellone<br/>di {{ entity.gestore.nome }}</li>
+        <li>
+            <a href="{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}">
+                {{ entity.ospedale.sigla }}/{{ entity.anno2 }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}">
+                {{ entity.ospedale.sigla }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla}) }}">
+                Generale
+            </a>
+        </li>
+        <li>Torna al tabellone generale</li>
+        <li>
+            <a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}">
+                {{ entity.ospedale.sigla }}/{{ entity.anno2 }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}">
+                {{ entity.ospedale.sigla }}
+            </a>
+        </li>
+        <li>
+            <a href="{{ path('tabellone') }}">
+                Generale
+            </a>
+        </li>
+    </ul>
+</nav>

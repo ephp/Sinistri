@@ -21,58 +21,9 @@ Scheda sinistro
     {% include 'EphpSinistriBundle:Scheda:show/tabella.html.twig' %}
 </div>
 <div style="position: absolute; width: 260px; margin-right: 10px;">
-    <table class="records_list">
-        <tbody>
-            <tr>
-                <th colspan="2">Gestore</th>
-            </tr>
-            <tr>
-                <td colspan="2">{{ entity.gestore.nome }}</td>
-            </tr>
-            <tr>
-                <th style="width: 50%; text-align: center">Amount Reserved</th>
-                <th style="width: 50%; text-align: center">Sa</th>
-            </tr>
-            <tr>
-                <td><input type="text" class="autoupdate currency" style="width:100px" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{{ entity.amountReserved }}"/> €</td>
-                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="sa" value="{{ entity.sa }}"/> €</td>
-            </tr>
-            <tr>
-                <th style="width: 50%; text-align: center">Offerta Nostra</th>
-                <th style="width: 50%; text-align: center">Offerta Loro</th>
-            </tr>
-            <tr>
-                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="offertaNostra" value="{{ entity.offertaNostra }}"/> €</td>
-                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="offertaLoro" value="{{ entity.offertaLoro }}"/> €</td>
-            </tr>
-            <tr>
-                <th style="width: 50%; text-align: center">Recupero Offerta Nostra</th>
-                <th style="width: 50%; text-align: center">Recupero Offerta Loro</th>
-            </tr>
-            <tr>
-                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="recuperoOffertaNostra" value="{{ entity.recuperoOffertaNostra }}" id="recuperoOffertaNostra_{{ entity.id }}" /> <span class="um" target="recuperoOffertaNostra_{{ entity.id }}"></span></td>
-                <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="recuperoOffertaLoro" value="{{ entity.recuperoOffertaLoro }}" id="recuperoOffertaLoro_{{ entity.id }}"/>  <span class="um" target="recuperoOffertaLoro_{{ entity.id }}"></span></td>
-            </tr>
-            <tr>
-                <th colspan="2">Note</th>
-            </tr>
-            <tr>
-                <td colspan="2"><textarea class="autoupdate autogrow" style="float: right; width: 250px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
-            </tr>
-        </tbody>
-    </table>
-    <ul class="record_actions" style="margin-top: 20px;">
-        <li>
-            <a href="{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla}) }}">
-                Torna al tabellone personale
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('tabellone') }}">
-                Torna al tabellone
-            </a>
-        </li>
-    </ul>
+    {% include 'EphpSinistriBundle:Scheda:show/riepilogo.html.twig' %}
+    {% include 'EphpSinistriBundle:Scheda:show/legenda_tabella.html.twig' %}
+    {% include 'EphpSinistriBundle:Scheda:show/back.html.twig' %}
 </div>
 <div style="clear: both"></div>
 <div style="display: none" id="fb_aggiungi_evento">

@@ -1,0 +1,17 @@
+<table style="margin-top: 10px; width: 100%;">
+    <thead>
+        <tr>
+            <th style="background-color: transparent; padding: 2px;">Sigla</th>
+            <th style="background-color: transparent; padding: 2px; text-align: center">Colore</th>
+            <th style="background-color: transparent; padding: 2px; text-align: right">Legenda</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tipo in tipi %}
+            <tr style="background-color: #{{tipo.colore}};">
+                <td style="background-color: transparent; padding: 2px;">{{tipo.sigla}}</td>
+                <td colspan="2" style="background-color: transparent; padding: 2px; text-align: right">{{tipo.nome}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
