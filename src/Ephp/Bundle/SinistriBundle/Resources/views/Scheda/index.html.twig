@@ -40,9 +40,9 @@
             {% if old_osp != osp.gruppo %}
                 {% set old_osp = osp.gruppo %}
                 {% if gestore is defined %}
-                    <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': osp.gruppo}) }}">{{osp.nome_gruppo}}</a></li>
+                    <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': osp.gruppo}) }}">{{osp.nomeGruppo}}</a></li>
                 {% else %}
-                    <li><a href="{{ path('tabellone', {'ospedale': osp.gruppo}) }}">{{osp.nome_gruppo}}</a></li>
+                    <li><a href="{{ path('tabellone', {'ospedale': osp.gruppo}) }}">{{osp.nomeGruppo}}</a></li>
                 {% endif %}
             {% endif %}
         {% endfor %}
