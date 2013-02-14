@@ -31,6 +31,13 @@ class Ospedale
     /**
      * @var string
      *
+     * @ORM\Column(name="$nome_gruppo", type="string", length=255)
+     */
+    private $nome_gruppo;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="sigla", type="string", length=16)
      */
     private $sigla;
@@ -120,5 +127,28 @@ class Ospedale
     public function getGruppo()
     {
         return $this->gruppo;
+    }
+
+    /**
+     * Set nome_gruppo
+     *
+     * @param string $nomeGruppo
+     * @return Ospedale
+     */
+    public function setNomeGruppo($nomeGruppo)
+    {
+        $this->nome_gruppo = $nomeGruppo;
+    
+        return $this;
+    }
+
+    /**
+     * Get nome_gruppo
+     *
+     * @return string 
+     */
+    public function getNomeGruppo()
+    {
+        return $this->nome_gruppo;
     }
 }
