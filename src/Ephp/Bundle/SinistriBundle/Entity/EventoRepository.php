@@ -15,6 +15,7 @@ class EventoRepository extends EntityRepository {
     public function prossimiEventi(\Ephp\Bundle\CalendarBundle\Entity\Calendario $calendario, $gestore, $maxResults = 100, $firstResult = 0) {
         $today = new \DateTime();
         $today->setTime(0, 0, 0);
+        $today->sub(new \DateInterval('P1D'));
         $q = $this->createQueryBuilder('e')
                 ->leftJoin('e.scheda', 's')
                 ->where('e.calendario = :cal')
