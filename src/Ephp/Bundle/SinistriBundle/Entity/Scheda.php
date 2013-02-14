@@ -144,27 +144,6 @@ class Scheda {
     private $note;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="jclaims", type="text", nullable=true)
-     */
-    private $jclaims;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="ravinale", type="string", length=255, nullable=true)
-     */
-    private $ravinale;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="report", type="string", length=255, nullable=true)
-     */
-    private $report;
-
-    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * 
      * @ORM\OneToMany(targetEntity="Evento", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
@@ -584,4 +563,27 @@ class Scheda {
         return $this->eventi;
     }
 
+
+    /**
+     * Set franchigia
+     *
+     * @param float $franchigia
+     * @return Scheda
+     */
+    public function setFranchigia($franchigia)
+    {
+        $this->franchigia = $franchigia;
+    
+        return $this;
+    }
+
+    /**
+     * Get franchigia
+     *
+     * @return float 
+     */
+    public function getFranchigia()
+    {
+        return $this->franchigia;
+    }
 }

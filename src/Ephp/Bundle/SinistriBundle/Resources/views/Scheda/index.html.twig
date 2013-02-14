@@ -21,7 +21,8 @@
 
 {% block header %}
     {% if gestore is not defined %}
-        <button><a href="{{ path('tabellone_upload_drive') }}">Importa da Google Drive</a></button>
+        <button><a href="{{ path('tabellone_upload_drive_default') }}">Importa da Google Drive</a></button>
+        <button><a href="{{ path('tabellone_upload_drive_piemonte') }}">Importa Piemonte da Google Drive</a></button>
     {% endif %}
 {% endblock %}
 

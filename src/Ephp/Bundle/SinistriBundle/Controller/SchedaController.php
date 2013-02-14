@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ephp\Bundle\ACLBundle\Entity\Gestore;
 use Ephp\Bundle\CalendarBundle\Entity\Calendario;
 use Ephp\Bundle\SinistriBundle\Entity\Evento;
+use Ephp\Bundle\SinistriBundle\Entity\Ospedale;
 use Ephp\Bundle\SinistriBundle\Entity\Priorita;
 use Ephp\Bundle\SinistriBundle\Entity\Scheda;
 use Ephp\Bundle\WsInvokerBundle\Functions\Funzioni;
@@ -317,11 +318,12 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
-     * @Route("-upload", name="tabellone_upload_drive")
+     * @Route("-upload-default-{tipo}", name="tabellone_upload_drive_default", defaults={"tipo"="default"})
+     * @Route("-upload-piemonte-{tipo}", name="tabellone_upload_drive_piemonte", defaults={"tipo"="piemonte"})
      * @Template()
      */
-    public function uploadAction() {
-        return array();
+    public function uploadAction($tipo) {
+        return array('tipo' =>$tipo);
     }
 
     /**
@@ -677,10 +679,20 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
-     * @Route("-import-drive", name="tabellone_import_drive", defaults={"_format"="json"})
+     * @Route("-import-drive-default-{tipo}", name="tabellone_import_drive_default", defaults={"_format"="json", "tipo"="default"})
+     * @Route("-import-drive-piemonte-{tipo}", name="tabellone_import_drive_piemonte", defaults={"_format"="json", "tipo"="piemonte"})
      */
-    public function importAction() {
-        $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);
+    public function importAction($tipo) {
+        $colonne = array();
+        switch($tipo) {
+            case 'piemonte':
+                $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'franchigia', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);
+                break;
+            default:
+                $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);
+                break;
+            
+        }
         $uri = __DIR__ . '/../../../../../web' . str_replace(' ', '+', urldecode($this->getRequest()->get('file')));
         set_time_limit(3600);
         $em = $this->getEm();
@@ -723,6 +735,24 @@ class SchedaController extends DragDropController {
                                     $scheda->setOspedale($ospedale);
                                     $scheda->setAnno($anno);
                                     $scheda->setTpa($tpa);
+                                } elseif (count($tpa) == 2) {
+                                    $tpa2 =  explode('-', $tpa[0]);
+                                    if (count($tpa2) != 2) {
+                                        break(3);
+                                    }
+                                    $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa2[0]));
+                                    if(!$ospedale) {
+                                        $ospedale = new Ospedale();
+                                        $ospedale->setSigla($tpa2[0]);
+                                        $ospedale->setNome($tpa2[0]);
+                                        $em->persist($ospedale);
+                                        $em->flush();
+                                    }
+                                    $anno = $tpa2[1];
+                                    $tpa = $tpa2[1];
+                                    $scheda->setOspedale($ospedale);
+                                    $scheda->setAnno($anno);
+                                    $scheda->setTpa($tpa);
                                 } else {
                                     break(3);
                                 }
@@ -740,6 +770,9 @@ class SchedaController extends DragDropController {
                                 if ($dati[$index]) {
                                     $scheda->setFirstReserve($this->currency($dati[$index]));
                                 }
+                                break;
+                            case 'franchigia':
+                                $scheda->setFranchigia($this->currency($dati[$index]));
                                 break;
                             case 'amount reserved':
                                 if ($dati[$index]) {
