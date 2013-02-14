@@ -30,16 +30,20 @@
     <h2>Ospedali</h2>
     <div style="clear: both"></div>
     <ul class="menu">
+        {% set old_osp = '' %}
         {% if gestore is defined %}
             <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tutti</a></li>
         {% else %}
             <li><a href="{{ path('tabellone') }}">Tutti</a></li>
         {% endif %}
         {% for osp in ospedali %}
-            {% if gestore is defined %}
-                <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': osp.sigla}) }}">{{osp.nome}}</a></li>
-            {% else %}
-                <li><a href="{{ path('tabellone', {'ospedale': osp.sigla}) }}">{{osp.nome}}</a></li>
+            {% if old_osp != osp.gruppo %}
+                {% set old_osp = osp.gruppo %}
+                {% if gestore is defined %}
+                    <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': osp.gruppo}) }}">{{osp.nome_gruppo}}</a></li>
+                {% else %}
+                    <li><a href="{{ path('tabellone', {'ospedale': osp.sigla}) }}">{{osp.nome}}</a></li>
+                {% endif %}
             {% endif %}
         {% endfor %}
     </ul>
