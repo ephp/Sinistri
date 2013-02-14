@@ -31,7 +31,7 @@ class Ospedale
     /**
      * @var string
      *
-     * @ORM\Column(name="sigla", type="string", length=3)
+     * @ORM\Column(name="sigla", type="string", length=16)
      */
     private $sigla;
 
