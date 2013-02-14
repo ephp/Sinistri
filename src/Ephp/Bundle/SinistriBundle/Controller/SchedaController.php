@@ -754,6 +754,7 @@ class SchedaController extends DragDropController {
                                 } elseif (count($tpa) == 2) {
                                     $tpa2 =  explode('-', $tpa[0]);
                                     if (count($tpa2) != 2) {
+                                        Funzioni::pr($dati);
                                         break(3);
                                     }
                                     $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa2[0]));
@@ -772,6 +773,7 @@ class SchedaController extends DragDropController {
                                     $scheda->setAnno($anno);
                                     $scheda->setTpa($tpa);
                                 } else {
+                                    Funzioni::pr($dati);
                                     break(3);
                                 }
                                 break;

@@ -5,8 +5,8 @@
 {% set params_anno = 'TUTTI' %}
 {% set route = 'tabellone' %}
 {% if ospedale != '' %}
-    {% set titolo = ospedale.nome %}
-    {% set params_ospedale = ospedale.sigla %}
+    {% set titolo = ospedale.nomeGruppo %}
+    {% set params_ospedale = ospedale.gruppo %}
 {% endif %}
 {% if anno != '0' %}
     {% set titolo = titolo ~ ' 20' ~ anno %}
