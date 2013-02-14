@@ -42,7 +42,7 @@
                 {% if gestore is defined %}
                     <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': osp.gruppo}) }}">{{osp.nome_gruppo}}</a></li>
                 {% else %}
-                    <li><a href="{{ path('tabellone', {'ospedale': osp.sigla}) }}">{{osp.nome}}</a></li>
+                    <li><a href="{{ path('tabellone', {'ospedale': osp.gruppo}) }}">{{osp.nome_gruppo}}</a></li>
                 {% endif %}
             {% endif %}
         {% endfor %}
