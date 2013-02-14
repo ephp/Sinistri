@@ -83,6 +83,13 @@ class Scheda {
     private $amount_reserved;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="franchigia", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $franchigia;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Stato")
      * @ORM\JoinColumn(name="stato_id", referencedColumnName="id")
      */
@@ -135,6 +142,27 @@ class Scheda {
      * @ORM\Column(name="note", type="text", nullable=true)
      */
     private $note;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="jclaims", type="text", nullable=true)
+     */
+    private $jclaims;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="ravinale", type="string", length=255, nullable=true)
+     */
+    private $ravinale;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report", type="string", length=255, nullable=true)
+     */
+    private $report;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection

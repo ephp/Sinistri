@@ -49,9 +49,9 @@ class CalendarController extends Controller {
         $calendario = $this->getCalendar();
         if ($gestore) {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
-            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore, 100, $pagina * 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore, 100, ($pagina - 1) * 100);
         } else {
-            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null, 100, $pagina * 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null, 100, ($pagina - 1) * 100);
         }
         return array(
             'entities' => $entities,
