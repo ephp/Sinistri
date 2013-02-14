@@ -38,7 +38,7 @@ class SchedaController extends DragDropController {
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
             $ospedali_id = array();
             foreach ($ospedali as $ospedale) {
-                $ospedali_id[] = $ospedale->gerId();
+                $ospedali_id[] = $ospedale->getId();
             }
             $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 100);
         } elseif ($ospedale) {
@@ -46,7 +46,7 @@ class SchedaController extends DragDropController {
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
             $ospedali_id = array();
             foreach ($ospedali as $ospedale) {
-                $ospedali_id[] = $ospedale->gerId();
+                $ospedali_id[] = $ospedale->getId();
             }
             $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id), array('anno' => 'ASC'), 100);
         } else {
@@ -86,7 +86,7 @@ class SchedaController extends DragDropController {
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
             $ospedali_id = array();
             foreach ($ospedali as $ospedale) {
-                $ospedali_id[] = $ospedale->gerId();
+                $ospedali_id[] = $ospedale->getId();
             }
             $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 100);
         } elseif ($ospedale) {
@@ -94,7 +94,7 @@ class SchedaController extends DragDropController {
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
             $ospedali_id = array();
             foreach ($ospedali as $ospedale) {
-                $ospedali_id[] = $ospedale->gerId();
+                $ospedali_id[] = $ospedale->getId();
             }
             $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id), array('anno' => 'ASC'), 100);
         } else {
