@@ -1,13 +1,13 @@
 <tr id="riga_{{ entity.id }}" style="display: none" class="r ng ca bg-white" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}" gestore="">
     {% if mode <= 1 %}
-        {% if gestore is defined %}
+        {% if gestore is defined and gestore %}
             <td style="text-align: center"><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}"><abbr title="{{ entity.ospedale.nome }}">{{ entity.ospedale.sigla|upper }}</abbr></a></td>
         {% else %}
             <td style="text-align: center"><a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}"><abbr title="{{ entity.ospedale.nome }}">{{ entity.ospedale.sigla|upper }}</abbr></a></td>
         {% endif %}
     {% endif %}
     {% if mode <= 2 %}
-        {% if gestore is defined %}
+        {% if gestore is defined and gestore %}
             <td style="text-align: center"><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}">{{ entity.anno2 }}</abbr></a></td>
         {% else %}
             <td style="text-align: center"><a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}">{{ entity.anno2 }}</abbr></a></td>
@@ -16,7 +16,7 @@
     <td style="text-align: center">{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}</td>
     <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
     <td>{{ entity.claimant }}</td>
-    {% if gestore is not defined %}
+    {% if gestore is not defined or not gestore %}
         <td style="text-align: center" class="chg"><a href="#fb_assegna_gestore" class="fancybox">Assegna</a></td>
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
@@ -28,7 +28,7 @@
         </button>
     </td>
 </tr>
-<tr style="display: none" id="detail_{{ entity.id }}">
+<tr {% if scroll is not defined %}style="display: none"{% else %}class="detail"{% endif %} id="detail_{{ entity.id }}">
     <td colspan="{{ colspan }}">
         <table class="records_list">
             <thead>
