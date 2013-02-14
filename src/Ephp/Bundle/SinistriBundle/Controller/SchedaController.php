@@ -150,7 +150,7 @@ class SchedaController extends DragDropController {
             'gestore' => $gestore,
             'entities' => $entities,
             'mode' => $mode,
-            'index' => 100 * $pagina + 1,
+            'index' => 100 * ($pagina - 1) + 1,
         );
     }
 
