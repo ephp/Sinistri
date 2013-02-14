@@ -31,7 +31,7 @@ class Ospedale
     /**
      * @var string
      *
-     * @ORM\Column(name="$nome_gruppo", type="string", length=255)
+     * @ORM\Column(name="nome_gruppo", type="string", length=255)
      */
     private $nome_gruppo;
 
