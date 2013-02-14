@@ -147,6 +147,7 @@ class SchedaController extends DragDropController {
         }
         $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy($params, array('anno' => 'ASC'), 100, 100 * ($pagina - 1));
         return array(
+            'gestore' => $gestore,
             'entities' => $entities,
             'mode' => $mode,
             'index' => 100 * $pagina + 1,
