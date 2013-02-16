@@ -362,15 +362,20 @@ class SchedaController extends DragDropController {
                             array('tipo' => 'RER', 'giorni' => 14),
                             array('tipo' => 'RSA', 'giorni' => 14),
                             array('tipo' => 'TAX', 'giorni' => 30),
-                            array('tipo' => 'TAX', 'giorni' => 14),
-                            array('tipo' => 'TAX', 'giorni' => 14)
+                            array('tipo' => 'TAX', 'giorni' => 14, 'from' => 1),
+                            array('tipo' => 'TAX', 'giorni' => 14, 'from' => 2)
                         );
                         $rischedulato = false;
                         foreach ($generatore as $i => $gen) {
                             if ($rischedulato) {
                                 $data = Funzioni::calcolaData($data, $gen['giorni']);
                                 $tipo = $this->getTipoEvento($gen['tipo']);
-                                $eventoP = $_evento->findOneBy(array('scheda' => $evento->getScheda()->getId(), 'tipo' => $tipo->getId()));
+                                if(isset($gen['from'])) {
+                                    $eventoP = $_evento->findBy(array('scheda' => $evento->getScheda()->getId(), 'tipo' => $tipo->getId()), array(), 1, $gen['from']);
+                                    $eventoP = $eventoP[0];
+                                } else {
+                                    $eventoP = $_evento->findOneBy(array('scheda' => $evento->getScheda()->getId(), 'tipo' => $tipo->getId()));
+                                }
                                 $eventoP->setDataOra($data);
                                 $em->persist($eventoP);
                                 $em->flush();
