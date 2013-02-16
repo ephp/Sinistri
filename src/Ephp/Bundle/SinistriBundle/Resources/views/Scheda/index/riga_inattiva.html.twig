@@ -1,3 +1,4 @@
+<!-- RIGA INATTIVA -->
 <tr style="display: none" class="r ng na bg-transparent" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}">
     {% if mode <= 1 %}
         {% if gestore is defined and gestore %}
@@ -13,13 +14,14 @@
             <td style="text-align: center"><a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}">{{ entity.anno2 }}</abbr></a></td>
         {% endif %}
     {% endif %}
-    <td style="text-align: center">{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}</td>
+    <td style="text-align: center"><input type="text" class="autoupdate auto_date" pratica="{{ entity.id }}" name="dasc" value="{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}"/></td>
     <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
     <td>{{ entity.claimant }}</td>
     {% if gestore is not defined or not gestore %}
         <td style="text-align: center">-</td>
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
+    <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved > 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
     <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
     <td style="text-align: center">inattiva</td>
     <td>&nbsp;</td>

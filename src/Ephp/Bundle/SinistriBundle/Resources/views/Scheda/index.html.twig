@@ -65,7 +65,7 @@
 {% block content %}
 <h1>{{titolo}}</h1>
 
-{% set colspan = 7 %}
+{% set colspan = 8 %}
 {% include 'EphpSinistriBundle:Scheda:index/filtri.html.twig' %}
 <table class="records_list">
     <thead>
@@ -90,6 +90,7 @@
                 <th>Gestore</th>
             {% endif %}
             <th>Soi</th>
+            <th>Amount Reserved</th>
             <th>Stato</th>
             <th>Priorita</th>
             <th>Operazioni</th>
@@ -180,6 +181,7 @@
         });
     }
     sanitizeCurrency([$('.currency')]);
+    sanitizeDate([$('.dasc_date')]);
     $('.autoupdate').change(function(){
         val = $(this).val();
         pratica = $(this).attr('pratica');
@@ -231,6 +233,8 @@
             });
         }
         $('.detail').hide();
+        sanitizeCurrency([$('.currency')]);
+        sanitizeDate([$('.dasc_date')]);
     }
 
     $(function(){

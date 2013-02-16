@@ -311,6 +311,10 @@ class SchedaController extends DragDropController {
                 case 'recuperoOffertaLoro':
                     $scheda->setRecuperoOffertaLoro($req['value']);
                     break;
+                case 'dasc':
+                    $dasc = \DateTime::createFromFormat('d/m/Y', $req['value']);
+                    $scheda->setDasc($dasc);
+                    break;
                 case 'note':
                     $scheda->setNote($req['value']);
                     break;
@@ -318,6 +322,94 @@ class SchedaController extends DragDropController {
             $em->persist($scheda);
             $em->flush();
         } catch (\Exception $e) {
+            throw $e;
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($req));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-autoupdate-calendario", name="tabellone_calendario_autoupdate", defaults={"_format"="json"})
+     */
+    public function autoupdateCalendarioAction() {
+        $req = $this->getRequest()->get('evento');
+        $req['reload'] = 0;
+        $em = $this->getEm();
+
+        $_evento = $em->getRepository('EphpSinistriBundle:Evento');
+        $evento = $_evento->find($req['id']);
+        /* @var $evento Evento */
+        try {
+            $em->beginTransaction();
+            switch ($req['field']) {
+                case 'titolo':
+                    $evento->setTitolo($req['value']);
+                    break;
+                case 'data':
+                    if($req['value'] == '') {
+                        $req['reload'] = 1;
+                        $em->remove($evento);
+                        $em->flush();
+                    } else {
+                        $old_data = $evento->getDataOra();
+                        $data = \DateTime::createFromFormat('d/m/Y', $req['value']);
+                        $evento->setDataOra($data);
+                        $generatore = array(
+                            array('tipo' => 'ASC', 'giorni' => 0),
+                            array('tipo' => 'VIM', 'giorni' => 10),
+                            array('tipo' => 'RPM', 'giorni' => 25),
+                            array('tipo' => 'RER', 'giorni' => 14),
+                            array('tipo' => 'RSA', 'giorni' => 14),
+                            array('tipo' => 'TAX', 'giorni' => 30),
+                            array('tipo' => 'TAX', 'giorni' => 14),
+                            array('tipo' => 'TAX', 'giorni' => 14)
+                        );
+                        $rischedulato = false;
+                        foreach ($generatore as $i => $gen) {
+                            if ($rischedulato) {
+                                $data = Funzioni::calcolaData($data, $gen['giorni']);
+                                $tipo = $this->getTipoEvento($gen['tipo']);
+                                $eventoP = $_evento->findOneBy(array('scheda' => $evento->getScheda()->getId(), 'tipo' => $tipo->getId()));
+                                $eventoP->setDataOra($data);
+                                $em->persist($eventoP);
+                                $em->flush();
+                            }
+                            if ($evento->getTipo()->getSigla() == $gen['tipo']) {
+                                if (!$rischedulato) {
+                                    $rischedulato = true;
+                                    $oggi = new \DateTime();
+                                    $cal = $this->getCalendar();
+                                    $tipo = $this->getTipoEvento('RIS');
+                                    $eventoR = new Evento();
+                                    $eventoR->setCalendario($cal);
+                                    $eventoR->setDataOra($oggi);
+                                    $eventoR->setDeltaG(0);
+                                    $eventoR->setGiornoIntero(true);
+                                    $eventoR->setImportante(false);
+                                    $eventoR->setNote("{$evento->getTipo()->getNome()} (da " . date('d-m-Y', $old_data->getTimestamp()) . " a " . date('d-m-Y', $data->getTimestamp()) . ")");
+                                    $eventoR->setOrdine($i + 1);
+                                    $eventoR->setRischedulazione(false);
+                                    $eventoR->setScheda($evento->getScheda());
+                                    $eventoR->setTipo($tipo);
+                                    $eventoR->setTitolo('Rischedulazione');
+                                    $em->persist($eventoR);
+                                    $em->flush();
+                                    $req['reload'] = 1;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 'note':
+                    $evento->setNote($req['value']);
+                    break;
+            }
+            $em->persist($evento);
+            $em->flush();
+            $em->commit();
+        } catch (\Exception $e) {
+            $em->rollback();
             throw $e;
         }
         return new \Symfony\Component\HttpFoundation\Response(json_encode($req));
@@ -341,7 +433,7 @@ class SchedaController extends DragDropController {
      * @Template()
      */
     public function uploadAction($tipo) {
-        return array('tipo' =>$tipo);
+        return array('tipo' => $tipo);
     }
 
     /**
@@ -419,17 +511,17 @@ class SchedaController extends DragDropController {
                     $evento->setScheda($entity);
                     $evento->setTipo($tipo);
                     $evento->setTitolo($dati[3]);
-                    
+
                     $like = array(
-                                'calendario' => $cal->getId(),
-                                'tipo' => $tipo->getId(),
-                                'scheda' => $entity->getId(),
-                                'titolo' => $evento->getTitolo(),
-                            );
-                    if(in_array($tipo->getSigla(), array('JWB', 'CNT', 'RVP', 'RIS'))) {
+                        'calendario' => $cal->getId(),
+                        'tipo' => $tipo->getId(),
+                        'scheda' => $entity->getId(),
+                        'titolo' => $evento->getTitolo(),
+                    );
+                    if (in_array($tipo->getSigla(), array('JWB', 'CNT', 'RVP', 'RIS'))) {
                         $like['note'] = $evento->getNote();
                     }
-                    
+
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy($like);
 //                    Funzioni::vd($old);
                     if (!$olds) {
@@ -438,18 +530,18 @@ class SchedaController extends DragDropController {
                     } else {
                         $data->setTime(0, 0, 0);
                         $save = true;
-                        foreach($olds as $old) {
+                        foreach ($olds as $old) {
                             $old->getDataOra()->setTime(0, 0, 0);
-                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                            if ($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
                                 $save = false;
-                                if($tipo->getSigla() == 'OTH') {
+                                if ($tipo->getSigla() == 'OTH') {
                                     $old->setNote($dati[4]);
                                     $em->persist($old);
                                     $em->flush();
                                 }
                             }
                         }
-                        if($save) {
+                        if ($save) {
                             $em->persist($evento);
                             $em->flush();
                         }
@@ -506,11 +598,11 @@ class SchedaController extends DragDropController {
                     $evento->setTipo($tipo);
                     $evento->setTitolo($dati[2]);
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
-                                'calendario' => $cal->getId(),
-                                'tipo' => $tipo->getId(),
-                                'scheda' => $entity->getId(),
-                                'titolo' => $evento->getTitolo(),
-                                'note' => $evento->getNote(),
+                        'calendario' => $cal->getId(),
+                        'tipo' => $tipo->getId(),
+                        'scheda' => $entity->getId(),
+                        'titolo' => $evento->getTitolo(),
+                        'note' => $evento->getNote(),
                             ));
 //                    Funzioni::vd($old);
                     if (!$olds) {
@@ -519,13 +611,13 @@ class SchedaController extends DragDropController {
                     } else {
                         $data->setTime(0, 0, 0);
                         $save = true;
-                        foreach($olds as $old) {
+                        foreach ($olds as $old) {
                             $old->getDataOra()->setTime(0, 0, 0);
-                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                            if ($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
                                 $save = false;
                             }
                         }
-                        if($save) {
+                        if ($save) {
                             $em->persist($evento);
                             $em->flush();
                         }
@@ -583,11 +675,11 @@ class SchedaController extends DragDropController {
                     $evento->setTipo($tipo);
                     $evento->setTitolo($dati[1]);
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
-                                'calendario' => $cal->getId(),
-                                'tipo' => $tipo->getId(),
-                                'scheda' => $entity->getId(),
-                                'titolo' => $evento->getTitolo(),
-                                'note' => $evento->getNote(),
+                        'calendario' => $cal->getId(),
+                        'tipo' => $tipo->getId(),
+                        'scheda' => $entity->getId(),
+                        'titolo' => $evento->getTitolo(),
+                        'note' => $evento->getNote(),
                             ));
 //                    Funzioni::vd($old);
                     if (!$olds) {
@@ -596,13 +688,13 @@ class SchedaController extends DragDropController {
                     } else {
                         $data->setTime(0, 0, 0);
                         $save = true;
-                        foreach($olds as $old) {
+                        foreach ($olds as $old) {
                             $old->getDataOra()->setTime(0, 0, 0);
-                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                            if ($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
                                 $save = false;
                             }
                         }
-                        if($save) {
+                        if ($save) {
                             $em->persist($evento);
                             $em->flush();
                         }
@@ -660,10 +752,10 @@ class SchedaController extends DragDropController {
                     $evento->setTipo($tipo);
                     $evento->setTitolo('Ravinale Piemonte');
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
-                                'calendario' => $cal->getId(),
-                                'tipo' => $tipo->getId(),
-                                'scheda' => $entity->getId(),
-                                'note' => $evento->getNote(),
+                        'calendario' => $cal->getId(),
+                        'tipo' => $tipo->getId(),
+                        'scheda' => $entity->getId(),
+                        'note' => $evento->getNote(),
                             ));
 //                    Funzioni::vd($old);
                     if (!$olds) {
@@ -672,13 +764,13 @@ class SchedaController extends DragDropController {
                     } else {
                         $data->setTime(0, 0, 0);
                         $save = true;
-                        foreach($olds as $old) {
+                        foreach ($olds as $old) {
                             $old->getDataOra()->setTime(0, 0, 0);
-                            if($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
+                            if ($data->getTimestamp() == $old->getDataOra()->getTimestamp()) {
                                 $save = false;
                             }
                         }
-                        if($save) {
+                        if ($save) {
                             $em->persist($evento);
                             $em->flush();
                         }
@@ -702,14 +794,13 @@ class SchedaController extends DragDropController {
      */
     public function importAction($tipo) {
         $colonne = array();
-        switch($tipo) {
+        switch ($tipo) {
             case 'piemonte':
                 $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'franchigia', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);
                 break;
             default:
                 $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);
                 break;
-            
         }
         $uri = __DIR__ . '/../../../../../web' . str_replace(' ', '+', urldecode($this->getRequest()->get('file')));
         set_time_limit(3600);
@@ -754,13 +845,13 @@ class SchedaController extends DragDropController {
                                     $scheda->setAnno($anno);
                                     $scheda->setTpa($tpa);
                                 } elseif (count($tpa) == 2) {
-                                    $tpa2 =  explode('-', $tpa[0]);
+                                    $tpa2 = explode('-', $tpa[0]);
                                     if (count($tpa2) != 2) {
                                         Funzioni::pr($dati);
                                         break(3);
                                     }
                                     $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa2[0]));
-                                    if(!$ospedale) {
+                                    if (!$ospedale) {
                                         $ospedale = new Ospedale();
                                         $ospedale->setSigla($tpa2[0]);
                                         $ospedale->setNome($tpa2[0]);

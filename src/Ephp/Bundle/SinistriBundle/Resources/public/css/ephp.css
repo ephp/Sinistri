@@ -384,6 +384,17 @@ tr.bg-gray td {
     color: #999999 !important;
 }
 
+form {
+    margin: 20px;
+}
+
+input.auto_date {
+    width: 80px !important;
+}
+input.auto_double {
+    width: 250px !important;
+    text-align: left !important;
+}
 input.autoupdate {
     border: none;
     background: none;

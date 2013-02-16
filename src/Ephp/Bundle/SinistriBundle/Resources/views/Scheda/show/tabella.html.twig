@@ -11,8 +11,8 @@
         {% for evento in entity.eventi %}
             <tr style="background-color: #{{evento.tipo.colore}};">
                 <td style="background-color: transparent;" title="{{evento.tipo.sigla}}" class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
-                <td style="background-color: transparent;" nowrap>{{ evento.dataOra|date('d/m/Y') }}</td>
-                <td style="background-color: transparent;">{{ evento.titolo }}</td>
+                <td style="background-color: transparent;" nowrap><input type="text" class="autoupdate auto_date" evento="{{ evento.id }}" name="data" value="{{ evento.dataOra|date('d/m/Y') }}"/></td>
+                <td style="background-color: transparent;"><input type="text" class="autoupdate auto_double" evento="{{ evento.id }}" name="titolo" value="{{ evento.titolo }}"/></td>
                 <td style="background-color: transparent;"><textarea style="width: 550px; height: 20px;" class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
             </tr>
         {% endfor %}

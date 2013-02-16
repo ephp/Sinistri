@@ -72,6 +72,9 @@ function sanitizeDate(fields) {
     fields.forEach(function(field) {
         field.change(function() {
             value = $(this).val().toLowerCase();
+            if(value == '') {
+                return false;
+            }
             d = new Date();
             if (value.endsWith('gg') || value == 'oggi' || value == 'domani') {
                 switch (value) {
@@ -94,14 +97,13 @@ function sanitizeDate(fields) {
             } else {
                 numeri = $(this).val().replace(/\-/g, "/").replace(/\./g, "/").replace(/\//g, " ").words();
                 if(numeri.length == 3) {
-                    console.log(numeri);
-                    d.setUTCDate(parseInt(numeri[0], 10));
-                    d.setUTCMonth(parseInt(numeri[1], 10));
                     d.setUTCFullYear(parseInt(numeri[2], 10) < 100 ? 2000 + parseInt(numeri[2], 10) : parseInt(numeri[2], 10));
+                    d.setUTCMonth(parseInt(numeri[1], 10));
+                    d.setUTCDate(parseInt(numeri[0], 10));
                 } 
-                g = d.getUTCDate() < 10 ? '0'+d.getUTCDate() : d.getUTCDate();
-                m = d.getUTCMonth() == 0 ? 12 : (d.getUTCMonth() < 10 ? '0'+(d.getUTCMonth()) : (d.getUTCMonth()));
-                a = d.getUTCFullYear();
+                g = parseInt(d.getUTCDate()) < 10 ? '0'+d.getUTCDate() : d.getUTCDate();
+                m = parseInt(d.getUTCMonth()) == 0 ? 12 : (d.getUTCMonth() < 10 ? '0'+(d.getUTCMonth()) : (d.getUTCMonth()));
+                a = d.getUTCFullYear() - (parseInt(m) == 12 ? 1 : 0);
                 $(this).val(g+'/'+m+'/'+a);
             }
         });
