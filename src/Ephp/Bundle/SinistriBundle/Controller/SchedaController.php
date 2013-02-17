@@ -40,7 +40,7 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 200);
         } elseif ($ospedale) {
             $mode = 2;
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
@@ -48,10 +48,10 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id), array('anno' => 'ASC'), 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id), array('anno' => 'ASC'), 200);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array('anno' => 'ASC'), 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array('anno' => 'ASC'), 200);
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
@@ -88,7 +88,7 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 200);
         } elseif ($ospedale) {
             $mode = 2;
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
@@ -96,10 +96,10 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id), array('anno' => 'ASC'), 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id), array('anno' => 'ASC'), 200);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId()), array('anno' => 'ASC'), 100);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId()), array('anno' => 'ASC'), 200);
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
@@ -145,12 +145,12 @@ class SchedaController extends DragDropController {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
             $params['gestore'] = $gestore->getId();
         }
-        $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy($params, array('anno' => 'ASC'), 100, 100 * ($pagina - 1));
+        $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy($params, array('anno' => 'ASC'), 200, 200 * ($pagina - 1));
         return array(
             'gestore' => $gestore == 'TUTTI' ? null : $gestore,
             'entities' => $entities,
             'mode' => $mode,
-            'index' => 100 * ($pagina - 1) + 1,
+            'index' => 200 * ($pagina - 1) + 1,
             'scroll' => true,
         );
     }
@@ -348,9 +348,9 @@ class SchedaController extends DragDropController {
                     break;
                 case 'data':
                     if($req['value'] == '') {
-                        $req['reload'] = 1;
                         $em->remove($evento);
                         $em->flush();
+                        $req['reload'] = 1;
                     } else {
                         $old_data = $evento->getDataOra();
                         $data = \DateTime::createFromFormat('d/m/Y', $req['value']);

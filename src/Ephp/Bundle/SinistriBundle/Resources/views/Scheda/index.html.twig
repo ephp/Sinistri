@@ -142,12 +142,16 @@
     });
     
     {% if gestore is not defined and gestori is defined %}
-        $('.chg').click(function(){
-            tr = $(this).closest('tr');
-            $('#assegna_gestore_a').text(tr.attr('titolo'));
-            $('#scheda_id').val(tr.attr('riga'));
-            $('#scheda_gestore').val(tr.attr('gestore'));
-        });
+        function cambiaGestore() {
+            $('.chg').click(function(){
+                tr = $(this).closest('tr');
+                $('#assegna_gestore_a').text(tr.attr('titolo'));
+                $('#scheda_id').val(tr.attr('riga'));
+                $('#scheda_gestore').val(tr.attr('gestore'));
+            });
+        }
+        cambiaGestore();
+        
         function assegnaGestore() {
             form = $('#assegna_gestore_scheda');
             $.post('{{ path('tabellone_assegna_gestore') }}', form.serialize(), function(out) {
@@ -235,6 +239,9 @@
         $('.detail').hide();
         sanitizeCurrency([$('.currency')]);
         sanitizeDate([$('.dasc_date')]);
+        {% if gestore is not defined and gestori is defined %}
+            cambiaGestore();
+        {% endif %}
     }
 
     $(function(){
