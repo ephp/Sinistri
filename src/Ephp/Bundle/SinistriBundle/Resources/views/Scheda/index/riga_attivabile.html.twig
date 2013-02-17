@@ -25,8 +25,8 @@
     <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
     <td style="text-align: center">non avviata</td>
     <td>
-        <button type="button">
-            <a href="javascript:$('#detail_{{ entity.id }}').toggle()">Dettagli</a>
+        <button type="button" onclick="javascript:$('#detail_{{ entity.id }}').toggle()">
+            Dettagli
         </button>
     </td>
 </tr>

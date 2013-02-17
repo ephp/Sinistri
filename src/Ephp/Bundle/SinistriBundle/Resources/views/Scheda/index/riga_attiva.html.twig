@@ -28,11 +28,11 @@
     <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
     <td style="text-align: center" class="chp"><a href="#fb_cambia_priorita" class="fancybox">{% if entity.priorita %}{{ entity.priorita.priorita }}{% else %}N/A{% endif %}</a></td>
     <td>
-        <button type="button">
-            <a href="javascript:$('#detail_{{ entity.id }}').toggle()">Dettagli</a>
+        <button type="button" onclick="javascript:$('#detail_{{ entity.id }}').toggle()">
+            Dettagli
         </button>
-        <button type="button">
-            <a href="{{ path('tabellone_show', {'id': entity.id}) }}">Apri</a>
+        <button type="button" onclick="javascript:window.location='{{ path('tabellone_show', {'id': entity.id}) }}'">
+            Apri
         </button>
     </td>
 </tr>
