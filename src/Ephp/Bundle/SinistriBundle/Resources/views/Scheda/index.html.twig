@@ -12,10 +12,11 @@
     {% set titolo = titolo ~ ' 20' ~ anno %}
     {% set params_anno = anno %}
 {% endif %}
-{% if gestore is defined %}
+{% if gestore is defined and gestore %}
     {% set titolo = gestore.nome ~ ' | ' ~ titolo %}
     {% set params_gestore = gestore.sigla %}
 {% endif %}
+{% set params_cerca = {'gestore': params_gestore, 'ospedale': params_ospedale, 'anno': params_anno, 'q': '__query__'} %}
 {% set params = {'gestore': params_gestore, 'ospedale': params_ospedale, 'anno': params_anno, 'pagina': 2} %}
 {% block title %}{{titolo}}{% endblock %}
 
@@ -31,7 +32,7 @@
     <div style="clear: both"></div>
     <ul class="menu">
         {% set old_osp = '' %}
-        {% if gestore is defined %}
+        {% if gestore is defined and gestore %}
             <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tutti</a></li>
         {% else %}
             <li><a href="{{ path('tabellone') }}">Tutti</a></li>
@@ -39,7 +40,7 @@
         {% for osp in ospedali %}
             {% if old_osp != osp.gruppo %}
                 {% set old_osp = osp.gruppo %}
-                {% if gestore is defined %}
+                {% if gestore is defined and gestore %}
                     <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': osp.gruppo}) }}">{{osp.nomeGruppo}}</a></li>
                 {% else %}
                     <li><a href="{{ path('tabellone', {'ospedale': osp.gruppo}) }}">{{osp.nomeGruppo}}</a></li>
@@ -70,7 +71,7 @@
 <table class="records_list">
     <thead>
         <tr>
-            {% if gestore is defined %}
+            {% if gestore is defined and gestore %}
                 {% set colspan = colspan + 1 %}
                 <th>#</th>
             {% endif %}
@@ -85,7 +86,7 @@
             <th>Dasc</th>
             <th>Tpa</th>
             <th>Claimant</th>
-            {% if gestore is not defined %}
+            {% if gestore is not defined or not gestore %}
                 {% set colspan = colspan + 1 %}
                 <th>Gestore</th>
             {% endif %}
@@ -100,10 +101,12 @@
         {% include 'EphpSinistriBundle:Scheda:index/tbody.html.twig' %}
     </tbody>
 </table>
-<nav id="page_nav">
-    <a href="{{ path('tabellone_scroll', params) }}">Ancora</a>
-</nav>
-{% if gestore is not defined and gestori is defined %}
+{% if q is not defined %}
+    <nav id="page_nav">
+        <a href="{{ path('tabellone_scroll', params) }}">Ancora</a>
+    </nav>
+{% endif %}
+{% if (gestore is not defined or not gestore) and gestori is defined %}
     <div style="display: none" id="fb_assegna_gestore">
         <form id="assegna_gestore_scheda">
             <h2>Assegna il gestore a <span id="assegna_gestore_a"></span></h2>
@@ -136,12 +139,29 @@
     var filtro = {'.r': true, '.na': false, '.ng': false};
     var filtro_nome = '';
     
-    $('#find_claimant').keyup(function(){
-        filtro_nome = $(this).val().toLowerCase();
-        runFiltro();
+    $('#find_claimant').change(function(){
+        q = $(this).val().toLowerCase();
+        if(q != '') {
+            url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('__query__', q);
+        } else {
+            {% if gestore is defined and gestore %}
+                url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__/', '-gestore_');
+            {% else %}
+                url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__', '').replace('tabellone/TUTTI', 'tabellone');
+            {% endif %}
+        }
+        window.location =  url ;
     });
+    function resetQ() {
+        {% if gestore is defined and gestore %}
+            url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__/', '-gestore_');
+        {% else %}
+            url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__', '').replace('tabellone/TUTTI', 'tabellone');;
+        {% endif %}
+        window.location =  url ;
+    }
     
-    {% if gestore is not defined and gestori is defined %}
+    {% if (gestore is not defined or not gestore) and gestori is defined %}
         function cambiaGestore() {
             $('.chg').click(function(){
                 tr = $(this).closest('tr');
@@ -239,25 +259,27 @@
         $('.detail').hide();
         sanitizeCurrency([$('.currency')]);
         sanitizeDate([$('.dasc_date')]);
-        {% if gestore is not defined and gestori is defined %}
+        {% if (gestore is not defined or not gestore) and gestori is defined %}
             cambiaGestore();
         {% endif %}
     }
 
-    $(function(){
-        var $container = $('#tb_container');
-        $container.infinitescroll({
-            navSelector  : '#page_nav',    // selector for the paged navigation 
-            nextSelector : '#page_nav a',  // selector for the NEXT link (to page 2)
-            itemSelector : '.r',     // selector for all items you'll retrieve
-            loading: {
-                finishedMsg: 'Fine',
-                msgText: 'Attendere',
-                img: 'http://i.imgur.com/qkKy8.gif'
-            }
-        }, function() {
-            setTimeout(function(){runFiltro();}, 10);
+    {% if q is not defined %}
+        $(function(){
+            var $container = $('#tb_container');
+            $container.infinitescroll({
+                navSelector  : '#page_nav',    // selector for the paged navigation 
+                nextSelector : '#page_nav a',  // selector for the NEXT link (to page 2)
+                itemSelector : '.r',     // selector for all items you'll retrieve
+                loading: {
+                    finishedMsg: 'Fine',
+                    msgText: 'Attendere',
+                    img: 'http://i.imgur.com/qkKy8.gif'
+                }
+            }, function() {
+                setTimeout(function(){runFiltro();}, 10);
+            });
         });
-    });
+    {% endif %}
 </script>
 {% endblock %}

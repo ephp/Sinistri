@@ -1,10 +1,10 @@
 <h2 style="float: left; margin-right: 20px;">Filtri veloci</h2>
 <ul class="menu">
-    {% if gestore is not defined %}
+    {% if gestore is not defined or not gestore %}
         <li><a href="javascript:filtra({'.r': true});">Visualizza tutto</a></li>
         <li><a href="javascript:filtra({'.r': true, '.na': false});">Nascondi senza DASC</a></li>
         <li><a href="javascript:filtra({'.r': true, '.na': false, '.cg': false});">Mostra senza gestore</a></li>
         <li><a href="javascript:filtra({'.r': true, '.na': false, '.ng': false});">Mostra con gestore</a></li>
     {% endif %}
-    <li>oppure <input type="text" id="find_claimant" placeholder="Cerca per TPA o Claimant" style="width: 250px;"></li>
+            <li>oppure <input type="text" id="find_claimant" placeholder="Cerca per Claimant e premi invio" style="width: 250px;" value="{% if q is defined %}{{q}}{% endif %}">{% if q is defined %}<button onclick="resetQ()">Cancella ricerca</button>{% endif %}</li>
 </ul>

@@ -116,6 +116,63 @@ class SchedaController extends DragDropController {
             'anni' => range(7, date('y'))
         );
     }
+    
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-cerca-{q}/{gestore}/{ospedale}/{anno}", name="tabellone_cerca", defaults={"gestore"="TUTTI", "ospedale"="TUTTI", "anno"="TUTTI", "q"=""})
+     * @Template("EphpSinistriBundle:Scheda:index.html.twig")
+     */
+    public function cercaAction($q, $gestore, $ospedale, $anno) {
+        if($q == '') {
+            $this->redirect($this->generateUrl('tabellone'));
+        }
+        $em = $this->getEm();
+        $mode = 0;
+        $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
+        if($gestore != 'TUTTI') {
+            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+        } else {
+            $gestore = false;
+        };
+        $ospedali_id = array();
+        if($ospedale != 'TUTTI') {
+            $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
+            foreach ($ospedali as $ospedale) {
+                $ospedali_id[] = $ospedale->getId();
+            }
+        } else {
+            $ospedale = false;
+        };
+        if($anno == 'TUTTI') {
+            $anno = false;
+        };
+        if ($ospedale && $anno) {
+            $mode = 3;
+        } elseif ($ospedale) {
+            $mode = 2;
+        } else {
+            $mode = 1;
+        }
+        $entities = $em->getRepository('EphpSinistriBundle:Scheda')->cerca($gestore, $ospedali_id, $anno, $q);
+        $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
+        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
+        $priorita = $_priorita->findAll();
+        return array(
+            'entities' => $entities,
+            'mode' => $mode,
+            'ospedale' => $ospedale,
+            'anno' => $anno < 10 ? '0' . $anno : $anno,
+            'gestore' => $gestore,
+            'ospedali' => $ospedali,
+            'gestori' => $gestori,
+            'priorita' => $priorita,
+            'anni' => range(7, date('y')),
+            'q' => $q,
+        );
+    }
 
     /**
      * Lists all Scheda entities.
