@@ -24,7 +24,7 @@
         <td style="text-align: center" class="chg"><a href="#fb_assegna_gestore" class="fancybox"><abbr title="{{ entity.gestore.nome }}">{{ entity.gestore.sigla }}</abbr></a></td>
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
-    <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved > 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
+    <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved >= 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
     <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
     <td style="text-align: center" class="chp"><a href="#fb_cambia_priorita" class="fancybox">{% if entity.priorita %}{{ entity.priorita.priorita }}{% else %}N/A{% endif %}</a></td>
     <td>

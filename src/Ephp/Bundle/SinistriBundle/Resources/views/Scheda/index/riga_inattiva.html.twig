@@ -21,7 +21,7 @@
         <td style="text-align: center">-</td>
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
-    <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved > 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
+    <td><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved >= 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
     <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
     <td style="text-align: center">inattiva</td>
     <td>&nbsp;</td>

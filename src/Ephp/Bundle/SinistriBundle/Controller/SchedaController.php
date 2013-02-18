@@ -13,6 +13,7 @@ use Ephp\Bundle\SinistriBundle\Entity\Ospedale;
 use Ephp\Bundle\SinistriBundle\Entity\Priorita;
 use Ephp\Bundle\SinistriBundle\Entity\Scheda;
 use Ephp\Bundle\WsInvokerBundle\Functions\Funzioni;
+use Ephp\Bundle\WsInvokerBundle\PhpExcel\SpreadsheetExcelReader;
 
 /**
  * Scheda controller.
@@ -116,7 +117,7 @@ class SchedaController extends DragDropController {
             'anni' => range(7, date('y'))
         );
     }
-    
+
     /**
      * Lists all Scheda entities.
      *
@@ -124,7 +125,7 @@ class SchedaController extends DragDropController {
      * @Template("EphpSinistriBundle:Scheda:index.html.twig")
      */
     public function cercaAction($q, $gestore, $ospedale, $anno) {
-        if($q == '') {
+        if ($q == '') {
             $this->redirect($this->generateUrl('tabellone'));
         }
         $em = $this->getEm();
@@ -132,13 +133,13 @@ class SchedaController extends DragDropController {
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
         $_gestore = $em->getRepository('EphpACLBundle:Gestore');
         $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
-        if($gestore != 'TUTTI') {
+        if ($gestore != 'TUTTI') {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
         } else {
             $gestore = false;
         };
         $ospedali_id = array();
-        if($ospedale != 'TUTTI') {
+        if ($ospedale != 'TUTTI') {
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
@@ -146,7 +147,7 @@ class SchedaController extends DragDropController {
         } else {
             $ospedale = false;
         };
-        if($anno == 'TUTTI') {
+        if ($anno == 'TUTTI') {
             $anno = false;
         };
         if ($ospedale && $anno) {
@@ -404,7 +405,7 @@ class SchedaController extends DragDropController {
                     $evento->setTitolo($req['value']);
                     break;
                 case 'data':
-                    if($req['value'] == '') {
+                    if ($req['value'] == '') {
                         $em->remove($evento);
                         $em->flush();
                         $req['reload'] = 1;
@@ -427,7 +428,7 @@ class SchedaController extends DragDropController {
                             if ($rischedulato) {
                                 $data = Funzioni::calcolaData($data, $gen['giorni']);
                                 $tipo = $this->getTipoEvento($gen['tipo']);
-                                if(isset($gen['from'])) {
+                                if (isset($gen['from'])) {
                                     $eventoP = $_evento->findBy(array('scheda' => $evento->getScheda()->getId(), 'tipo' => $tipo->getId()), array(), 1, $gen['from']);
                                     $eventoP = $eventoP[0];
                                 } else {
@@ -475,6 +476,27 @@ class SchedaController extends DragDropController {
             throw $e;
         }
         return new \Symfony\Component\HttpFoundation\Response(json_encode($req));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-uploadXlsSingle", name="tabellone_xls_upload_single")
+     * @Template("EphpDragDropBundle:DragDrop:singleXls.html.php")
+     */
+    public function uploadXlsSingleAction() {
+        return $this->singleFile();
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-upload-xls-default-{tipo}", name="tabellone_upload_xls_default", defaults={"tipo"="default"})
+     * @Route("-upload-xls-piemonte-{tipo}", name="tabellone_upload_xls_piemonte", defaults={"tipo"="piemonte"})
+     * @Template()
+     */
+    public function uploadXlsAction($tipo) {
+        return array('tipo' => $tipo);
     }
 
     /**
@@ -1036,6 +1058,184 @@ class SchedaController extends DragDropController {
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('schede_aggiunte' => $schede_aggiunte, 'schede_aggiornate' => $schede_aggiornate)));
     }
 
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-import-xls-default-{tipo}", name="tabellone_import_xls_default", defaults={"_format"="json", "tipo"="default"})
+     * @Route("-import-xls-piemonte-{tipo}", name="tabellone_import_xls_piemonte", defaults={"_format"="json", "tipo"="piemonte"})
+     */
+    public function importXlsAction($tipo) {
+        $colonne = array();
+        $em = $this->getEm();
+        
+        $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
+        $_stato = $em->getRepository('EphpSinistriBundle:Stato');
+        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
+        
+        $schede_aggiunte = $schede_aggiornate = 0;
+
+        $uri = __DIR__ . '/../../../../../web' . str_replace(' ', '+', urldecode($this->getRequest()->get('file')));
+        set_time_limit(3600);
+        switch ($tipo) {
+            case 'piemonte':
+                $colonne = array(
+                    'ID',
+                    'TDA Ref.',
+                    'HOSPITAL',
+                    'CLAIMANT',
+                    'DOL',
+                    'DON',
+                    'TYPE OF LOSS',
+                    'FIRST RESERVE INDICATION',
+                    'APPLICABLE DEDUCTIBLE',
+                    'AMOUNT RESERVED',
+                    'DEDUCTIBLE RESERVED',
+                    'LT FEES RESERVE',
+                    'PROFESS. FEES RESERVE',
+                    'POSSIBLE RECOVERY',
+                    'AMOUNT SETTLED',
+                    'DEDUC. PAID',
+                    'PROFESS. FEES PAID',
+                    'LT FEES PAID',
+                    'TOTAL PAID',
+                    'RECOVERED',
+                    'TOTAL INCURRED',
+                    'S.P.',
+                    'M.P.L.',
+                    'S. OF I.',
+                    'STATUS',
+                    'COMMENTS',
+                );
+                $doc = new \DOMDocument();
+                $doc->loadHTMLFile($uri);
+                $tag_html = $doc->getElementsByTagName('html')->item(0);
+                $tag_body = $this->getDOMElement($tag_html, array('tag' => 'body'));
+                $table = $this->getDOMElement($tag_body, array('tag' => 'table'));
+                $trs = $this->getDOMElement($table, array('tag' => 'tr'), false);
+                foreach ($trs as $tr) {
+                    $tds = $this->getDOMElement($tr, array('tag' => 'td'), false);
+                    if (count($tds) > 0) {
+                        try {
+                            $em->beginTransaction();
+                            $scheda = new Scheda();
+                            foreach ($tds as $idx => $td) {
+                                switch ($colonne[$idx]) {
+                                    case 'TDA Ref.':
+                                        $tpa = explode('/', $td->nodeValue);
+                                        if (count($tpa) == 3) {
+                                            $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa[0]));
+                                            $anno = $tpa[1];
+                                            $tpa = $tpa[2];
+                                            $scheda->setOspedale($ospedale);
+                                            $scheda->setAnno($anno);
+                                            $scheda->setTpa($tpa);
+                                        } elseif (count($tpa) == 2) {
+                                            $tpa2 = explode('-', $tpa[0]);
+                                            if (count($tpa2) != 2) {
+                                                break(3);
+                                            }
+                                            $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa2[0]));
+                                            if (!$ospedale) {
+                                                $ospedale = new Ospedale();
+                                                $ospedale->setSigla($tpa2[0]);
+                                                $ospedale->setNome($tpa2[0]);
+                                                $ospedale->setGruppo('Piemonte');
+                                                $ospedale->setNomeGruppo('Ospedali Piemonte');
+                                                $em->persist($ospedale);
+                                                $em->flush();
+                                            }
+                                            $anno = $tpa2[1];
+                                            $tpa = $tpa[1];
+                                            $scheda->setOspedale($ospedale);
+                                            $scheda->setAnno($anno);
+                                            $scheda->setTpa($tpa);
+                                        } else {
+                                            break(3);
+                                        }
+                                        break;
+
+                                    case 'CLAIMANT':
+                                        $scheda->setClaimant($td->nodeValue);
+                                        break;
+                                    case 'S. OF I.':
+                                        if ($td->nodeValue) {
+                                            $scheda->setSoi($td->nodeValue);
+                                        }
+                                        break;
+                                    case 'FIRST RESERVE INDICATION':
+                                        if ($td->nodeValue) {
+                                            $scheda->setFirstReserve($this->currency($td->nodeValue));
+                                        }
+                                        break;
+                                    case 'APPLICABLE DEDUCTIBLE':
+                                        $scheda->setFranchigia($this->currency($td->nodeValue));
+                                        break;
+                                    case 'AMOUNT RESERVED':
+                                        if ($td->nodeValue) {
+                                            if($td->nodeValue != 'NP') {
+                                                $scheda->setAmountReserved($this->currency($td->nodeValue));
+                                            } else {
+                                                $scheda->setAmountReserved(-1);
+                                            }
+                                        }
+                                        break;
+                                    case 'STATUS':
+                                        if ($td->nodeValue) {
+                                            $stato = $_stato->findOneBy(array('stato' => $td->nodeValue));
+                                            if (!$stato) {
+                                                $stato = new \Ephp\Bundle\SinistriBundle\Entity\Stato();
+                                                $stato->setStato($td->nodeValue);
+                                                $em->persist($stato);
+                                                $em->flush();
+                                            }
+                                            $scheda->setStato($stato);
+                                        }
+                                        break;
+                                    default: break;
+                                }
+                            }
+                            $old = $_scheda->findOneBy(array('ospedale' => $scheda->getOspedale()->getId(), 'anno' => $scheda->getAnno(), 'tpa' => $scheda->getTpa()));
+                            /* @var $old Scheda */
+                            if ($old) {
+                                $old->setAmountReserved($scheda->getAmountReserved());
+//                        $old->setClaimant($scheda->getClaimant());
+                                $old->setFirstReserve($scheda->getFirstReserve());
+//                        $old->setGestore($scheda->getGestore());
+//                        $old->setOffertaLoro($scheda->getOffertaLoro());
+//                        $old->setOffertaNostra($scheda->getOffertaNostra());
+//                        $old->setPriorita($scheda->getPriorita());
+//                        $old->setRecuperoOffertaLoro($scheda->getRecuperoOffertaLoro());
+//                        $old->setRecuperoOffertaNostra($scheda->getRecuperoOffertaNostra());
+//                        $old->setSa($scheda->getSa());
+                                $old->setSoi($scheda->getSoi());
+                                $old->setStato($scheda->getStato());
+                                $em->persist($old);
+                                $em->flush();
+                                $schede_aggiornate++;
+                            } else {
+                                $em->persist($scheda);
+                                $em->flush();
+                                $schede_aggiunte++;
+                            }
+                            $em->commit();
+                        } catch (\Exception $e) {
+                            $em->rollback();
+                            throw $e;
+                        }
+                    }
+                }
+                break;
+            default:
+                $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);
+                $data = new SpreadsheetExcelReader($uri);
+                Funzioni::vd($data->dump(true, true));
+                break;
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('schede_aggiunte' => $schede_aggiunte, 'schede_aggiornate' => $schede_aggiornate)));
+    }
+
     private function currency($euro) {
         return str_replace(array('€', '.', ',', ' '), array('', '', '.', ''), $euro);
     }
@@ -1068,6 +1268,106 @@ class SchedaController extends DragDropController {
             $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
         }
         return $cal;
+    }
+
+    /**
+     * 
+     * @param \DOMElement $element
+     * @param array $criteria
+     * @param boolean $first
+     * @return \BringOut\Bundle\GrabBundle\Controller\DOMElement
+     */
+    protected function getDOMElement(\DOMElement $element, $criteria = array(), $first = true) {
+        $out = $first ? false : array();
+        $i = 0;
+        if (isset($criteria['vd'])) {
+            Funzioni::pr('========================', true);
+            Funzioni::pr($criteria, true);
+        }
+        if (isset($criteria['n'])) {
+            $first = false;
+            $out = false;
+        }
+        foreach ($element->childNodes as $tag) {
+            if ($tag instanceof \DOMElement) {
+                /* @var $tag \DOMElement */
+                if (isset($criteria['vd'])) {
+                    Funzioni::pr('------------------------', true);
+                    $attributes = array();
+                    foreach ($tag->attributes as $attr) {
+                        /* @var $attr \DOMAttr */
+                        $attributes[$attr->name] = $attr->value;
+                    }
+                    $vd = array(
+                        'tag' => $tag->nodeName,
+                        'attr' => $attributes,
+                    );
+                    if (isset($criteria['vd-value'])) {
+                        $vd['value'] = $tag->nodeValue;
+                    }
+                    Funzioni::vd($vd, true);
+                }
+                if (isset($criteria['id'])) {
+                    if ($tag->hasAttribute('id')) {
+                        if ($tag->getAttribute('id') == $criteria['id']) {
+                            if (isset($criteria['vd'])) {
+                                Funzioni::pr('      \'RETURN\' => 1', true);
+                            }
+                            return $tag;
+                        }
+                    }
+                }
+                if (isset($criteria['tag'])) {
+                    if ($tag->nodeName == $criteria['tag']) {
+                        if ($first) {
+                            if (isset($criteria['vd'])) {
+                                Funzioni::pr('      \'RETURN\' => 1', true);
+                            }
+                            return $tag;
+                        } elseif (isset($criteria['n'])) {
+                            $i++;
+                            if ($criteria['n'] == $i) {
+                                if (isset($criteria['vd'])) {
+                                    Funzioni::pr('      \'RETURN\' => 1', true);
+                                }
+                                return $tag;
+                            }
+                        } else {
+                            if (isset($criteria['vd'])) {
+                                Funzioni::pr('      \'RETURN\' => 1', true);
+                            }
+                            $out[] = $tag;
+                        }
+                    }
+                }
+                if (isset($criteria['class'])) {
+                    if ($tag->hasAttribute('class')) {
+                        if (strpos($tag->getAttribute('class'), $criteria['class']) !== false) {
+                            if ($first) {
+                                if (isset($criteria['vd'])) {
+                                    Funzioni::pr('      \'RETURN\' => 1', true);
+                                }
+                                return $tag;
+                            } elseif (isset($criteria['n'])) {
+                                $i++;
+                                if ($criteria['n'] == $i) {
+                                    if (isset($criteria['vd'])) {
+                                        Funzioni::pr('      \'RETURN\' => 1', true);
+                                    }
+                                    return $tag;
+                                }
+                            } else {
+                                if (isset($criteria['vd'])) {
+                                    Funzioni::pr('      \'RETURN\' => 1', true);
+                                }
+                                $out[] = $tag;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $out;
     }
 
 }
