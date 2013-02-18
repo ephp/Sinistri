@@ -65,27 +65,31 @@ Scheda sinistro
             $('#tabella_container').html(out);
             $.fancybox.close();
             form.reset();
+            autoupdate();
         });
     }
     sanitizeCurrency([$('.currency')]);
     sanitizeDate([$('.auto_date')]);
-    $('.autoupdate').change(function(){
-        val = $(this).val();
-        pratica = $(this).attr('pratica');
-        evento = $(this).attr('evento');
-        field = $(this).attr('name');
-        if(pratica) {
-            $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
-                checkUm();
-            });
-        } else {
-            $.post('{{ path('tabellone_calendario_autoupdate') }}', {'evento': {'id': evento, 'field': field, 'value': val}}, function(out) {
-                if(out.reload == 1) {
-                    window.location = window.location;
-                }
-            });
-        }
-    });
+    function autoupdate() {
+        $('.autoupdate').change(function(){
+            val = $(this).val();
+            pratica = $(this).attr('pratica');
+            evento = $(this).attr('evento');
+            field = $(this).attr('name');
+            if(pratica) {
+                $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
+                    checkUm();
+                });
+            } else {
+                $.post('{{ path('tabellone_calendario_autoupdate') }}', {'evento': {'id': evento, 'field': field, 'value': val}}, function(out) {
+                    if(out.reload == 1) {
+                        window.location = window.location;
+                    }
+                });
+            }
+        });
+    }
+    autoupdate();
     function checkUm() {
         $('.um').each(function(){
             val = $('#'+$(this).attr('target')).val();
@@ -111,6 +115,7 @@ Scheda sinistro
         form = $('#form_update');
         $.post(form.attr('action'), form.serialize(), function(out){
             $('#tabella_container').html(out);
+            autoupdate();
         });
     }
 </script>
