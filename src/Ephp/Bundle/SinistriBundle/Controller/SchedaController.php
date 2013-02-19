@@ -49,10 +49,10 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id), array('anno' => 'ASC'), 200);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id), array('anno' => 'DESC'), 200);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array('anno' => 'ASC'), 200);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array('anno' => 'DESC'), 200);
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
@@ -89,7 +89,7 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 200);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'DESC'), 200);
         } elseif ($ospedale) {
             $mode = 2;
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
@@ -97,10 +97,10 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id), array('anno' => 'ASC'), 200);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id), array('anno' => 'DESC'), 200);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId()), array('anno' => 'ASC'), 200);
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId()), array('anno' => 'DESC'), 200);
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));

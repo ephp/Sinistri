@@ -10,7 +10,7 @@
             $.post(url_import_tabellone, {file: file}, function(out) {
                 //$('.symfony-content').html(out);
                 $('#documento_tmb').append('Sono stati importate '+out.schede_aggiunte+' schede e aggiorante'+out.schede_aggiornate+' schede<br/>');
-                //window.location = url_tabellone;
+                window.location = url_tabellone;
             });
         }
     </script>
