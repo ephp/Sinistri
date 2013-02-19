@@ -81,7 +81,7 @@ class Utility {
 // http://uk.php.net/manual/en/public static function.getdate.php
     public static function gmgetdate($ts = null) {
         $k = array('seconds', 'minutes', 'hours', 'mday', 'wday', 'mon', 'year', 'yday', 'weekday', 'month', 0);
-        return(Utility::array_comb($k, split(":", gmdate('s:i:G:j:w:n:Y:z:l:F:U', is_null($ts) ? time() : $ts))));
+        return(Utility::array_comb($k, explode(":", gmdate('s:i:G:j:w:n:Y:z:l:F:U', is_null($ts) ? time() : $ts))));
     }
 
 // Added for PHP4 compatibility

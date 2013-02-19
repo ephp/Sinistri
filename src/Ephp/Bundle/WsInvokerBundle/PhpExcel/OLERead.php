@@ -37,7 +37,7 @@ class OLERead {
         $pos = Utility::$BIG_BLOCK_DEPOT_BLOCKS_POS;
         $bbdBlocks = $this->numBigBlockDepotBlocks;
         if ($this->numExtensionBlocks != 0) {
-            $bbdBlocks = (Utility::BIG_BLOCK_SIZE - Utility::$BIG_BLOCK_DEPOT_BLOCKS_POS) / 4;
+            $bbdBlocks = (Utility::$BIG_BLOCK_SIZE - Utility::$BIG_BLOCK_DEPOT_BLOCKS_POS) / 4;
         }
 
         for ($i = 0; $i < $bbdBlocks; $i++) {
@@ -47,8 +47,8 @@ class OLERead {
 
 
         for ($j = 0; $j < $this->numExtensionBlocks; $j++) {
-            $pos = ($this->extensionBlock + 1) * Utility::BIG_BLOCK_SIZE;
-            $blocksToRead = min($this->numBigBlockDepotBlocks - $bbdBlocks, Utility::BIG_BLOCK_SIZE / 4 - 1);
+            $pos = ($this->extensionBlock + 1) * Utility::$BIG_BLOCK_SIZE;
+            $blocksToRead = min($this->numBigBlockDepotBlocks - $bbdBlocks, Utility::$BIG_BLOCK_SIZE / 4 - 1);
 
             for ($i = $bbdBlocks; $i < $bbdBlocks + $blocksToRead; $i++) {
                 $bigBlockDepotBlocks[$i] = Utility::GetInt4d($this->data, $pos);
@@ -67,9 +67,9 @@ class OLERead {
         $this->bigBlockChain = array();
 
         for ($i = 0; $i < $this->numBigBlockDepotBlocks; $i++) {
-            $pos = ($bigBlockDepotBlocks[$i] + 1) * Utility::BIG_BLOCK_SIZE;
+            $pos = ($bigBlockDepotBlocks[$i] + 1) * Utility::$BIG_BLOCK_SIZE;
             //echo "pos = $pos";
-            for ($j = 0; $j < Utility::BIG_BLOCK_SIZE / 4; $j++) {
+            for ($j = 0; $j < Utility::$BIG_BLOCK_SIZE / 4; $j++) {
                 $this->bigBlockChain[$index] = Utility::GetInt4d($this->data, $pos);
                 $pos += 4;
                 $index++;
@@ -83,8 +83,8 @@ class OLERead {
         $this->smallBlockChain = array();
 
         while ($sbdBlock != -2) {
-            $pos = ($sbdBlock + 1) * Utility::BIG_BLOCK_SIZE;
-            for ($j = 0; $j < Utility::BIG_BLOCK_SIZE / 4; $j++) {
+            $pos = ($sbdBlock + 1) * Utility::$BIG_BLOCK_SIZE;
+            for ($j = 0; $j < Utility::$BIG_BLOCK_SIZE / 4; $j++) {
                 $this->smallBlockChain[$index] = Utility::GetInt4d($this->data, $pos);
                 $pos += 4;
                 $index++;
@@ -105,8 +105,8 @@ class OLERead {
         $pos = 0;
         $data = '';
         while ($block != -2) {
-            $pos = ($block + 1) * Utility::BIG_BLOCK_SIZE;
-            $data = $data . substr($this->data, $pos, Utility::BIG_BLOCK_SIZE);
+            $pos = ($block + 1) * Utility::$BIG_BLOCK_SIZE;
+            $data = $data . substr($this->data, $pos, Utility::$BIG_BLOCK_SIZE);
             $block = $this->bigBlockChain[$block];
         }
         return $data;
@@ -153,8 +153,8 @@ class OLERead {
             }
             return $streamData;
         } else {
-            $numBlocks = $this->props[$this->wrkbook]['size'] / Utility::BIG_BLOCK_SIZE;
-            if ($this->props[$this->wrkbook]['size'] % Utility::BIG_BLOCK_SIZE != 0) {
+            $numBlocks = $this->props[$this->wrkbook]['size'] / Utility::$BIG_BLOCK_SIZE;
+            if ($this->props[$this->wrkbook]['size'] % Utility::$BIG_BLOCK_SIZE != 0) {
                 $numBlocks++;
             }
 
@@ -164,8 +164,8 @@ class OLERead {
             $block = $this->props[$this->wrkbook]['startBlock'];
             $pos = 0;
             while ($block != -2) {
-                $pos = ($block + 1) * Utility::BIG_BLOCK_SIZE;
-                $streamData .= substr($this->data, $pos, Utility::BIG_BLOCK_SIZE);
+                $pos = ($block + 1) * Utility::$BIG_BLOCK_SIZE;
+                $streamData .= substr($this->data, $pos, Utility::$BIG_BLOCK_SIZE);
                 $block = $this->bigBlockChain[$block];
             }
             return $streamData;

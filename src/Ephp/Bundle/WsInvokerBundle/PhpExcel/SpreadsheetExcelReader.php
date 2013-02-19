@@ -86,7 +86,7 @@ class SpreadsheetExcelReader {
     }
 
     function hyperlink($row, $col, $sheet = 0) {
-        $link = $this->sheets[$sheet]['cellsInfo'][$row][$col]['hyperlink'];
+        $link = isset($this->sheets[$sheet]['cellsInfo'][$row][$col]['hyperlink']) ? $this->sheets[$sheet]['cellsInfo'][$row][$col]['hyperlink'] : false;
         if ($link) {
             return $link['link'];
         }
@@ -103,19 +103,19 @@ class SpreadsheetExcelReader {
 
     function colwidth($col, $sheet = 0) {
         // Col width is actually the width of the number 0. So we have to estimate and come close
-        return $this->colInfo[$sheet][$col]['width'] / 9142 * 200;
+        return isset($this->colInfo[$sheet][$col]['width']) ? $this->colInfo[$sheet][$col]['width'] / 9142 * 200 : 0;
     }
 
     function colhidden($col, $sheet = 0) {
-        return !!$this->colInfo[$sheet][$col]['hidden'];
+        return isset($this->colInfo[$sheet][$col]['hidden']) ? !!$this->colInfo[$sheet][$col]['hidden'] : true;
     }
 
     function rowheight($row, $sheet = 0) {
-        return $this->rowInfo[$sheet][$row]['height'];
+        return isset($this->rowInfo[$sheet][$row]['height']) ? $this->rowInfo[$sheet][$row]['height'] : 0;
     }
 
     function rowhidden($row, $sheet = 0) {
-        return !!$this->rowInfo[$sheet][$row]['hidden'];
+        return isset($this->rowInfo[$sheet][$row]['hidden']) ? !!$this->rowInfo[$sheet][$row]['hidden'] : true;
     }
 
     // GET THE CSS FOR FORMATTING
@@ -231,43 +231,43 @@ class SpreadsheetExcelReader {
     }
 
     function align($row, $col, $sheet = 0) {
-        return $this->xfProperty($row, $col, $sheet, 'align');
+        return $this->xfProperty($row, $col, $sheet, 'align') ? $this->xfProperty($row, $col, $sheet, 'align') : null;
     }
 
     function bgColor($row, $col, $sheet = 0) {
-        return $this->xfProperty($row, $col, $sheet, 'bgColor');
+        return $this->xfProperty($row, $col, $sheet, 'bgColor') ? $this->xfProperty($row, $col, $sheet, 'bgColor') : null;
     }
 
     function borderLeft($row, $col, $sheet = 0) {
-        return $this->xfProperty($row, $col, $sheet, 'borderLeft');
+        return $this->xfProperty($row, $col, $sheet, 'borderLeft') ? $this->xfProperty($row, $col, $sheet, 'borderLeft') : null;
     }
 
     function borderRight($row, $col, $sheet = 0) {
-        return $this->xfProperty($row, $col, $sheet, 'borderRight');
+        return $this->xfProperty($row, $col, $sheet, 'borderRight') ? $this->xfProperty($row, $col, $sheet, 'borderRight') : null;
     }
 
     function borderTop($row, $col, $sheet = 0) {
-        return $this->xfProperty($row, $col, $sheet, 'borderTop');
+        return $this->xfProperty($row, $col, $sheet, 'borderTop') ? $this->xfProperty($row, $col, $sheet, 'borderTop') : null;
     }
 
     function borderBottom($row, $col, $sheet = 0) {
-        return $this->xfProperty($row, $col, $sheet, 'borderBottom');
+        return $this->xfProperty($row, $col, $sheet, 'borderBottom') ? $this->xfProperty($row, $col, $sheet, 'borderBottom') : null;
     }
 
     function borderLeftColor($row, $col, $sheet = 0) {
-        return $this->colors[$this->xfProperty($row, $col, $sheet, 'borderLeftColor')];
+        return $this->xfProperty($row, $col, $sheet, 'borderLeftColor') ? $this->colors[$this->xfProperty($row, $col, $sheet, 'borderLeftColor')] : null;
     }
 
     function borderRightColor($row, $col, $sheet = 0) {
-        return $this->colors[$this->xfProperty($row, $col, $sheet, 'borderRightColor')];
+        return $this->xfProperty($row, $col, $sheet, 'borderRightColor') ? $this->colors[$this->xfProperty($row, $col, $sheet, 'borderRightColor')] : null;
     }
 
     function borderTopColor($row, $col, $sheet = 0) {
-        return $this->colors[$this->xfProperty($row, $col, $sheet, 'borderTopColor')];
+        return $this->xfProperty($row, $col, $sheet, 'borderTopColor') ? $this->colors[$this->xfProperty($row, $col, $sheet, 'borderTopColor')] : null;
     }
 
     function borderBottomColor($row, $col, $sheet = 0) {
-        return $this->colors[$this->xfProperty($row, $col, $sheet, 'borderBottomColor')];
+        return $this->xfProperty($row, $col, $sheet, 'borderBottomColor') ? $this->colors[$this->xfProperty($row, $col, $sheet, 'borderBottomColor')] : null;
     }
 
     // FONT PROPERTIES
@@ -372,7 +372,7 @@ class SpreadsheetExcelReader {
                         }
                     }
                 }
-                if (!$this->sheets[$sheet]['cellsInfo'][$row][$col]['dontprint']) {
+                if (!isset($this->sheets[$sheet]['cellsInfo'][$row][$col]['dontprint']) || !$this->sheets[$sheet]['cellsInfo'][$row][$col]['dontprint']) {
                     $style = $this->style($row, $col, $sheet);
                     if ($this->colhidden($col, $sheet)) {
                         $style .= "display:none;";
@@ -585,7 +585,7 @@ class SpreadsheetExcelReader {
 
         // Custom pattern can be POSITIVE;NEGATIVE;ZERO
         // The "text" option as 4th parameter is not handled
-        $parts = split(";", $format);
+        $parts = explode(";", $format);
         $pattern = $parts[0];
         // Negative pattern
         if (count($parts) > 2 && $num == 0) {
@@ -990,7 +990,7 @@ class SpreadsheetExcelReader {
                                 $tmp = preg_replace("/^\[[^\]]*\]/", "", $tmp);
                                 if (preg_match("/[^hmsday\/\-:\s\\\,AMP]/i", $tmp) == 0) { // found day and time format
                                     $isdate = TRUE;
-                                    $formatstr = $tmp;
+                                    $formatstr = strtolower($tmp);
                                     $formatstr = str_replace(array('AM/PM', 'mmmm', 'mmm'), array('a', 'F', 'M'), $formatstr);
                                     // m/mm are used for both minutes and months - oh SNAP!
                                     // This mess tries to fix for that.
@@ -1462,7 +1462,7 @@ class SpreadsheetExcelReader {
         $result = $string;
         if ($this->_defaultEncoding) {
             switch ($this->_encoderFunction) {
-                case 'iconv' : $result = iconUtility::v('UTF-16LE', $this->_defaultEncoding, $string);
+                case 'iconv' : $result = iconv('UTF-16LE', $this->_defaultEncoding, $string);
                     break;
                 case 'mb_convert_encoding' : $result = mb_convert_encoding($string, $this->_defaultEncoding, 'UTF-16LE');
                     break;

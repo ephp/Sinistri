@@ -1067,13 +1067,13 @@ class SchedaController extends DragDropController {
     public function importXlsAction($tipo) {
         $colonne = array();
         $em = $this->getEm();
-        
+
         $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
         $_gestore = $em->getRepository('EphpACLBundle:Gestore');
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
         $_stato = $em->getRepository('EphpSinistriBundle:Stato');
         $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
-        
+
         $schede_aggiunte = $schede_aggiornate = 0;
 
         $uri = __DIR__ . '/../../../../../web' . str_replace(' ', '+', urldecode($this->getRequest()->get('file')));
@@ -1174,7 +1174,7 @@ class SchedaController extends DragDropController {
                                         break;
                                     case 'AMOUNT RESERVED':
                                         if ($td->nodeValue) {
-                                            if($td->nodeValue != 'NP') {
+                                            if ($td->nodeValue != 'NP') {
                                                 $scheda->setAmountReserved($this->currency($td->nodeValue));
                                             } else {
                                                 $scheda->setAmountReserved(-1);
@@ -1200,15 +1200,7 @@ class SchedaController extends DragDropController {
                             /* @var $old Scheda */
                             if ($old) {
                                 $old->setAmountReserved($scheda->getAmountReserved());
-//                        $old->setClaimant($scheda->getClaimant());
                                 $old->setFirstReserve($scheda->getFirstReserve());
-//                        $old->setGestore($scheda->getGestore());
-//                        $old->setOffertaLoro($scheda->getOffertaLoro());
-//                        $old->setOffertaNostra($scheda->getOffertaNostra());
-//                        $old->setPriorita($scheda->getPriorita());
-//                        $old->setRecuperoOffertaLoro($scheda->getRecuperoOffertaLoro());
-//                        $old->setRecuperoOffertaNostra($scheda->getRecuperoOffertaNostra());
-//                        $old->setSa($scheda->getSa());
                                 $old->setSoi($scheda->getSoi());
                                 $old->setStato($scheda->getStato());
                                 $em->persist($old);
@@ -1228,9 +1220,151 @@ class SchedaController extends DragDropController {
                 }
                 break;
             default:
-                $colonne = array('id', 'gestore', 'dasc', 'tpa', 'claimant', 'soi', 'first reserve', 'amount reserved', 'stato', 'sa', 'offerta ns', 'offerta loro', 'priorita', 'recupero offerta ns', 'recupero offerta loro', 'claimant 2', 'gmail',);
                 $data = new SpreadsheetExcelReader($uri);
-                Funzioni::vd($data->dump(true, true));
+                //return new \Symfony\Component\HttpFoundation\Response(json_encode($data->sheets));
+                foreach ($data->sheets as $sheet) {
+                    $sheet = $sheet['cells'];
+                    $start = false;
+                    $colonne = array();
+                    foreach ($sheet as $riga => $valori_riga) {
+                        if (!$start) {
+                            if (count($colonne) > 0) {
+                                $start = true;
+                            }
+                            if (isset($valori_riga[2]) && in_array($valori_riga[2], array('TPA  Ref.', 'TPA Ref.'))) {
+                                $colonne = $valori_riga;
+                            }
+                        } else {
+                            if (!isset($valori_riga[2])  || !$valori_riga[2]) {
+                                break;
+                            } else {
+                                try {
+                                    $em->beginTransaction();
+                                    $scheda = new Scheda();
+                                    foreach ($valori_riga as $idx => $value) {
+                                        if(!isset($colonne[$idx])) {
+                                            break;
+                                        }
+                                        switch ($colonne[$idx]) {
+                                            case 'TPA  Ref.':
+                                            case 'TPA Ref.':
+                                                $tpa = explode('/', $value);
+                                                if (count($tpa) == 3) {
+                                                    $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa[0]));
+                                                    if (!$ospedale) {
+                                                        $ospedale = new Ospedale();
+                                                        $ospedale->setSigla($tpa[0]);
+                                                        $ospedale->setNome($sheet[6][14]);
+                                                        $ospedale->setGruppo($tpa[0]);
+                                                        $ospedale->setNomeGruppo($sheet[6][14]);
+                                                        $em->persist($ospedale);
+                                                        $em->flush();
+                                                    }
+                                                    $anno = $tpa[1];
+                                                    $tpa = $tpa[2];
+                                                    $scheda->setOspedale($ospedale);
+                                                    $scheda->setAnno($anno);
+                                                    $scheda->setTpa($tpa);
+                                                } elseif (count($tpa) == 2) {
+                                                    $tpa2 = explode('-', $tpa[0]);
+                                                    if (count($tpa2) != 2) {
+                                                        break(3);
+                                                    }
+                                                    $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa2[0]));
+                                                    if (!$ospedale) {
+                                                        $ospedale = new Ospedale();
+                                                        $ospedale->setSigla($tpa2[0]);
+                                                        $ospedale->setNome($tpa2[0]);
+                                                        $ospedale->setGruppo('Piemonte');
+                                                        $ospedale->setNomeGruppo('Ospedali Piemonte');
+                                                        $em->persist($ospedale);
+                                                        $em->flush();
+                                                    }
+                                                    $anno = $tpa2[1];
+                                                    $tpa = $tpa[1];
+                                                    $scheda->setOspedale($ospedale);
+                                                    $scheda->setAnno($anno);
+                                                    $scheda->setTpa($tpa);
+                                                } else {
+                                                    break(3);
+                                                }
+                                                break;
+
+                                            case 'CLAYMANT':
+                                                $scheda->setClaimant($value);
+                                                break;
+                                            case 'S.of I.':
+                                                if ($value) {
+                                                    $scheda->setSoi($value);
+                                                }
+                                                break;
+                                            case 'LEGAL TEAM':
+                                                if ($value) {
+                                                    $dasc = \DateTime::createFromFormat('d/m/Y', $value);
+                                                    $scheda->setDasc($dasc);
+                                                } else {
+                                                    $scheda->setDasc(null);
+                                                }
+                                                break;
+                                            case 'FIRST RESERVE INDICATION':
+                                                if ($value) {
+                                                    $scheda->setFirstReserve($this->currency($value));
+                                                }
+                                                break;
+                                            case 'DEDUC. RESERVE':
+                                                $scheda->setFranchigia($this->currency($value));
+                                                break;
+                                            case 'AMOUNT RESERVED':
+                                                if ($value) {
+                                                    if ($value != 'N.P.') {
+                                                        $scheda->setAmountReserved($this->currency($value));
+                                                    } else {
+                                                        $scheda->setAmountReserved(-1);
+                                                    }
+                                                }
+                                                break;
+                                            case 'STATUS':
+                                                if ($value) {
+                                                    $stato = $_stato->findOneBy(array('stato' => $value));
+                                                    if (!$stato) {
+                                                        $stato = new \Ephp\Bundle\SinistriBundle\Entity\Stato();
+                                                        $stato->setStato($value);
+                                                        $em->persist($stato);
+                                                        $em->flush();
+                                                    }
+                                                    $scheda->setStato($stato);
+                                                }
+                                                break;
+                                            default: break;
+                                        }
+                                    }
+                                    $old = $_scheda->findOneBy(array('ospedale' => $scheda->getOspedale()->getId(), 'anno' => $scheda->getAnno(), 'tpa' => $scheda->getTpa()));
+                                    /* @var $old Scheda */
+                                    if ($old) {
+//                                        Funzioni::vd($old, true);
+                                        $old->setAmountReserved($scheda->getAmountReserved());
+                                        $old->setFirstReserve($scheda->getFirstReserve());
+                                        $old->setDasc($scheda->getDasc());
+                                        $old->setSoi($scheda->getSoi());
+                                        $old->setStato($scheda->getStato());
+//                                        Funzioni::vd($old);
+                                        $em->persist($old);
+                                        $em->flush();
+                                        $schede_aggiornate++;
+                                    } else {
+                                        $em->persist($scheda);
+                                        $em->flush();
+                                        $schede_aggiunte++;
+                                    }
+                                    $em->commit();
+                                } catch (\Exception $e) {
+                                    $em->rollback();
+                                    throw $e;
+                                }
+                            }
+                        }
+                    }
+                }
                 break;
         }
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('schede_aggiunte' => $schede_aggiunte, 'schede_aggiornate' => $schede_aggiornate)));
