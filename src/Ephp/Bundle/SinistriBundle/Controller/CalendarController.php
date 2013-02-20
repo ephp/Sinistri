@@ -96,7 +96,7 @@ class CalendarController extends Controller {
             $message = \Swift_Message::newInstance()
                     ->setSubject("[JFCLAIMS] agenda {$gestore->getNome()} " . date('d-m-Y', $oggi->getTimestamp()))
                     ->setFrom($this->container->getParameter('email_robot'))
-                    ->setTo('munkeph+' . trim($gestore->getEmail()))
+                    ->setTo(trim($gestore->getEmail()))
                     ->setReplyTo($this->container->getParameter('email_robot'), "No-Reply")
                     ->setBody($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.txt.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)))
                     ->addPart($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.html.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)), 'text/html');
