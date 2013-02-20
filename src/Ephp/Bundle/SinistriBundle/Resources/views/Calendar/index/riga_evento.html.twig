@@ -1,4 +1,4 @@
-<tr id="riga_{{ entity.id }}" style="background-color: #{{ entity.tipo.colore }}">
+<tr id="riga_{{ entity.id }}" style="background-color: #{{ entity.tipo.colore }}; {% if oggi|date('d-m-Y') ==  entity.dataOra|date('d-m-Y') %}font-weight: bold;{% endif %}">
     {% if gestore != '' %}
         <th style="text-align: right;">{{ index }}</th>
     {% endif %}

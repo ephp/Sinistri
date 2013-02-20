@@ -31,12 +31,14 @@ class CalendarController extends Controller {
         }
         $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
         return array(
+            'oggi' => new \DateTime(),
             'entities' => $entities,
             'gestore' => $gestore,
             'gestori' => $gestori,
             'anni' => range(7, date('y'))
         );
     }
+
     /**
      * Lists all Scheda entities.
      *
@@ -54,14 +56,15 @@ class CalendarController extends Controller {
             $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null, 100, ($pagina - 1) * 100);
         }
         return array(
+            'oggi' => new \DateTime(),
             'entities' => $entities,
             'gestore' => $gestore,
-            'index' => 100 * $pagina + 1, 
+            'index' => 100 * $pagina + 1,
         );
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager 
+     * @return \Doctrine\ORM\EntityManager
      */
     protected function getEm() {
         return $this->getDoctrine()->getEntityManager();
