@@ -64,6 +64,49 @@ class CalendarController extends Controller {
     }
 
     /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-cron", name="calendario_sinistri_cron", defaults={"_format"="json"})
+     */
+    public function cronAction() {
+        $em = $this->getEm();
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $out = array();
+        foreach ($_gestore->findAll() as $gestore) {
+            $out[] = $this->sendEmailAction($gestore);
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
+    }
+
+    public function sendEmailAction(\Ephp\Bundle\ACLBundle\Entity\Gestore $gestore) {
+        $em = $this->getEm();
+        $calendario = $this->getCalendar();
+        $eventi = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
+        $oggi = new \DateTime();
+        $send = array();
+        foreach ($eventi as $evento) {
+            /* @var $evento \Ephp\Bundle\SinistriBundle\Entity\Evento */
+            $t = $evento->getDataOra();
+            if (date('d-m-Y', $t->getTimestamp()) == date('d-m-Y', $oggi->getTimestamp())) {
+                $send[] = $evento;
+            }
+        }
+        if (count($send) > 0) {
+            $message = \Swift_Message::newInstance()
+                    ->setSubject("[JFCLAIMS] agenda {$gestore->getNome()} " . date('d-m-Y', $oggi->getTimestamp()))
+                    ->setFrom($this->container->getParameter('email_robot'))
+                    ->setTo(trim($gestore->getEmail()))
+                    ->setReplyTo($this->container->getParameter('email_robot'), "No-Reply")
+                    ->setBody($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.txt.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)))
+                    ->addPart($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.html.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)), 'text/html');
+            ;
+            $message->getHeaders()->addTextHeader('X-Mailer', 'PHP v' . phpversion());
+            $this->get('mailer')->send($message);
+        }
+        return array($gestore->getSigla() => count($send));
+    }
+
+    /**
      * @return \Doctrine\ORM\EntityManager
      */
     protected function getEm() {

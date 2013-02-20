@@ -17,3 +17,5 @@ parameters:
   locale: it
   secret: 00a93fc27105f2fdf290c66c77e1e557
   database_path: null
+
+  mail_robot: gestione@studiolegalecarlesi.com

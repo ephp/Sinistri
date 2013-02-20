@@ -1,0 +1,23 @@
+{% extends '::email.html.twig' %}
+{% set titolo = 'Agenda giornaliera di '~gestore.nome %}
+
+{% block content %}
+<h1>{{titolo}}</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>&nbsp;</th>
+            <th>Data</th>
+            <th>Tpa</th>
+            <th>Claimant</th>
+            <th>Titolo</th>
+            <th>Note</th>
+        </tr>
+    </thead>
+    <tbody id="tb_container">
+        {% include 'EphpSinistriBundle:Calendar:email/agenda_giornaliera/tbody.html.twig' %}
+    </tbody>
+</table>
+{% endblock %}

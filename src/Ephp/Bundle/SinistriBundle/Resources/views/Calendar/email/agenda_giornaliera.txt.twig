@@ -1,0 +1,6 @@
+{% set titolo = 'Agenda giornaliera di'~gestore.nome %}
+
+*{{titolo}}*
+
+| # | * | Data | Tpa | Claimant | Titolo | Note |
+{% include 'EphpSinistriBundle:Calendar:email/agenda_giornaliera/tbody.txt.twig' %}

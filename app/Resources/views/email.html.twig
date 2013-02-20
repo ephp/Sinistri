@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Sinistri{% endblock %}</title>
+        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('/bundles/ephpsinistri/css/ephp.css') }}" />
+        <link rel="stylesheet" href="{{ asset('/bundles/ephpcalendar/css/ephp.css') }}" />
+    </head>
+    <body>
+        <div id="symfony-wrapper">
+            <div id="symfony-header">
+                <a href="{{ url('home') }}"><h1>JFclaims</h1></a>
+            </div>
+            <div class="symfony-content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
