@@ -17,7 +17,8 @@ $output = '';
 try {
     $ch = curl_init();
     $output = callCurl(generateUrl($prod, $agenda_giornaliera['prod']['send'], $agenda_giornaliera['params']['send']));
-    print_r($output);
+    echo "TEST:\n";
+    var_dump($output);
     curl_close($ch);
 } catch (Exception $e) {
     writeError($e->getMessage());
