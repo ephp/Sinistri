@@ -2,13 +2,13 @@
 
 /**
  * Fa una chiamata CURL in get o in post
- * 
+ *
  * @param string $url url del webservice
  * @param json|false $data dati da mandare in post (se false viene effettuata una chiamata get)
  * @param boolean $echo se true scrive sul file di log
  * @return type
  */
-function callCurl($url, $data = false, $echo = true) {
+function callCurl($url, $userpwd = false, $data = false, $echo = true) {
     $ch = curl_init();
     if ($echo) {
         writeLog("Chiamo {$url}");
@@ -39,6 +39,9 @@ function callCurl($url, $data = false, $echo = true) {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
     }
+    if ($userpwd) {
+        curl_setopt($ch, CURLOPT_USERPWD, $userpwd);
+    }
     $out = curl_exec($ch);
 
     if ($out === false) {
@@ -56,7 +59,7 @@ function callCurl($url, $data = false, $echo = true) {
 
 /**
  * crea il nome del semaforo
- * 
+ *
  * @param string $name nome del semaforo
  */
 function nomeSemaforo($name) {
@@ -65,7 +68,7 @@ function nomeSemaforo($name) {
 
 /**
  * Attiva un semaforo tramite creazione di un file
- * 
+ *
  * @param string $name nome del semaforo
  */
 function creaSemaforo($name) {
@@ -77,7 +80,7 @@ function creaSemaforo($name) {
 
 /**
  * Disattiva il semaforo tramite cancellazione di un file
- * 
+ *
  * @param string $name nome del semaforo
  */
 function cancellaSemaforo($name) {
@@ -87,7 +90,7 @@ function cancellaSemaforo($name) {
 
 /**
  * Verifica che il semaforo sia attivo o meno tramite check esistenza file
- * 
+ *
  * @param string $name nome del semaforo
  * @return boolean true se il semaforo non c'è, false se il semaforo c'è e non bisogna compiere alcuna operazione
  */
@@ -99,7 +102,7 @@ function checkSemaforo($name) {
 /**
  * Scrive su file di log.
  * E' NECESSARIO CHE SIA STATA ISTANZIATA LA VARIABILE GLOBALE $log
- * 
+ *
  * @global string $log nome del file di log
  * @param string $string messaggio da scrivere nel log
  * @param boolean $new se true crea un nuovo file cancellando il precedente
@@ -115,7 +118,7 @@ function writeLog($string, $new = false) {
 /**
  * Scrive su file di log.
  * E' NECESSARIO CHE SIA STATA ISTANZIATA LA VARIABILE GLOBALE $log
- * 
+ *
  * @global string $log nome del file di log
  * @param string $string messaggio da scrivere nel log
  * @param boolean $new se true crea un nuovo file cancellando il precedente
@@ -132,7 +135,7 @@ function leggiDataLog($name) {
 
 /**
  * Verifica che il semaforo sia attivo o meno tramite check esistenza file
- * 
+ *
  * @param string $name nome del semaforo
  * @return boolean true se il semaforo non c'è, false se il semaforo c'è e non bisogna compiere alcuna operazione
  */
@@ -143,16 +146,17 @@ function checkLog($name) {
 
 /**
  * crea il nome del semaforo
- * 
+ *
  * @param string $name nome del semaforo
  */
 function nomeLog($name, $dir = true) {
     return ($dir ? __DIR__ : '') . "/logs/log_{$name}.txt";
 }
+
 /**
  * Scrive su file di log.
  * E' NECESSARIO CHE SIA STATA ISTANZIATA LA VARIABILE GLOBALE $log
- * 
+ *
  * @global string $log nome del file di log
  * @param string $string messaggio da scrivere nel log
  * @param boolean $new se true crea un nuovo file cancellando il precedente
@@ -168,7 +172,7 @@ function writeHistory($string, $new = false) {
 /**
  * Scrive su file di log.
  * E' NECESSARIO CHE SIA STATA ISTANZIATA LA VARIABILE GLOBALE $log
- * 
+ *
  * @global string $log nome del file di log
  * @param string $string messaggio da scrivere nel log
  * @param boolean $new se true crea un nuovo file cancellando il precedente
@@ -185,7 +189,7 @@ function leggiDataHistory($name) {
 
 /**
  * Verifica che il semaforo sia attivo o meno tramite check esistenza file
- * 
+ *
  * @param string $name nome del semaforo
  * @return boolean true se il semaforo non c'è, false se il semaforo c'è e non bisogna compiere alcuna operazione
  */
@@ -196,7 +200,7 @@ function checkHistory($name) {
 
 /**
  * crea il nome del semaforo
- * 
+ *
  * @param string $name nome del semaforo
  */
 function nomeHistory($name, $dir = true) {
@@ -206,7 +210,7 @@ function nomeHistory($name, $dir = true) {
 /**
  * Scrive su file di errorlog.
  * E' NECESSARIO CHE SIA STATA ISTANZIATA LA VARIABILE GLOBALE $log
- * 
+ *
  * @global string $log nome del file di log
  * @param string $string messaggio da scrivere nell'errorlog
  * @param boolean $new se true crea un nuovo file cancellando il precedente
@@ -221,7 +225,7 @@ function writeError($string, $new = false) {
 
 /**
  * Verifica che il semaforo sia attivo o meno tramite check esistenza file
- * 
+ *
  * @param string $name nome del semaforo
  * @return boolean true se il semaforo non c'è, false se il semaforo c'è e non bisogna compiere alcuna operazione
  */
@@ -232,7 +236,7 @@ function checkError($name) {
 
 /**
  * crea il nome del semaforo
- * 
+ *
  * @param string $name nome del semaforo
  */
 function nomeError($name, $dir = true) {
@@ -241,7 +245,7 @@ function nomeError($name, $dir = true) {
 
 /**
  * Genera l'url da chiamare sostituendo gli eventuali parametri
- * 
+ *
  * @param string $url http del server
  * @param string $path pagina da chiamare (può contenere parametri da sostituire con la sintassi indirizzo/{parametro})
  * @param array $params parametri da sostituire all'interno della stringa $path
@@ -259,12 +263,12 @@ function generateUrl($url, $path, $params = array(), $dev = true) {
 
 /**
  * Sostituisce i caratteri accentari in una stringa con i rispettivi senza accento
- * 
+ *
  * @params string $frase la stringa da modificare
  * @return string la stringa modificata
  */
 function normalizza($frase) {
     return strtolower(str_replace(
-                            array('`', "'A", "'E", "'I", "'O", "'U"), array('', 'a', 'e', 'i', 'o', 'u'), @iconv("utf-8", "ascii//TRANSLIT", $frase)
-                    ));
+                    array('`', "'A", "'E", "'I", "'O", "'U"), array('', 'a', 'e', 'i', 'o', 'u'), @iconv("utf-8", "ascii//TRANSLIT", $frase)
+            ));
 }

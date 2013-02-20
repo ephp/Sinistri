@@ -71,14 +71,15 @@ class CalendarController extends Controller {
     public function cronAction() {
         $em = $this->getEm();
         $_gestore = $em->getRepository('EphpACLBundle:Gestore');
-        $out = array();
-        foreach ($_gestore->findAll() as $gestore) {
-            $out[] = $this->sendEmailAction($gestore);
+        $gestori = $_gestore->findAll();
+        $out = array('gestori' => count($gestori), 'email' => array());
+        foreach ($gestori as $gestore) {
+            $out['email'][] = $this->sendEmailAction($gestore);
         }
         return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
     }
 
-    public function sendEmailAction(\Ephp\Bundle\ACLBundle\Entity\Gestore $gestore) {
+    private function sendEmailAction(\Ephp\Bundle\ACLBundle\Entity\Gestore $gestore) {
         $em = $this->getEm();
         $calendario = $this->getCalendar();
         $eventi = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
@@ -95,7 +96,7 @@ class CalendarController extends Controller {
             $message = \Swift_Message::newInstance()
                     ->setSubject("[JFCLAIMS] agenda {$gestore->getNome()} " . date('d-m-Y', $oggi->getTimestamp()))
                     ->setFrom($this->container->getParameter('email_robot'))
-                    ->setTo(trim($gestore->getEmail()))
+                    ->setTo('munkeph+' . trim($gestore->getEmail()))
                     ->setReplyTo($this->container->getParameter('email_robot'), "No-Reply")
                     ->setBody($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.txt.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)))
                     ->addPart($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.html.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)), 'text/html');
