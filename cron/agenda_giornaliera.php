@@ -13,10 +13,15 @@ if (!checkError($log)) {
 if (!checkHistory($log)) {
     writeHistory("STORICO\n", true);
 }
-$ch = curl_init();
-$output = callCurl(generateUrl($prod, $agenda_giornaliera['prod']['send'], $agenda_giornaliera['params']['send']));
-curl_close($ch);
-
+$output = '';
+try {
+    $ch = curl_init();
+    $output = callCurl(generateUrl($prod, $agenda_giornaliera['prod']['send'], $agenda_giornaliera['params']['send']));
+    print_r($output);
+    curl_close($ch);
+} catch (Exception $e) {
+    writeError($e->getMessage());
+}
 writeHistory($output);
 
 if (isset($_REQUEST['index'])) {
