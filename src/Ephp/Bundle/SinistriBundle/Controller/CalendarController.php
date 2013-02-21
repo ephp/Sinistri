@@ -5,6 +5,8 @@ namespace Ephp\Bundle\SinistriBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Ephp\Bundle\CalendarBundle\Vendor\ICalCreator\VCalendar;
+use Ephp\Bundle\CalendarBundle\Vendor\ICalCreator\ICalUtilityFunctions;
 
 /**
  * Scheda controller.
@@ -37,6 +39,56 @@ class CalendarController extends Controller {
             'gestori' => $gestori,
             'anni' => range(7, date('y'))
         );
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-ical/{gestore}.ics", name="calendario_sinistri_ical", defaults={"gestore"="completo","_format"="text/calendar"})
+     * @Template()
+     */
+    public function iCalAction($gestore) {
+        $em = $this->getEm();
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $calendario = $this->getCalendar();
+        if ($gestore != 'completo') {
+            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
+        } else {
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null);
+        }
+
+        set_time_limit(3600);
+        $tz = "Europe/Rome";                   // define time zone
+        $config = array("unique_id" => "jfclaims" // set a (site) unique id
+            , "TZID" => $tz, "NL" => "\n");          // opt. "calendar" timezone
+        $v = new VCalendar($config);
+        $v->setProperty("method", "PUBLISH");
+        $v->setProperty("x-wr-calname", "Calendario sinistri " . ($gestore != 'completo' ? $gestore->getNome() : 'completo'));
+        $v->setProperty("X-WR-CALDESC", "Calendario JFClaims dei sinistri");
+        $v->setProperty("X-WR-TIMEZONE", $tz);
+        $xprops = array("X-LIC-LOCATION" => $tz);
+        ICalUtilityFunctions::createTimezone($v, $tz, $xprops);
+
+        foreach ($entities as $evento) {
+            /* @var $evento \Ephp\Bundle\SinistriBundle\Entity\Evento */
+            $vevent = & $v->newComponent("vevent");
+            /* @var $vevent \Ephp\Bundle\CalendarBundle\Vendor\ICalCreator\VEvent */
+            $vevent->setProperty("dtstart", date('Ymd', $evento->getDataOra()->getTimestamp()), array("VALUE" => "DATE"));
+            $vevent->setProperty("summary", $evento->getScheda()->getClaimant() . ': ' . $evento->getTitolo());
+            $vevent->setProperty("description", $evento->getNote());
+            $vevent->setProperty("comment", "In carico a {$evento->getScheda()->getGestore()->getNome()}");
+            $vevent->setProperty("attendee", $evento->getScheda()->getGestore()->getEmail());
+            $valarm = & $vevent->newComponent("valarm");
+            /* @var $valarm \Ephp\Bundle\CalendarBundle\Vendor\ICalCreator\VAlarm */
+            $valarm->setProperty("action", "DISPLAY");
+            $valarm->setProperty("description", $evento->getScheda()->getClaimant() . ': ' . $evento->getTitolo() . ' - ' . $evento->getNote());
+            $d = sprintf("%04d%02d%02d %02d%02d%02d", date('Y', $evento->getDataOra()->getTimestamp()), date('m', $evento->getDataOra()->getTimestamp()), date('d', $evento->getDataOra()->getTimestamp()), 9, 30, 0);
+            ICalUtilityFunctions::transformDateTime($d, $tz, "UTC", "Ymd\THis\Z");
+            $valarm->setProperty("trigger", $d);
+        }
+
+        return new \Symfony\Component\HttpFoundation\Response($v->createCalendar(), 200, array('Content-Type: text/calendar; charset=utf-8', 'Cache-Control: max-age=10'));
     }
 
     /**

@@ -25,10 +25,22 @@ class EventoRepository extends EntityRepository {
                 ->setMaxResults($maxResults)
                 ->setFirstResult($firstResult)
                 ->orderBy('e.data_ora', 'ASC');
-        if($gestore) {
+        if ($gestore) {
             $q->andWhere('s.gestore = :ges')
-                ->setParameter('ges', $gestore->getId());
-            
+                    ->setParameter('ges', $gestore->getId());
+        }
+        return $q->getQuery()->execute();
+    }
+
+    public function tuttiEventi(\Ephp\Bundle\CalendarBundle\Entity\Calendario $calendario, $gestore) {
+        $q = $this->createQueryBuilder('e')
+                ->leftJoin('e.scheda', 's')
+                ->where('e.calendario = :cal')
+                ->setParameter('cal', $calendario->getId())
+                ->orderBy('e.data_ora', 'ASC');
+        if ($gestore) {
+            $q->andWhere('s.gestore = :ges')
+                    ->setParameter('ges', $gestore->getId());
         }
         return $q->getQuery()->execute();
     }
