@@ -115,7 +115,7 @@ class CalendarController extends Controller {
         foreach ($entities as $evento) {
 
             $riga = array(
-                $evento->getScheda()->getClaimant() . ': ' . str_replace(',', '.', $evento->getTitolo()),
+                $evento->getScheda()->getClaimant() . ': ' . str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getTitolo()),
                 date('Y-m-d', $evento->getDataOra()->getTimestamp()),
                 date('h:i:s', $evento->getDataOra()->getTimestamp()),
                 '',
@@ -125,7 +125,7 @@ class CalendarController extends Controller {
                 date('Y-m-d', $evento->getDataOra()->getTimestamp()),
                 '09:00',
                 '',
-                str_replace(',', '.', $evento->getNote()),
+                str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getNote()),
                 $evento->getScheda()->getOspedale()->getNome(),
                 1,
             );
