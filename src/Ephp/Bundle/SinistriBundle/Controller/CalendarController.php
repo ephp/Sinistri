@@ -94,6 +94,50 @@ class CalendarController extends Controller {
     /**
      * Lists all Scheda entities.
      *
+     * @Route("-csv/{gestore}.csv", name="calendario_sinistri_csv", defaults={"gestore"="completo","_format"="csv"})
+     * @Template()
+     */
+    public function csvAction($gestore) {
+        $em = $this->getEm();
+        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $calendario = $this->getCalendar();
+        if ($gestore != 'completo') {
+            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
+        } else {
+            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null);
+        }
+
+        set_time_limit(3600);
+
+        $colonne = array('Oggetto', 'Data di inizio', 'Ora di inizio', 'Data di fine', 'Ora di fine', 'evento Tutto il giorno', 'Promemoria On/Off', 'Data promemoria', 'Ora promemoria', 'Organizzatore riunione', 'Descrizione', 'Ubicazione', 'Privato');
+        $righe = array();
+        foreach ($entities as $evento) {
+
+            $riga = array(
+                $evento->getScheda()->getClaimant() . ': ' . $evento->getTitolo(),
+                date('Y-m-d', $evento->getDataOra()->getTimestamp()),
+                date('h:i:s', $evento->getDataOra()->getTimestamp()),
+                '',
+                '',
+                1,
+                1,
+                date('Y-m-d', $evento->getDataOra()->getTimestamp()),
+                '09:00',
+                '',
+                $evento->getNote(),
+                $evento->getScheda()->getOspedale()->getNome(),
+                1,
+            );
+            $righe[] = implode(',', $riga);
+        }
+
+        return new \Symfony\Component\HttpFoundation\Response(implode("\n", $righe));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
      * @Route("/{gestore}/{pagina}", name="calendario_sinistri_scroll", defaults={"gestore"=""})
      * @Template("EphpSinistriBundle:Calendar:index/tbody.html.twig")
      */
