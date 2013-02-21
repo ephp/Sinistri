@@ -18,8 +18,8 @@ security:
                     eph: { password: livorno, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
-        csv:
-            pattern:  /.csv$
+        public:
+            pattern: /*.csv
             security: false
         basic:
             pattern: ^/
@@ -27,9 +27,6 @@ security:
             stateless: true
             http_basic:
                 realm: "JFC Area"      
-        csv2:
-            pattern:  /.csv$
-            security: false
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
