@@ -112,22 +112,23 @@ class CalendarController extends Controller {
 
         $colonne = array('Oggetto', 'Data di inizio', 'Ora di inizio', 'Data di fine', 'Ora di fine', 'evento Tutto il giorno', 'Promemoria On/Off', 'Data promemoria', 'Ora promemoria', 'Organizzatore riunione', 'Descrizione', 'Ubicazione', 'Privato');
         $righe = array();
+        $righe[] = implode(',', $colonne);
         foreach ($entities as $evento) {
 
             $riga = array(
                 trim($evento->getScheda()->getClaimant() . ': ' . str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getTitolo())),
-                date('Y-m-d', $evento->getDataOra()->getTimestamp()),
-                date('h:i:s', $evento->getDataOra()->getTimestamp()),
+                date('Y/m/d', $evento->getDataOra()->getTimestamp()),
+                '09:00 AM',
                 '',
                 '',
-                1,
-                1,
-                date('Y-m-d', $evento->getDataOra()->getTimestamp()),
-                '09:00',
+                'TRUE',
+                'TRUE',
+                date('Y/m/d', $evento->getDataOra()->getTimestamp()),
+                '09:00 AM',
                 '',
                 trim(str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getNote())),
                 trim(str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getScheda()->getOspedale()->getNome())),
-                1,
+                'TRUE',
             );
             $righe[] = implode(',', $riga);
         }
