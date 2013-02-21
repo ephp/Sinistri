@@ -1,0 +1,22 @@
+<table class="records_list" style="width: 100%; margin-top: 10px;">
+    <thead>
+        <tr>
+            <th>Link utili</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for link in entity.links %}
+            <tr>
+                <td>
+                    <button onclick="cancellaLink({{ link.id }})">&nbsp;X&nbsp;</button>
+                    <a href="{{ link.url }}">{{ link.sito }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th style="text-align: center;">
+                <a href="#fb_aggiungi_link" class="fancybox">Aggiungi link</a>
+            </th>
+        </tr>
+    </tbody>
+</table>

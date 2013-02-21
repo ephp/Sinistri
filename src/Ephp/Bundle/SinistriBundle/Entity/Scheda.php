@@ -145,11 +145,19 @@ class Scheda {
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * 
+     *
      * @ORM\OneToMany(targetEntity="Evento", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
-     * @ORM\OrderBy({"data_ora" = "ASC"}) 
+     * @ORM\OrderBy({"data_ora" = "ASC"})
      */
     private $eventi;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Link", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
+     * @ORM\OrderBy({"sito" = "ASC"})
+     */
+    private $links;
 
     /**
      * Constructor
@@ -161,7 +169,7 @@ class Scheda {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -182,7 +190,7 @@ class Scheda {
     /**
      * Get anno
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnno() {
         return $this->anno;
@@ -191,7 +199,7 @@ class Scheda {
     /**
      * Get anno a due cifre
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnno2() {
         return $this->anno < 10 ? '0' . $this->anno : $this->anno;
@@ -212,7 +220,7 @@ class Scheda {
     /**
      * Get dasc
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDasc() {
         return $this->dasc;
@@ -233,7 +241,7 @@ class Scheda {
     /**
      * Get tpa
      *
-     * @return integer 
+     * @return integer
      */
     public function getTpa() {
         return $this->tpa;
@@ -254,7 +262,7 @@ class Scheda {
     /**
      * Get claimant
      *
-     * @return string 
+     * @return string
      */
     public function getClaimant() {
         return $this->claimant;
@@ -275,7 +283,7 @@ class Scheda {
     /**
      * Get soi
      *
-     * @return string 
+     * @return string
      */
     public function getSoi() {
         return $this->soi;
@@ -296,7 +304,7 @@ class Scheda {
     /**
      * Get first_reserve
      *
-     * @return float 
+     * @return float
      */
     public function getFirstReserve() {
         return $this->first_reserve;
@@ -317,7 +325,7 @@ class Scheda {
     /**
      * Get amount_reserved
      *
-     * @return float 
+     * @return float
      */
     public function getAmountReserved() {
         return $this->amount_reserved;
@@ -338,7 +346,7 @@ class Scheda {
     /**
      * Get sa
      *
-     * @return float 
+     * @return float
      */
     public function getSa() {
         return $this->sa;
@@ -359,7 +367,7 @@ class Scheda {
     /**
      * Get offerta_nostra
      *
-     * @return float 
+     * @return float
      */
     public function getOffertaNostra() {
         return $this->offerta_nostra;
@@ -380,7 +388,7 @@ class Scheda {
     /**
      * Get offerta_loro
      *
-     * @return float 
+     * @return float
      */
     public function getOffertaLoro() {
         return $this->offerta_loro;
@@ -401,7 +409,7 @@ class Scheda {
     /**
      * Get recupero_offerta_nostra
      *
-     * @return float 
+     * @return float
      */
     public function getRecuperoOffertaNostra() {
         return $this->recupero_offerta_nostra;
@@ -422,7 +430,7 @@ class Scheda {
     /**
      * Get recupero_offerta_loro
      *
-     * @return float 
+     * @return float
      */
     public function getRecuperoOffertaLoro() {
         return $this->recupero_offerta_loro;
@@ -443,7 +451,7 @@ class Scheda {
     /**
      * Get note
      *
-     * @return string 
+     * @return string
      */
     public function getNote() {
         return $this->note;
@@ -464,7 +472,7 @@ class Scheda {
     /**
      * Get ospedale
      *
-     * @return \Ephp\Bundle\SinistriBundle\Entity\Ospedale 
+     * @return \Ephp\Bundle\SinistriBundle\Entity\Ospedale
      */
     public function getOspedale() {
         return $this->ospedale;
@@ -485,7 +493,7 @@ class Scheda {
     /**
      * Get gestore
      *
-     * @return \Ephp\Bundle\ACLBundle\Entity\Gestore 
+     * @return \Ephp\Bundle\ACLBundle\Entity\Gestore
      */
     public function getGestore() {
         return $this->gestore;
@@ -506,7 +514,7 @@ class Scheda {
     /**
      * Get stato
      *
-     * @return \Ephp\Bundle\SinistriBundle\Entity\Stato 
+     * @return \Ephp\Bundle\SinistriBundle\Entity\Stato
      */
     public function getStato() {
         return $this->stato;
@@ -527,7 +535,7 @@ class Scheda {
     /**
      * Get priorita
      *
-     * @return \Ephp\Bundle\SinistriBundle\Entity\Priorita 
+     * @return \Ephp\Bundle\SinistriBundle\Entity\Priorita
      */
     public function getPriorita() {
         return $this->priorita;
@@ -557,7 +565,7 @@ class Scheda {
     /**
      * Get eventi
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getEventi() {
         return $this->eventi;
@@ -573,17 +581,50 @@ class Scheda {
     public function setFranchigia($franchigia)
     {
         $this->franchigia = $franchigia;
-    
+
         return $this;
     }
 
     /**
      * Get franchigia
      *
-     * @return float 
+     * @return float
      */
     public function getFranchigia()
     {
         return $this->franchigia;
+    }
+
+    /**
+     * Add links
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Link $links
+     * @return Scheda
+     */
+    public function addLink(\Ephp\Bundle\SinistriBundle\Entity\Link $links)
+    {
+        $this->links[] = $links;
+    
+        return $this;
+    }
+
+    /**
+     * Remove links
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Link $links
+     */
+    public function removeLink(\Ephp\Bundle\SinistriBundle\Entity\Link $links)
+    {
+        $this->links->removeElement($links);
+    }
+
+    /**
+     * Get links
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLinks()
+    {
+        return $this->links;
     }
 }

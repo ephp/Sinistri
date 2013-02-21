@@ -22,6 +22,9 @@
 </div>
 <div style="position: absolute; width: 260px; margin-right: 10px;">
     {% include 'EphpSinistriBundle:Scheda:show/riepilogo.html.twig' %}
+    <div id="link_container">
+        {% include 'EphpSinistriBundle:Scheda:show/link.html.twig' %}
+    </div>
     {#% include 'EphpSinistriBundle:Scheda:show/legenda_tabella.html.twig' %#}
     {% include 'EphpSinistriBundle:Scheda:show/back.html.twig' %}
 </div>
@@ -43,6 +46,21 @@
         <textarea style="background-color: #ffffff; border: 1px solid #dadada; width: 400px;" class="autogrow" name="evento[note]" id="scheda_note" placeholder="Inserisci qui le tue note"></textarea>
         <div style="clear: both"></div>
         <button type="button" onclick="aggiungiEvento()">Aggiungi</button>
+    </form>
+</div>
+<div style="display: none" id="fb_aggiungi_link">
+    <form id="aggiungi_link">
+        <h2>Aggiungi link a {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h2>
+        <div style="clear: both"></div>
+        <label for="scheda_data">Sito</label>
+        <div style="clear: both"></div>
+        <input type="text" name="link[sito]" id="link_sito" placeholder="Inserire il nome del sito" value="" />
+        <div style="clear: both"></div>
+        <label for="scheda_titolo">Indirizzo</label>
+        <div style="clear: both"></div>
+        <input type="text" name="link[url]" id="link_url" style="width: 400px;" placeholder="Inserire il link da aprire (es: http://www.google.it)" value=""/>  
+        <div style="clear: both"></div>
+        <button type="button" onclick="aggiungiLink()">Aggiungi</button>
     </form>
 </div>
 <script type="text/html" id="form_code">
@@ -68,8 +86,22 @@
             autoupdate();
         });
     }
+    function aggiungiLink() {
+        form = $('#aggiungi_link');
+        $.post('{{ path('tabellone_aggiungi_link', {'id': entity.id}) }}', form.serialize(), function(out) {
+            $('#link_container').html(out);
+            $.fancybox.close();
+            form[0].reset();
+        });
+    }
+    function cancellaLink(id) {
+        $.post('{{ path('tabellone_cancella_link') }}', {'link': {'id': id}}, function(out) {
+            $('#link_container').html(out);
+        });
+    }
     sanitizeCurrency([$('.currency')]);
     sanitizeDate([$('.auto_date')]);
+    sanitizeUrl([$('#link_url')])
     function autoupdate() {
         $('.autoupdate').change(function(){
             val = $(this).val();

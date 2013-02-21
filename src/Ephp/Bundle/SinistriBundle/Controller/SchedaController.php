@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ephp\Bundle\ACLBundle\Entity\Gestore;
 use Ephp\Bundle\CalendarBundle\Entity\Calendario;
 use Ephp\Bundle\SinistriBundle\Entity\Evento;
+use Ephp\Bundle\SinistriBundle\Entity\Link;
 use Ephp\Bundle\SinistriBundle\Entity\Ospedale;
 use Ephp\Bundle\SinistriBundle\Entity\Priorita;
 use Ephp\Bundle\SinistriBundle\Entity\Scheda;
@@ -528,6 +529,49 @@ class SchedaController extends DragDropController {
      */
     public function uploadAction($tipo) {
         return array('tipo' => $tipo);
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-cancella-link", name="tabellone_cancella_link")
+     * @Template("EphpSinistriBundle:Scheda:show/link.html.twig")
+     */
+    public function cancellaLinkAction() {
+        $req = $this->getRequest()->get('link');
+        $em = $this->getEm();
+        $entity = $em->getRepository('EphpSinistriBundle:Link')->find($req['id']);
+        /* @var $entity Link */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+        $id = $entity->getScheda()->getId();
+        $em->remove($entity);
+        $em->flush();
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-aggiungi-link/{id}", name="tabellone_aggiungi_link")
+     * @Template("EphpSinistriBundle:Scheda:show/link.html.twig")
+     */
+    public function aggiungiLinkAction($id) {
+        $req = $this->getRequest()->get('link');
+        $em = $this->getEm();
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+        $link = new Link();
+        $link->setScheda($entity);
+        $link->setUrl($req['url']);
+        $link->setSito($req['sito']);
+        $em->persist($link);
+        $em->flush();
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
     }
 
     /**
