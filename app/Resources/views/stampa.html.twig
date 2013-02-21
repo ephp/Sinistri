@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Sinistri{% endblock %}</title>
+        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset('/bundles/ephpsinistri/css/ephp.css') }}" />
+        <link rel="stylesheet" href="{{ asset('/bundles/ephpcalendar/css/ephp.css') }}" />
+        <link rel="stylesheet" href="{{ asset('/css/jquery/FancyBox/jquery.fancybox.css') }}" />
+        <link rel="stylesheet" href="{{ asset('/css/jquery/FancyBox/helpers/jquery.fancybox-buttons.css') }}" />
+        <link rel="stylesheet" href="{{ asset('/css/jquery/FancyBox/helpers/jquery.fancybox-thumbs.css') }}" />
+        <script src="{{ asset('/js/sugar/sugar-1.2.1.min.js') }}"></script>
+        <script src="{{ asset('/js/sugar/sugar-1.2.3-custom.min.js') }}"></script>
+        <script src="{{ asset('/js/jquery/jquery-1.7.1.min.js') }}"></script>
+        <script src="{{ asset('/js/jquery/jquery-ui-1.8.17.custom.min.js') }}"></script>
+        <script src="{{ asset('/js/jquery/jquery.autogrow-textarea.js') }}"></script>
+        <script src="{{ asset('/js/jquery/jquery.ui.widget.js') }}"></script>
+        <script src="{{ asset('/js/jquery/jquery.spinner.js') }}"></script>
+        <script src="{{ asset('/js/jquery/jquery.infinitescroll.min.js') }}"></script>
+        <script src="{{ asset('/js/jquery/FancyBox/jquery.fancybox.js') }}"></script>
+        <script src="{{ asset('/js/jquery/FancyBox/jquery.fancybox.pack.js') }}"></script>
+        <script src="{{ asset('/js/jquery/FancyBox/helpers/jquery.fancybox-buttons.js') }}"></script>
+        <script src="{{ asset('/js/jquery/FancyBox/helpers/jquery.fancybox-thumbs.js') }}"></script>
+        <script src="{{ asset('/js/commons.js') }}"></script>
+    </head>
+    <body>
+        <div id="symfony-wrapper">
+            <div id="symfony-header">
+                <img src="{{ asset('bundles/ephpsinistri/images/logo.png') }}" alt="JFclaims logo" style="vertical-align: middle; margin-right: 25px;" />
+            </div>
+
+                <div style="clear: both"></div>
+
+            <div class="symfony-content">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+        </div>
+    </body>
+</html>

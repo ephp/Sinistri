@@ -1890,7 +1890,6 @@ class VCalendar {
             $calendarStart .= '>' . $this->nl;
         $calendar .= $this->createXprop();
         foreach ($this->components as $component) {
-//            \Ephp\Bundle\WsInvokerBundle\Functions\Funzioni::info($component, true);
             if (empty($component))
                 continue;
             $component->setConfig($this->getConfig(), FALSE, TRUE);

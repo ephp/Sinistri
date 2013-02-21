@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block title %}
-Scheda sinistro
+{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }} - Scheda sinistro
 {% endblock %}
 
 {% block header %}

@@ -1,0 +1,20 @@
+<table class="records_list" style="border-top: 1px solid black; margin-bottom: 10px;">
+    <tbody>
+        <tr>
+            <td colspan="2">Gestore: {{ entity.gestore.nome }}</td>
+            <td>Amount Reserved: {{ entity.amountReserved }} €</td>
+            <td style="border-right: 1px solid black;">Sa: {{ entity.sa }} €</td>
+        </tr>
+        <tr>
+            <td>Offerta Nostra: {{ entity.offertaNostra }} €</td>
+            <td>Offerta Loro: {{ entity.offertaLoro }} €</td>
+            <td>Recupero Offerta Nostra: {{ entity.recuperoOffertaNostra }} {% if entity.recuperoOffertaNostra > 100 %}€{% else %}%{%endif %}</td>
+            <td style="border-right: 1px solid black;">Recupero Offerta Loro: {{ entity.recuperoOffertaLoro }} {% if entity.recuperoOffertaLoro > 100 %}€{% else %}%{%endif %}</td>
+        </tr>
+        {% if entity.note %}
+        <tr>
+            <td colspan="8" style="border-right: 1px solid black;">Note:<br/>{{ entity.note|nl2br }}</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>

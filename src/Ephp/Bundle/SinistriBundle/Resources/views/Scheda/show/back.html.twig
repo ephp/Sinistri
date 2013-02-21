@@ -1,5 +1,10 @@
 <nav style="margin-top: 10px;">
     <ul>
+        <li>
+            <a href="{{ path('tabellone_stampa', {'id': entity.id}) }}">
+                Stampa scheda {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}
+            </a>
+        </li>
         <li>Torna al tabellone<br/>di {{ entity.gestore.nome }}</li>
         <li>
             <a href="{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}">

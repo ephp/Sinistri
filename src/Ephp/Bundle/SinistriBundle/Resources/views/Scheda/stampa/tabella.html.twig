@@ -1,0 +1,20 @@
+<table class="records_list" style="width: 100%; border-top: 1px solid black; margin-bottom: 10px;"">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Titolo</th>
+            <th>Note</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for evento in entity.eventi %}
+            {% if evento.titolo|trim != '' and evento.tipo.sigla != 'RIS' %}
+                <tr>
+                    <td nowrap>{{ evento.dataOra|date('d/m/Y') }}</td>
+                    <td>{{ evento.titolo }}</td>
+                    <td>{{ evento.note }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>

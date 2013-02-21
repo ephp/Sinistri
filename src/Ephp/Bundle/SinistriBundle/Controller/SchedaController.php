@@ -216,6 +216,16 @@ class SchedaController extends DragDropController {
     /**
      * Finds and displays a Scheda entity.
      *
+     * @Route("-stampa/{id}", name="tabellone_stampa")
+     * @Template()
+     */
+    public function stampaAction($id) {
+        return $this->showAction($id);
+    }
+
+    /**
+     * Finds and displays a Scheda entity.
+     *
      * @Route("-scheda/{id}", name="tabellone_show")
      * @Template()
      */
@@ -1235,14 +1245,14 @@ class SchedaController extends DragDropController {
                                 $colonne = $valori_riga;
                             }
                         } else {
-                            if (!isset($valori_riga[2])  || !$valori_riga[2]) {
+                            if (!isset($valori_riga[2]) || !$valori_riga[2]) {
                                 break;
                             } else {
                                 try {
                                     $em->beginTransaction();
                                     $scheda = new Scheda();
                                     foreach ($valori_riga as $idx => $value) {
-                                        if(!isset($colonne[$idx])) {
+                                        if (!isset($colonne[$idx])) {
                                             break;
                                         }
                                         switch ($colonne[$idx]) {
@@ -1405,7 +1415,7 @@ class SchedaController extends DragDropController {
     }
 
     /**
-     * 
+     *
      * @param \DOMElement $element
      * @param array $criteria
      * @param boolean $first

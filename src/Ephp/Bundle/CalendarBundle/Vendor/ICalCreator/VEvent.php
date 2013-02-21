@@ -109,7 +109,6 @@ class VEvent extends CalendarComponent {
      * @return string
      */
     function CreateComponent(&$xcaldecl) {
-//        \Ephp\Bundle\WsInvokerBundle\Functions\Funzioni::pr($this, true);
         $objectname = $this->_createFormat();
         $component = $this->componentStart1 . $objectname . 'VEVENT' . $this->nl;
         $component .= $this->createUid();

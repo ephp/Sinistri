@@ -1,0 +1,17 @@
+{% extends '::stampa.html.twig' %}
+
+{% block title %}
+Scheda sinistro {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
+
+<div>
+    {% include 'EphpSinistriBundle:Scheda:stampa/riepilogo.html.twig' %}
+</div>
+<div style="width: auto;" id="tabella_container">
+    {% include 'EphpSinistriBundle:Scheda:stampa/tabella.html.twig' %}
+</div>
+<div style="clear: both"></div>
+{% endblock %}

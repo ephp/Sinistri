@@ -4080,14 +4080,10 @@ class CalendarComponent {
         if (1 > $numargs)
             return FALSE;
         $arglist = func_get_args();
-//        \Ephp\Bundle\WsInvokerBundle\Functions\Funzioni::info($this, true);
-//        \Ephp\Bundle\WsInvokerBundle\Functions\Funzioni::vd($arglist[0], true);
         if (!$this->_notExistProp($arglist[0])) {
-//            \Ephp\Bundle\WsInvokerBundle\Functions\Funzioni::vd($this->_notExistProp($arglist[0]), true);
             return FALSE;
         }
         if (!$this->getConfig('allowEmpty') && (!isset($arglist[1]) || empty($arglist[1]))) {
-//            \Ephp\Bundle\WsInvokerBundle\Functions\Funzioni::vd(!$this->getConfig('allowEmpty') && (!isset($arglist[1]) || empty($arglist[1])), true);
             return FALSE;
         }
         $arglist[0] = strtoupper($arglist[0]);
