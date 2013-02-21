@@ -25,7 +25,7 @@ security:
             http_basic:
                 realm: "JFC Area"      
         csv:
-            pattern:  ^/(csv)/
+            pattern:  .csv$
             security: false
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
