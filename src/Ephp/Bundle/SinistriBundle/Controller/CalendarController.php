@@ -110,24 +110,21 @@ class CalendarController extends Controller {
 
         set_time_limit(3600);
 
-        $colonne = array('Oggetto', 'Data di inizio', 'Ora di inizio', 'Data di fine', 'Ora di fine', 'evento Tutto il giorno', 'Promemoria On/Off', 'Data promemoria', 'Ora promemoria', 'Organizzatore riunione', 'Descrizione', 'Ubicazione', 'Privato');
+        $colonne = array('Subject', 'Start Date', 'Start Time', 'All day event', 'Reminder on/off', 'Reminder Date', 'Reminder Time', 'Description', 'Location', 'Private');
         $righe = array();
         $righe[] = implode(',', $colonne);
         foreach ($entities as $evento) {
 
             $riga = array(
-                trim($evento->getScheda()->getClaimant() . ': ' . str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getTitolo())),
-                date('d/m/Y', $evento->getDataOra()->getTimestamp()),
+                '"' . trim($evento->getScheda()->getClaimant() . ': ' . str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getTitolo())) . '"',
+                date('m/d/y', $evento->getDataOra()->getTimestamp()),
                 '09:00 AM',
-                '',
-                '',
                 'TRUE',
                 'TRUE',
-                date('d/m/Y', $evento->getDataOra()->getTimestamp()),
+                date('m/d/y', $evento->getDataOra()->getTimestamp()),
                 '09:00 AM',
-                '',
-                trim(str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getNote())),
-                trim(str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getScheda()->getOspedale()->getNome())),
+                '"' . trim(str_replace(array("\n", "\r"), array(' ', ' '), $evento->getNote())) . '"',
+                '"' . trim(str_replace(array("\n", "\r"), array(' ', ' '), $evento->getScheda()->getOspedale()->getNome())) . '"',
                 'TRUE',
             );
             $righe[] = implode(',', $riga);
