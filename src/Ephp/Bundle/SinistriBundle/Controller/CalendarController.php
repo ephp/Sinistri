@@ -126,7 +126,7 @@ class CalendarController extends Controller {
                 '09:00',
                 '',
                 str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getNote()),
-                $evento->getScheda()->getOspedale()->getNome(),
+                str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getScheda()->getOspedale()->getNome()),
                 1,
             );
             $righe[] = implode(',', $riga);
