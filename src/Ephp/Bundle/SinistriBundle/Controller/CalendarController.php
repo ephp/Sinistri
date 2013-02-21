@@ -117,13 +117,13 @@ class CalendarController extends Controller {
 
             $riga = array(
                 trim($evento->getScheda()->getClaimant() . ': ' . str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getTitolo())),
-                date('Y/m/d', $evento->getDataOra()->getTimestamp()),
+                date('d/m/Y', $evento->getDataOra()->getTimestamp()),
                 '09:00 AM',
                 '',
                 '',
                 'TRUE',
                 'TRUE',
-                date('Y/m/d', $evento->getDataOra()->getTimestamp()),
+                date('d/m/Y', $evento->getDataOra()->getTimestamp()),
                 '09:00 AM',
                 '',
                 trim(str_replace(array(',', "\n", "\r"), array(' - ', ' ', ' '), $evento->getNote())),
