@@ -86,6 +86,18 @@
             autoupdate();
         });
     }
+    function cancellaEvento(id, testo) {
+        if(confirm("Vuoi cancellare l'evento \""+testo+"\"")) {
+            $.post('{{ path('tabellone_cancella_evento') }}', {'evento': {'id': id}}, function(out) {
+                $('#tabella_container').html(out);
+            });
+        }
+    }
+    function evidenziaEvento(id) {
+        $.post('{{ path('tabellone_evidenzia_evento') }}', {'evento': {'id': id}}, function(out) {
+            $('#tabella_container').html(out);
+        });
+    }
     function aggiungiLink() {
         form = $('#aggiungi_link');
         $.post('{{ path('tabellone_aggiungi_link', {'id': entity.id}) }}', form.serialize(), function(out) {
@@ -94,10 +106,12 @@
             form[0].reset();
         });
     }
-    function cancellaLink(id) {
-        $.post('{{ path('tabellone_cancella_link') }}', {'link': {'id': id}}, function(out) {
-            $('#link_container').html(out);
-        });
+    function cancellaLink(id, testo) {
+        if(confirm("Vuoi cancellare il link a \""+testo+"\"")) {
+            $.post('{{ path('tabellone_cancella_link') }}', {'link': {'id': id}}, function(out) {
+                $('#link_container').html(out);
+            });
+        }
     }
     sanitizeCurrency([$('.currency')]);
     sanitizeDate([$('.auto_date')]);

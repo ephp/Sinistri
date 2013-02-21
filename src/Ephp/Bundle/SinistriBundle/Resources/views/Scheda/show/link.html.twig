@@ -8,7 +8,7 @@
         {% for link in entity.links %}
             <tr>
                 <td>
-                    <button onclick="cancellaLink({{ link.id }})">&nbsp;X&nbsp;</button>
+                    <button onclick="cancellaLink({{ link.id }}, '{{ link.sito }}')">&nbsp;X&nbsp;</button>
                     <a href="{{ link.url }}">{{ link.sito }}</a>
                 </td>
             </tr>

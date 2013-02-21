@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th>&nbsp;</th>
+            <th>&nbsp;</th>
             <th>Data</th>
             <th>Titolo</th>
             <th>Note</th>
@@ -11,7 +12,8 @@
         {% for evento in entity.eventi %}
             {% if evento.titolo|trim != '' %}
                 <tr style="background-color: #{{evento.tipo.colore}};">
-                    <td style="background-color: transparent;" title="{{evento.tipo.sigla}}" class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"></td>
+                    <td style="background-color: transparent;" title="{{evento.tipo.sigla}}"><button onclick="cancellaEvento({{ evento.id }}, '{{ evento.dataOra|date('d/m/Y') }} - {{ evento.titolo }}')">&nbsp;X&nbsp;</button></td>
+                    <td style="background-color: transparent;" title="{{evento.tipo.sigla}}" class="{% if evento.importante %}cal_important{% else %}cal_normal{% endif %}"  onclick="evidenziaEvento({{ evento.id }})"></td>
                     <td style="background-color: transparent;" nowrap><input type="text" class="autoupdate auto_date" evento="{{ evento.id }}" name="data" value="{{ evento.dataOra|date('d/m/Y') }}"/></td>
                     <td style="background-color: transparent;"><input type="text" class="autoupdate auto_double" evento="{{ evento.id }}" name="titolo" value="{{ evento.titolo }}"/></td>
                     <td style="background-color: transparent;"><textarea style="width: 550px; height: 20px;" class="autoupdate autogrow" evento="{{ evento.id }}" name="note" placeholder="Inserisci qui le tue note">{{ evento.note }}</textarea></td>
@@ -19,7 +21,7 @@
             {% endif %}
         {% endfor %}
         <tr>
-            <th colspan="4" style="text-align: center;">
+            <th colspan="5" style="text-align: center;">
                 <a href="#fb_aggiungi_evento" class="fancybox">Aggiungi data</a>
             </th>
         </tr>

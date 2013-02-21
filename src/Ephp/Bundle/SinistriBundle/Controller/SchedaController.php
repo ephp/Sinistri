@@ -554,6 +554,47 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
+     * @Route("-cancella-evento", name="tabellone_cancella_evento")
+     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     */
+    public function cancellaEventoAction() {
+        $req = $this->getRequest()->get('evento');
+        $em = $this->getEm();
+        $entity = $em->getRepository('EphpSinistriBundle:Evento')->find($req['id']);
+        /* @var $entity Evento */
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+        $id = $entity->getScheda()->getId();
+        $em->remove($entity);
+        $em->flush();
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-evidenzia-evento", name="tabellone_evidenzia_evento")
+     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     */
+    public function evidenziaEventoAction() {
+        $req = $this->getRequest()->get('evento');
+        $em = $this->getEm();
+        $evento = $em->getRepository('EphpSinistriBundle:Evento')->find($req['id']);
+        /* @var $evento Evento */
+        if (!$evento) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+        $id = $evento->getScheda()->getId();
+        $evento->setImportante(!$evento->getImportante());
+        $em->persist($evento);
+        $em->flush();
+        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
      * @Route("-aggiungi-link/{id}", name="tabellone_aggiungi_link")
      * @Template("EphpSinistriBundle:Scheda:show/link.html.twig")
      */
