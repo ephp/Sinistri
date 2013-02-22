@@ -9,7 +9,7 @@
             <tr>
                 <td>
                     <button onclick="cancellaLink({{ link.id }}, '{{ link.sito }}')">&nbsp;X&nbsp;</button>
-                    <a href="{{ link.url }}">{{ link.sito }}</a>
+                    <a href="{{ link.url }}" target="_blank">{{ link.sito }}</a>
                 </td>
             </tr>
         {% endfor %}
