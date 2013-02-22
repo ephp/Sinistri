@@ -11,7 +11,7 @@
             <th style="width: 50%; text-align: center">Sa</th>
         </tr>
         <tr>
-            <td><input type="text" class="autoupdate currency" style="width:100px" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{{ entity.amountReserved }}"/> €</td>
+            <td><input type="text" class="autoupdate currency" style="width:100px" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved >= 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
             <td><input type="text" class="autoupdate currency" style="width:100px" pratica="{{ entity.id }}" name="sa" value="{{ entity.sa }}"/> €</td>
         </tr>
         <tr>
