@@ -19,14 +19,16 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            
-//            new FOS\UserBundle\FOSUserBundle(),
+
+            new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new B2S\Bundle\PortletBundle\B2SPortletBundle(),
+            new Ephp\ACLBundle\EphpACLBundle(),
+            new Ephp\UtilityBundle\EphpUtilityBundle(),
             new Ephp\Bundle\DragDropBundle\EphpDragDropBundle(),
             new Ephp\Bundle\SinistriBundle\EphpSinistriBundle(),
-            new B2S\Bundle\PortletBundle\B2SPortletBundle(),
-            new Ephp\Bundle\ACLBundle\EphpACLBundle(),
+            new Ephp\Bundle\GestoriBundle\EphpGestoriBundle(),
             new Ephp\Bundle\CalendarBundle\EphpCalendarBundle(),
         );
 

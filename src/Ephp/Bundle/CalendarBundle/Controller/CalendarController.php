@@ -23,7 +23,7 @@ class CalendarController extends Controller
         $em = $this->getEm();
         $mode = 0;
         $_calendario = $em->getRepository('EphpCalendarBundle:Calendario');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $calendario = $_calendario->findOneBy(array('sigla' => $calendario));
         if ($calendario && $gestore) {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));

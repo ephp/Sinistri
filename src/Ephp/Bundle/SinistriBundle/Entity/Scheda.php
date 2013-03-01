@@ -35,7 +35,7 @@ class Scheda {
     private $anno;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Ephp\Bundle\ACLBundle\Entity\Gestore")
+     * @ORM\ManyToOne(targetEntity="\Ephp\Bundle\GestoriBundle\Entity\Gestore")
      * @ORM\JoinColumn(name="gestore_id", referencedColumnName="id")
      */
     private $gestore;
@@ -481,10 +481,10 @@ class Scheda {
     /**
      * Set gestore
      *
-     * @param \Ephp\Bundle\ACLBundle\Entity\Gestore $gestore
+     * @param \Ephp\Bundle\GestoriBundle\Entity\Gestore $gestore
      * @return Scheda
      */
-    public function setGestore(\Ephp\Bundle\ACLBundle\Entity\Gestore $gestore = null) {
+    public function setGestore(\Ephp\Bundle\GestoriBundle\Entity\Gestore $gestore = null) {
         $this->gestore = $gestore;
 
         return $this;
@@ -493,7 +493,7 @@ class Scheda {
     /**
      * Get gestore
      *
-     * @return \Ephp\Bundle\ACLBundle\Entity\Gestore
+     * @return \Ephp\Bundle\GestoriBundle\Entity\Gestore
      */
     public function getGestore() {
         return $this->gestore;

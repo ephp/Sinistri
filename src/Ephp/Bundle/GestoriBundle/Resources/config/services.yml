@@ -1,0 +1,8 @@
+services:
+    my.facebook.user:
+        class: Ephp\ACLBundle\Security\User\Provider\FacebookProvider
+        arguments:
+            facebook: ~
+            userManager: ~
+            validator: ~
+            container: ~

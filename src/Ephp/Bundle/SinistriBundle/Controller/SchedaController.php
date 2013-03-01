@@ -33,7 +33,7 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
         if ($ospedale && $anno) {
             $mode = 3;
@@ -80,7 +80,7 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
         $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
         if ($ospedale && $anno) {
@@ -132,7 +132,7 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
         if ($gestore != 'TUTTI') {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
@@ -191,7 +191,7 @@ class SchedaController extends DragDropController {
             $mode = 2;
         }
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $params = array();
         if ($anno != 'TUTTI') {
             $params['anno'] = $anno;
@@ -297,7 +297,7 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
 
         $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
 
         $scheda = $_scheda->find($req['id']);
         /* @var $scheda Scheda */
@@ -989,7 +989,7 @@ class SchedaController extends DragDropController {
         $schede_aggiornate = 0;
 
         $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
         $_stato = $em->getRepository('EphpSinistriBundle:Stato');
         $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
@@ -1164,7 +1164,7 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
 
         $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
         $_stato = $em->getRepository('EphpSinistriBundle:Stato');
         $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');

@@ -19,3 +19,4 @@ parameters:
   database_path: null
 
   mail_robot: gestione@studiolegalecarlesi.com
+  mail_robot_sender: Studio Legale Carlesi

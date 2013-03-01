@@ -23,7 +23,7 @@ class CalendarController extends Controller {
      */
     public function indexAction($gestore) {
         $em = $this->getEm();
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $calendario = $this->getCalendar();
         if ($gestore) {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
@@ -49,7 +49,7 @@ class CalendarController extends Controller {
      */
     public function iCalAction($gestore) {
         $em = $this->getEm();
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $calendario = $this->getCalendar();
         if ($gestore != 'completo') {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
@@ -99,7 +99,7 @@ class CalendarController extends Controller {
      */
     public function csvAction($gestore) {
         $em = $this->getEm();
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $calendario = $this->getCalendar();
         if ($gestore != 'completo') {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
@@ -141,7 +141,7 @@ class CalendarController extends Controller {
      */
     public function scrollAction($gestore, $pagina) {
         $em = $this->getEm();
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $calendario = $this->getCalendar();
         if ($gestore) {
             $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
@@ -164,7 +164,7 @@ class CalendarController extends Controller {
      */
     public function cronAction() {
         $em = $this->getEm();
-        $_gestore = $em->getRepository('EphpACLBundle:Gestore');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $gestori = $_gestore->findAll();
         $out = array('gestori' => count($gestori), 'email' => array());
         foreach ($gestori as $gestore) {
@@ -173,7 +173,7 @@ class CalendarController extends Controller {
         return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
     }
 
-    private function sendEmailAction(\Ephp\Bundle\ACLBundle\Entity\Gestore $gestore) {
+    private function sendEmailAction(\Ephp\Bundle\GestoriBundle\Entity\Gestore $gestore) {
         $em = $this->getEm();
         $calendario = $this->getCalendar();
         $eventi = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);

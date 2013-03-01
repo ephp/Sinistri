@@ -4,7 +4,7 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: "%locale%" }
+    translator:      ~
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -58,6 +58,32 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
+    
+# FOS User
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: Ephp\Bundle\ACLBundle\Entity\Gestore
+#    resetting:
+#        token_ttl: 86400
+#        email:
+#            from_email: 
+#                address:        %mail_robot%
+#                sender_name:    %mail_robot_sender%
+#            template:   FOSUserBundle:Resetting:email.txt.twig
+#        form:
+#            type:               fos_user_resetting
+#            handler:            fos_user.resetting.form.handler.default
+#            name:               fos_user_resetting_form
+#            validation_groups:  [ResetPassword]
+    service:
+        mailer:                 fos_user.mailer.default
+        email_canonicalizer:    fos_user.util.canonicalizer.default
+        username_canonicalizer: fos_user.util.canonicalizer.default
+        user_manager:           fos_user.user_manager.default
+        
+ephp_acl:
+  user_class: Ephp\Bundle\ACLBundle\Entity\Gestore
+    
 parameters:
     email_robot: %mail_robot%

@@ -12,3 +12,6 @@ ephp_sinistri:
     resource: "@EphpSinistriBundle/Controller/"
     type:     annotation
     prefix:   /
+
+_fos:
+    resource: routing_fos_user.yml
