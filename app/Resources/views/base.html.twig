@@ -47,6 +47,7 @@
                         <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
                         <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
                         <li><a href="{{ path('fos_user_change_password') }}">Cambia password</a></li>
+                        <li><a href="{{ path('logout') }}">Esci</a></li>
                     </ul>
                 {% endif %}
                 <div style="clear: both"></div>
@@ -55,8 +56,8 @@
             <div class="symfony-content">
                 {% block content %}
                     {% if app.user %}
-                        <h1>Benvenuto su JF Claims</h1>
-                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 01/03/2013 ore 22:30)</p>
+                        <h1>Benvenuto {{ app.user.nome }}.</h1>
+                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 01/03/2013 ore 23:00)</p>
                         <dl>
                             <dt color: red;>Profilo personale</dt>
                             <dd color: red;>Ogni gestore ha un suo profilo, col quale lavorare<br/>
