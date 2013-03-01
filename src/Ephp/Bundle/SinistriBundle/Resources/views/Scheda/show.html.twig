@@ -6,7 +6,9 @@
 
 {% block header %}
 <ul class="menu" style="float: right;">
-    <li><a href="javascript:attivaImport('Google','{{ path('calendario_import_google', {'id': entity.id}) }}')">Google</a></li>
+    {% if false %}
+        <li><a href="javascript:attivaImport('Google','{{ path('calendario_import_google', {'id': entity.id}) }}')">Google</a></li>
+    {% endif %}
     <li><a href="javascript:attivaImport('JWeb-Claims','{{ path('calendario_import_jweb', {'id': entity.id}) }}')">JWeb-Claims</a></li>
     <li><a href="javascript:attivaImport('Cancelleria Telematica','{{ path('calendario_import_cancelleria', {'id': entity.id}) }}')">Cancelleria Telematica</a></li>
     <li><a href="javascript:attivaImport('Ravinale Piemonte','{{ path('calendario_import_ravinale', {'id': entity.id}) }}')">Ravinale Piemonte</a></li>

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ephp\Bundle\GestoriBundle\Entity\Gestore;
 use Ephp\Bundle\GestoriBundle\Form\GestoreType;
+use Ephp\Bundle\GestoriBundle\Form\GestoreNewType;
 
 /**
  * Gestore controller.
@@ -40,7 +41,7 @@ class GestoreController extends Controller
     public function newAction()
     {
         $entity = new Gestore();
-        $form   = $this->createForm(new GestoreType(), $entity);
+        $form   = $this->createForm(new GestoreNewType(), $entity);
 
         return array(
             'entity' => $entity,
@@ -59,10 +60,17 @@ class GestoreController extends Controller
     {
         $entity  = new Gestore();
         $request = $this->getRequest();
-        $form    = $this->createForm(new GestoreType(), $entity);
+        $form    = $this->createForm(new GestoreNewType(), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
+            $entity->setUsername($entity->getEmail());
+            $entity->setPlainPassword($entity->getPassword());
+            $entity->addRole('ROLE_USER');
+            if($request->get('role_admin', 'ko') == 'ok') {
+                $entity->addRole('ROLE_ADMIN');
+            }
+            $entity->setEnabled(true);
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();

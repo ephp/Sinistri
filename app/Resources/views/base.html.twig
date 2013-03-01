@@ -40,10 +40,13 @@
             {% block content_header %}
                 {% if app.user %}
                     <ul class="menu">
-                        <li><a href="{{ path('gestori') }}">Gestori</a></li>
-                        <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
+                        {% if app.user.hasRole() %}
+                            <li><a href="{{ path('gestori') }}">Gestori</a></li>
+                            <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
+                        {% endif %}
                         <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
                         <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
+                        <li><a href="{{ path('fos_user_change_password') }}">Cambia password</a></li>
                     </ul>
                 {% endif %}
                 <div style="clear: both"></div>
@@ -53,14 +56,19 @@
                 {% block content %}
                     {% if app.user %}
                         <h1>Benvenuto su JF Claims</h1>
-                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 21/02/2013 ore 23:30)</p>
+                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 01/03/2013 ore 22:30)</p>
                         <dl>
-                            <dt>Gestori</dt>
-                            <dd>Inserisci e modifica i gestori delle pratiche</dd>
-                            <dt>Ospedali</dt>
-                            <dd>Inserisci e modifica gli ospedali</dd>
+                            <dt color: red;>Profilo personale</dt>
+                            <dd color: red;>Ogni gestore ha un suo profilo, col quale lavorare<br/>
+                                <ul>
+                                    <li style="padding-bottom: 0px; color: red;">Gestione ruoli</li>
+                                    <li style="padding-bottom: 0px; color: red;">Tabellone personale</li>
+                                    <li style="padding-bottom: 0px; color: red;">Calendario personale</li>
+                                    <li style="padding-bottom: 0px; color: red;">Possibilità di cambiare la password</li>
+                                </ul>
+                            </dd>
                             <dt>Calendario/Agenda</dt>
-                            <dd>Bozza di visualizzazione<br/>
+                            <dd>Consultazione del calendario<br/>
                                 <ul>
                                     <li style="padding-bottom: 0px;">Filtro per gestore</li>
                                     <li style="padding-bottom: 0px;">Mostra solo gli eventi futuri</li>
@@ -72,7 +80,7 @@
                                 <ul>
                                     <li style="padding-bottom: 0px;">Filtro per ospedale e anno</li>
                                     <li style="padding-bottom: 0px;">Filtro per gestore</li>
-                                    <li style="padding-bottom: 0px; color: red;">Ricerca per Claimat modificata</li>
+                                    <li style="padding-bottom: 0px;">Ricerca per Claimat modificata</li>
                                     <li style="padding-bottom: 0px;">Scroll con risultari filtrati</li>
                                     <li style="padding-bottom: 0px;">Contatore pratiche per i gestori</li>
                                     <li style="padding-bottom: 0px;">Assegnazione gestore</li>
@@ -96,17 +104,21 @@
                                     <li style="padding-bottom: 0px;">Link di ritorno completi</li>
                                     <li style="padding-bottom: 0px;">Importazione date da:
                                         <ul>
-                                            <li style="padding-bottom: 0px;">Google (schede vecchie)</li>
+                                            <li style="padding-bottom: 0px;">Google (nascosta)</li>
                                             <li style="padding-bottom: 0px;">jWeb Claims</li>
                                             <li style="padding-bottom: 0px;">Cancelleria Telematica</li>
                                             <li style="padding-bottom: 0px;">Ravinale Piemonte</li>
                                         </ul>
                                     </li>
-                                    <li style="padding-bottom: 0px; color: red;">Modifica, evidenziazione e cancellazione date calendario</li>
-                                    <li style="padding-bottom: 0px; color: red;">Versione per la stampa</li>
-                                    <li style="padding-bottom: 0px; color: red;">Aggiunta di link relativi alla scheda</li>
+                                    <li style="padding-bottom: 0px;">Modifica, evidenziazione e cancellazione date calendario</li>
+                                    <li style="padding-bottom: 0px;">Versione per la stampa</li>
+                                    <li style="padding-bottom: 0px;">Aggiunta di link relativi alla scheda</li>
                                 </ul>
                             </dd>
+                            <dt>Gestori</dt>
+                            <dd>Inserisci e modifica i gestori delle pratiche</dd>
+                            <dt>Ospedali</dt>
+                            <dd>Inserisci e modifica gli ospedali</dd>
                         </dl>
                     {% endif %}
                 {% endblock %}

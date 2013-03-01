@@ -9,6 +9,7 @@ Gestore
 
 <form action="{{ path('gestori_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
+    <label><input type="checkbox" value="ok" name="role_admin" /> Amministratore</label>
     <p>
         <button type="submit">Salva</button>
     </p>
