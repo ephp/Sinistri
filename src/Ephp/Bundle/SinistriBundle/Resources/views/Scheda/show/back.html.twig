@@ -5,7 +5,11 @@
                 Stampa scheda
             </button>
         </li>
-        <li>Torna al tabellone<br/>di {{ entity.gestore.nome }}</li>
+        {% if app.user.hasRole('ROLE_ADMIN') %}
+            <li>Torna al tabellone<br/>di {{ entity.gestore.nome }}</li>
+        {% else %}
+            <li>Torna al tabellone</li>
+        {% endif %}
         <li>
             <a href="{{ path('tabellone_gestore', {'gestore': entity.gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}">
                 {{ entity.ospedale.sigla }}/{{ entity.anno2 }}
@@ -26,26 +30,28 @@
                 Calendario personale
             </a>
         </li>
-        <li>Torna al tabellone generale</li>
-        <li>
-            <a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}">
-                {{ entity.ospedale.sigla }}/{{ entity.anno2 }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}">
-                {{ entity.ospedale.sigla }}
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('tabellone') }}">
-                Generale
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('calendario_sinistri') }}">
-                Calendario generale
-            </a>
-        </li>
+        {% if app.user.hasRole('ROLE_ADMIN') %}
+            <li>Torna al tabellone generale</li>
+            <li>
+                <a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}">
+                    {{ entity.ospedale.sigla }}/{{ entity.anno2 }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}">
+                    {{ entity.ospedale.sigla }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('tabellone') }}">
+                    Generale
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('calendario_sinistri') }}">
+                    Calendario generale
+                </a>
+            </li>
+        {% endif %}
     </ul>
 </nav>
