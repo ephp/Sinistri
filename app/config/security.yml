@@ -31,16 +31,31 @@ security:
             pattern:  /login$
             security: false
         main:
+            form_login:
             pattern: ^/
             form_login:
                 provider: fos_user_bundle
-                csrf_provider: form.csrf_provider
                 login_path: /login
                 check_path: /login_check
                 default_target_path: /tabellone
                 remember_me: true
+                csrf_provider: form.csrf_provider
+            remember_me:
+                key:      divine_office_hub_17021976
+                lifetime: 31536000
+                path:     ^/
+                domain:   ~ # Defaults to the current domain from $_SERVER
+                always_remember_me: true
+                remember_me_parameter: _remember_me
             logout:       true
             anonymous:    false
+        login:
+            pattern:  ^/login$
+            security: false
+        logout:
+            pattern:  ^/logout$
+            security: false
+          
 #        basic:
 #            pattern: ^/
 #            provider: in_memory
