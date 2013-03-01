@@ -40,7 +40,7 @@
             {% block content_header %}
                 {% if app.user %}
                     <ul class="menu">
-                        {% if app.user.hasRole() %}
+                        {% if app.user.hasRole('ROLE_ADMIN') %}
                             <li><a href="{{ path('gestori') }}">Gestori</a></li>
                             <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
                         {% endif %}
