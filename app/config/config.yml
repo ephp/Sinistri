@@ -63,7 +63,7 @@ swiftmailer:
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: Ephp\Bundle\ACLBundle\Entity\Gestore
+    user_class: Ephp\Bundle\GestoriBundle\Entity\Gestore
 #    resetting:
 #        token_ttl: 86400
 #        email:
@@ -83,7 +83,7 @@ fos_user:
         user_manager:           fos_user.user_manager.default
         
 ephp_acl:
-  user_class: Ephp\Bundle\ACLBundle\Entity\Gestore
+  user_class: Ephp\Bundle\GestoriBundle\Entity\Gestore
     
 parameters:
     email_robot: %mail_robot%

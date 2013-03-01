@@ -22,6 +22,11 @@ class CalendarController extends Controller {
      * @Template()
      */
     public function indexAction($gestore) {
+        $user = $this->getUser();
+        /* @var $user \Ephp\Bundle\GestoriBundle\Entity\Gestore */
+        if($gestore == '' && !$user->hasRole('ROLE_ADMIN')) {
+            return $this->redirect($this->generateUrl('calendario_sinistri', array('gestore' => $user->getSigla())));
+        }
         $em = $this->getEm();
         $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $calendario = $this->getCalendar();

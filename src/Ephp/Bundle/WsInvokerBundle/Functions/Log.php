@@ -19,56 +19,56 @@ class Log {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($controller, true);
+        $pre = Debug::typeof($controller, true);
         $logger->info("{$pre} | {$message}");
     }
     public static function notice(Controller $controller, $object, $text = '', $mode = 0) {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($controller, true);
+        $pre = Debug::typeof($controller, true);
         $logger->notice("{$pre} | {$message}");
     }
     public static function debug(Controller $controller, $object, $text = '', $mode = 0) {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($controller, true);
+        $pre = Debug::typeof($controller, true);
         $logger->debug("{$pre} | {$message}");
     }
     public static function alert(Controller $controller, $object, $text = '', $mode = 0) {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($controller, true);
+        $pre = Debug::typeof($controller, true);
         $logger->alert("{$pre} | {$message}");
     }
     public static function warning(Controller $controller, $object, $text = '', $mode = 0) {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($controller, true);
+        $pre = Debug::typeof($controller, true);
         $logger->warn("{$pre} | {$message}");
     }
     public static function error(Controller $controller, $object, $text = '', $mode = 0) {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($controller, true);
+        $pre = Debug::typeof($controller, true);
         $logger->err("{$pre} | {$message}");
     }
     public static function critic(Controller $controller, $object, $text = '', $mode = 0) {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($controller, true);
+        $pre = Debug::typeof($controller, true);
         $logger->crit("{$pre} | {$message}");
     }
     public static function emergency(Controller $controller, $object, $text = '', $mode = 0) {
         $message = self::getMessage($object, $text, $mode);
         $logger = $controller->get('logger');
         /* @var $logger \Symfony\Bridge\Monolog\Logger */
-        $pre = Funzioni::typeof($object, true);
+        $pre = Debug::typeof($object, true);
         $logger->emerg("{$pre} | {$message}");
     }
 
@@ -91,13 +91,13 @@ class Log {
                 }
                 $message .= "Variabile non iterabile: ";
             case self::$CLASS:
-                $message .= Funzioni::typeof($object, true);
+                $message .= Debug::typeof($object, true);
                 break;
             case self::$VD:
-                $message .= Funzioni::var_dump($object, true);
+                $message .= Debug::var_dump($object, true);
                 break;
             case self::$PR:
-                $message .= Funzioni::print_r($object);
+                $message .= Debug::print_r($object);
                 break;
             case self::$STRING:
                 if(is_bool($object)) {
@@ -108,7 +108,7 @@ class Log {
                 } elseif(!is_object($object)) {
                     $message .= $object;
                 } else {
-                    $message .= Funzioni::typeof($object, true);
+                    $message .= Debug::typeof($object, true);
                     $methods = get_class_methods($object);
                     if(in_array('__toString', $methods)) {
                         $message .= ': '.$object.__toString();

@@ -13,8 +13,11 @@ use Ephp\Bundle\SinistriBundle\Entity\Link;
 use Ephp\Bundle\SinistriBundle\Entity\Ospedale;
 use Ephp\Bundle\SinistriBundle\Entity\Priorita;
 use Ephp\Bundle\SinistriBundle\Entity\Scheda;
-use Ephp\Bundle\WsInvokerBundle\Functions\Funzioni;
 use Ephp\Bundle\WsInvokerBundle\PhpExcel\SpreadsheetExcelReader;
+use Ephp\UtilityBundle\Utility\Debug;
+use Ephp\UtilityBundle\Utility\Dom;
+use Ephp\UtilityBundle\Utility\String;
+use Ephp\UtilityBundle\Utility\Time;
 
 /**
  * Scheda controller.
@@ -30,6 +33,11 @@ class SchedaController extends DragDropController {
      * @Template()
      */
     public function indexAction($ospedale, $anno) {
+        $user = $this->getUser();
+        /* @var $user \Ephp\Bundle\GestoriBundle\Entity\Gestore */
+        if(!$user->hasRole('ROLE_ADMIN')) {
+            return $this->redirect($this->generateUrl('tabellone_gestore', array('gestore' => $user->getSigla(), 'ospedale' => $ospedale, 'anno' => $anno)));
+        }
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
@@ -256,7 +264,7 @@ class SchedaController extends DragDropController {
                 );
                 $data = $entity->getDasc();
                 foreach ($generatore as $i => $gen) {
-                    $data = Funzioni::calcolaData($data, $gen['giorni']);
+                    $data = Time::calcolaData($data, $gen['giorni']);
                     $tipo = $this->getTipoEvento($gen['tipo']);
                     $evento = new Evento();
                     $evento->setCalendario($cal);
@@ -416,10 +424,10 @@ class SchedaController extends DragDropController {
                     $evento->setTitolo($req['value']);
                     break;
                 case 'data':
+                    $req['reload'] = 1;
                     if ($req['value'] == '') {
                         $em->remove($evento);
                         $em->flush();
-                        $req['reload'] = 1;
                     } else {
                         $old_data = $evento->getDataOra();
                         $data = \DateTime::createFromFormat('d/m/Y', $req['value']);
@@ -437,7 +445,7 @@ class SchedaController extends DragDropController {
                         $rischedulato = false;
                         foreach ($generatore as $i => $gen) {
                             if ($rischedulato) {
-                                $data = Funzioni::calcolaData($data, $gen['giorni']);
+                                $data = Time::calcolaData($data, $gen['giorni']);
                                 $tipo = $this->getTipoEvento($gen['tipo']);
                                 if (isset($gen['from'])) {
                                     $eventoP = $_evento->findBy(array('scheda' => $evento->getScheda()->getId(), 'tipo' => $tipo->getId()), array(), 1, $gen['from']);
@@ -702,7 +710,7 @@ class SchedaController extends DragDropController {
                     }
 
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy($like);
-//                    Funzioni::vd($old);
+//                    Debug::vd($old);
                     if (!$olds) {
                         $em->persist($evento);
                         $em->flush();
@@ -783,7 +791,7 @@ class SchedaController extends DragDropController {
                         'titolo' => $evento->getTitolo(),
                         'note' => $evento->getNote(),
                             ));
-//                    Funzioni::vd($old);
+//                    Debug::vd($old);
                     if (!$olds) {
                         $em->persist($evento);
                         $em->flush();
@@ -860,7 +868,7 @@ class SchedaController extends DragDropController {
                         'titolo' => $evento->getTitolo(),
                         'note' => $evento->getNote(),
                             ));
-//                    Funzioni::vd($old);
+//                    Debug::vd($old);
                     if (!$olds) {
                         $em->persist($evento);
                         $em->flush();
@@ -936,7 +944,7 @@ class SchedaController extends DragDropController {
                         'scheda' => $entity->getId(),
                         'note' => $evento->getNote(),
                             ));
-//                    Funzioni::vd($old);
+//                    Debug::vd($old);
                     if (!$olds) {
                         $em->persist($evento);
                         $em->flush();
@@ -1026,7 +1034,7 @@ class SchedaController extends DragDropController {
                                 } elseif (count($tpa) == 2) {
                                     $tpa2 = explode('-', $tpa[0]);
                                     if (count($tpa2) != 2) {
-                                        Funzioni::pr($dati);
+                                        Debug::pr($dati);
                                         break(3);
                                     }
                                     $ospedale = $_ospedale->findOneBy(array('sigla' => $tpa2[0]));
@@ -1045,7 +1053,7 @@ class SchedaController extends DragDropController {
                                     $scheda->setAnno($anno);
                                     $scheda->setTpa($tpa);
                                 } else {
-                                    Funzioni::pr($dati);
+                                    Debug::pr($dati);
                                     break(3);
                                 }
                                 break;
@@ -1060,15 +1068,15 @@ class SchedaController extends DragDropController {
                                 break;
                             case 'first reserve':
                                 if ($dati[$index]) {
-                                    $scheda->setFirstReserve($this->currency($dati[$index]));
+                                    $scheda->setFirstReserve(String::currency($dati[$index]));
                                 }
                                 break;
                             case 'franchigia':
-                                $scheda->setFranchigia($this->currency($dati[$index]));
+                                $scheda->setFranchigia(String::currency($dati[$index]));
                                 break;
                             case 'amount reserved':
                                 if ($dati[$index]) {
-                                    $scheda->setAmountReserved($this->currency($dati[$index]));
+                                    $scheda->setAmountReserved(String::currency($dati[$index]));
                                 }
                                 break;
                             case 'stato':
@@ -1085,17 +1093,17 @@ class SchedaController extends DragDropController {
                                 break;
                             case 'sa':
                                 if ($dati[$index]) {
-                                    $scheda->setSa($this->currency($dati[$index]));
+                                    $scheda->setSa(String::currency($dati[$index]));
                                 }
                                 break;
                             case 'offerta ns':
                                 if ($dati[$index]) {
-                                    $scheda->setOffertaNostra($this->currency($dati[$index]));
+                                    $scheda->setOffertaNostra(String::currency($dati[$index]));
                                 }
                                 break;
                             case 'offerta loro':
                                 if ($dati[$index]) {
-                                    $scheda->setOffertaLoro($this->currency($dati[$index]));
+                                    $scheda->setOffertaLoro(String::currency($dati[$index]));
                                 }
                                 break;
                             case 'priorita':
@@ -1106,12 +1114,12 @@ class SchedaController extends DragDropController {
                                 break;
                             case 'recupero offerta ns':
                                 if ($dati[$index]) {
-                                    $scheda->setRecuperoOffertaNostra($this->currency($dati[$index]));
+                                    $scheda->setRecuperoOffertaNostra(String::currency($dati[$index]));
                                 }
                                 break;
                             case 'recupero offerta loro':
                                 if ($dati[$index]) {
-                                    $scheda->setRecuperoOffertaLoro($this->currency($dati[$index]));
+                                    $scheda->setRecuperoOffertaLoro(String::currency($dati[$index]));
                                 }
                                 break;
                             default: break;
@@ -1205,12 +1213,12 @@ class SchedaController extends DragDropController {
                 );
                 $doc = new \DOMDocument();
                 $doc->loadHTMLFile($uri);
-                $tag_html = $doc->getElementsByTagName('html')->item(0);
-                $tag_body = $this->getDOMElement($tag_html, array('tag' => 'body'));
-                $table = $this->getDOMElement($tag_body, array('tag' => 'table'));
-                $trs = $this->getDOMElement($table, array('tag' => 'tr'), false);
+                $tag_html = Dom::getDOMBase($doc);
+                $tag_body = Dom::getDOMElement($tag_html, array('tag' => 'body'));
+                $table = Dom::getDOMElement($tag_body, array('tag' => 'table'));
+                $trs = Dom::getDOMElement($table, array('tag' => 'tr'), false);
                 foreach ($trs as $tr) {
-                    $tds = $this->getDOMElement($tr, array('tag' => 'td'), false);
+                    $tds = Dom::getDOMElement($tr, array('tag' => 'td'), false);
                     if (count($tds) > 0) {
                         try {
                             $em->beginTransaction();
@@ -1261,16 +1269,16 @@ class SchedaController extends DragDropController {
                                         break;
                                     case 'FIRST RESERVE INDICATION':
                                         if ($td->nodeValue) {
-                                            $scheda->setFirstReserve($this->currency($td->nodeValue));
+                                            $scheda->setFirstReserve(String::currency($td->nodeValue));
                                         }
                                         break;
                                     case 'APPLICABLE DEDUCTIBLE':
-                                        $scheda->setFranchigia($this->currency($td->nodeValue));
+                                        $scheda->setFranchigia(String::currency($td->nodeValue));
                                         break;
                                     case 'AMOUNT RESERVED':
                                         if ($td->nodeValue) {
                                             if ($td->nodeValue != 'NP') {
-                                                $scheda->setAmountReserved($this->currency($td->nodeValue));
+                                                $scheda->setAmountReserved(String::currency($td->nodeValue));
                                             } else {
                                                 $scheda->setAmountReserved(-1);
                                             }
@@ -1403,16 +1411,16 @@ class SchedaController extends DragDropController {
                                                 break;
                                             case 'FIRST RESERVE INDICATION':
                                                 if ($value) {
-                                                    $scheda->setFirstReserve($this->currency($value));
+                                                    $scheda->setFirstReserve(String::currency($value));
                                                 }
                                                 break;
                                             case 'DEDUC. RESERVE':
-                                                $scheda->setFranchigia($this->currency($value));
+                                                $scheda->setFranchigia(String::currency($value));
                                                 break;
                                             case 'AMOUNT RESERVED':
                                                 if ($value) {
                                                     if ($value != 'N.P.') {
-                                                        $scheda->setAmountReserved($this->currency($value));
+                                                        $scheda->setAmountReserved(String::currency($value));
                                                     } else {
                                                         $scheda->setAmountReserved(-1);
                                                     }
@@ -1436,13 +1444,13 @@ class SchedaController extends DragDropController {
                                     $old = $_scheda->findOneBy(array('ospedale' => $scheda->getOspedale()->getId(), 'anno' => $scheda->getAnno(), 'tpa' => $scheda->getTpa()));
                                     /* @var $old Scheda */
                                     if ($old) {
-//                                        Funzioni::vd($old, true);
+//                                        Debug::vd($old, true);
                                         $old->setAmountReserved($scheda->getAmountReserved());
                                         $old->setFirstReserve($scheda->getFirstReserve());
                                         $old->setDasc($scheda->getDasc());
                                         $old->setSoi($scheda->getSoi());
                                         $old->setStato($scheda->getStato());
-//                                        Funzioni::vd($old);
+//                                        Debug::vd($old);
                                         $em->persist($old);
                                         $em->flush();
                                         $schede_aggiornate++;
@@ -1497,106 +1505,6 @@ class SchedaController extends DragDropController {
             $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
         }
         return $cal;
-    }
-
-    /**
-     *
-     * @param \DOMElement $element
-     * @param array $criteria
-     * @param boolean $first
-     * @return \BringOut\Bundle\GrabBundle\Controller\DOMElement
-     */
-    protected function getDOMElement(\DOMElement $element, $criteria = array(), $first = true) {
-        $out = $first ? false : array();
-        $i = 0;
-        if (isset($criteria['vd'])) {
-            Funzioni::pr('========================', true);
-            Funzioni::pr($criteria, true);
-        }
-        if (isset($criteria['n'])) {
-            $first = false;
-            $out = false;
-        }
-        foreach ($element->childNodes as $tag) {
-            if ($tag instanceof \DOMElement) {
-                /* @var $tag \DOMElement */
-                if (isset($criteria['vd'])) {
-                    Funzioni::pr('------------------------', true);
-                    $attributes = array();
-                    foreach ($tag->attributes as $attr) {
-                        /* @var $attr \DOMAttr */
-                        $attributes[$attr->name] = $attr->value;
-                    }
-                    $vd = array(
-                        'tag' => $tag->nodeName,
-                        'attr' => $attributes,
-                    );
-                    if (isset($criteria['vd-value'])) {
-                        $vd['value'] = $tag->nodeValue;
-                    }
-                    Funzioni::vd($vd, true);
-                }
-                if (isset($criteria['id'])) {
-                    if ($tag->hasAttribute('id')) {
-                        if ($tag->getAttribute('id') == $criteria['id']) {
-                            if (isset($criteria['vd'])) {
-                                Funzioni::pr('      \'RETURN\' => 1', true);
-                            }
-                            return $tag;
-                        }
-                    }
-                }
-                if (isset($criteria['tag'])) {
-                    if ($tag->nodeName == $criteria['tag']) {
-                        if ($first) {
-                            if (isset($criteria['vd'])) {
-                                Funzioni::pr('      \'RETURN\' => 1', true);
-                            }
-                            return $tag;
-                        } elseif (isset($criteria['n'])) {
-                            $i++;
-                            if ($criteria['n'] == $i) {
-                                if (isset($criteria['vd'])) {
-                                    Funzioni::pr('      \'RETURN\' => 1', true);
-                                }
-                                return $tag;
-                            }
-                        } else {
-                            if (isset($criteria['vd'])) {
-                                Funzioni::pr('      \'RETURN\' => 1', true);
-                            }
-                            $out[] = $tag;
-                        }
-                    }
-                }
-                if (isset($criteria['class'])) {
-                    if ($tag->hasAttribute('class')) {
-                        if (strpos($tag->getAttribute('class'), $criteria['class']) !== false) {
-                            if ($first) {
-                                if (isset($criteria['vd'])) {
-                                    Funzioni::pr('      \'RETURN\' => 1', true);
-                                }
-                                return $tag;
-                            } elseif (isset($criteria['n'])) {
-                                $i++;
-                                if ($criteria['n'] == $i) {
-                                    if (isset($criteria['vd'])) {
-                                        Funzioni::pr('      \'RETURN\' => 1', true);
-                                    }
-                                    return $tag;
-                                }
-                            } else {
-                                if (isset($criteria['vd'])) {
-                                    Funzioni::pr('      \'RETURN\' => 1', true);
-                                }
-                                $out[] = $tag;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $out;
     }
 
 }

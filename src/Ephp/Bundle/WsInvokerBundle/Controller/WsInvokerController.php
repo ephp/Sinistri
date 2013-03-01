@@ -236,7 +236,6 @@ class WsInvokerController extends Controller {
             }
             $header[] = 'Content-length: ' . strlen($data);
         }
-//        \BringOut\Bundle\WebBundle\Functions\Funzioni::vd($header);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $header);
         $log_request->setHeader(implode("\n", $header));
         $log_request->setXml($data);

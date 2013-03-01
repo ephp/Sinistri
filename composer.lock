@@ -279,12 +279,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ephp/ACL.git",
-                "reference": "783a0417aae95fc7a464ca7eb637174cbd5e10fa"
+                "reference": "2a2bd5e2d4eedeb52a6d6ff17c41981946e359d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ephp/ACL/zipball/783a0417aae95fc7a464ca7eb637174cbd5e10fa",
-                "reference": "783a0417aae95fc7a464ca7eb637174cbd5e10fa",
+                "url": "https://api.github.com/repos/ephp/ACL/zipball/2a2bd5e2d4eedeb52a6d6ff17c41981946e359d8",
+                "reference": "2a2bd5e2d4eedeb52a6d6ff17c41981946e359d8",
                 "shasum": ""
             },
             "require": {
@@ -293,7 +293,7 @@
                 "friendsofsymfony/user-bundle": "*",
                 "friendsofsymfony/facebook-bundle": "1.1.*"
             },
-            "time": "2013-02-28 18:36:12",
+            "time": "2013-03-01 15:04:27",
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
@@ -328,18 +328,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ephp/Utility.git",
-                "reference": "6e4518ded73cb4fa6aa634c98a0142cb470c18e0"
+                "reference": "2e99f19822c45fc5efc64de6a89e996884dfa43b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ephp/Utility/zipball/6e4518ded73cb4fa6aa634c98a0142cb470c18e0",
-                "reference": "6e4518ded73cb4fa6aa634c98a0142cb470c18e0",
+                "url": "https://api.github.com/repos/ephp/Utility/zipball/2e99f19822c45fc5efc64de6a89e996884dfa43b",
+                "reference": "2e99f19822c45fc5efc64de6a89e996884dfa43b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "2013-02-28 11:46:34",
+            "time": "2013-03-01 15:04:52",
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
@@ -477,12 +477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "993eebfb836a548b9120469ef48543bac10916b6"
+                "reference": "4b59ab8d063eeed9292cec7fedd6b3a3631e4e84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/993eebfb836a548b9120469ef48543bac10916b6",
-                "reference": "993eebfb836a548b9120469ef48543bac10916b6",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/4b59ab8d063eeed9292cec7fedd6b3a3631e4e84",
+                "reference": "4b59ab8d063eeed9292cec7fedd6b3a3631e4e84",
                 "shasum": ""
             },
             "require": {
@@ -498,7 +498,7 @@
                 "symfony/validator": "2.1.*",
                 "symfony/yaml": "2.1.*"
             },
-            "time": "2013-02-20 08:35:53",
+            "time": "2013-03-01 14:56:23",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
