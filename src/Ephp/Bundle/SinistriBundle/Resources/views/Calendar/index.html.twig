@@ -10,17 +10,18 @@
 {% block title %}{{titolo}}{% endblock %}
 
 {% block content_header %}
-    <div style="clear: both"></div>
-    <h2>Gestori</h2>
-    <div style="clear: both"></div>
-    <ul class="menu">
-        <li><a href="{{ path('calendario_sinistri') }}">Tutti</a></li>
-        {% for ges in gestori %}
-            <li><a href="{{ path('calendario_sinistri', {'gestore': ges.sigla}) }}">{{ges.nome}}</a></li>
-        {% endfor %}
-    </ul>
-    <div style="clear: both"></div>
-
+    {% if app.user.hasRole('ROLE_ADMIN') %}
+        <div style="clear: both"></div>
+        <h2>Gestori</h2>
+        <div style="clear: both"></div>
+        <ul class="menu">
+            <li><a href="{{ path('calendario_sinistri') }}">Tutti</a></li>
+            {% for ges in gestori %}
+                <li><a href="{{ path('calendario_sinistri', {'gestore': ges.sigla}) }}">{{ges.nome}}</a></li>
+            {% endfor %}
+        </ul>
+        <div style="clear: both"></div>
+    {% endif %}
 {% endblock %}
 {% block header %}
     <a href="{{ path('tabellone') }}">Tabellone</a>

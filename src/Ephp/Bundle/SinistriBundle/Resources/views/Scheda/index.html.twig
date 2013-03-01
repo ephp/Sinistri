@@ -51,7 +51,7 @@
             {% endif %}
         {% endfor %}
     </ul>
-    {% if gestori is defined %}
+    {% if app.user.hasRole('ROLE_ADMIN') %}
         <div style="clear: both"></div>
         <h2>Gestori</h2>
         <div style="clear: both"></div>
