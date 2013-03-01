@@ -5,7 +5,7 @@ namespace Ephp\Bundle\GestoriBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class GestoreType extends AbstractType
+class GestoreNewType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
