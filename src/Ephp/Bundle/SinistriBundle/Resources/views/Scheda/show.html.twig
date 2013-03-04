@@ -83,9 +83,9 @@
         form = $('#aggiungi_evento');
         $.post('{{ path('tabellone_aggiungi_evento', {'id': entity.id}) }}', form.serialize(), function(out) {
             $('#tabella_container').html(out);
-            $.fancybox.close();
-            form.reset();
             autoupdate();
+            $.fancybox.close();
+            form[0].reset();
         });
     }
     function cancellaEvento(id, testo) {
