@@ -582,8 +582,27 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
-     * @Route("-evidenzia-evento", name="tabellone_evidenzia_evento")
-     * @Template("EphpSinistriBundle:Scheda:show/tabella.html.twig")
+     * @Route("-primo-piano", name="tabellone_prima_pagina", defaults={"_format"="json"})
+     */
+    public function primoPianoAction() {
+        $req = $this->getRequest()->get('scheda');
+        $em = $this->getEm();
+        $scheda = $em->getRepository('EphpSinistriBundle:Scheda')->find($req['id']);
+        /* @var $evento Scheda */
+        if (!$scheda) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+        $out = array('id' => 'star_'.$req['id'], 'remove' => $scheda->getPrimaPagina() ? 'cal_important' : 'cal_normal', 'add' => $scheda->getPrimaPagina() ? 'cal_normal' : 'cal_important');
+        $scheda->setPrimaPagina(!$scheda->getPrimaPagina());
+        $em->persist($scheda);
+        $em->flush();
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
+    }
+    
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-evidenzia-evento", name="tabellone_evidenzia_evento", defaults={"_format"="json"})
      */
     public function evidenziaEventoAction() {
         $req = $this->getRequest()->get('evento');
@@ -593,11 +612,11 @@ class SchedaController extends DragDropController {
         if (!$evento) {
             throw $this->createNotFoundException('Unable to find Scheda entity.');
         }
-        $id = $evento->getScheda()->getId();
+        $out = array('id' => 'star_'.$req['id'], 'remove' => $evento->getImportante() ? 'cal_important' : 'cal_normal', 'add' => $evento->getImportante() ? 'cal_normal' : 'cal_important');
         $evento->setImportante(!$evento->getImportante());
         $em->persist($evento);
         $em->flush();
-        return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
     }
 
     /**

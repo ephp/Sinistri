@@ -77,8 +77,9 @@
     <thead>
         <tr>
             {% if gestore is defined and gestore %}
-                {% set colspan = colspan + 1 %}
+                {% set colspan = colspan + 2 %}
                 <th>#</th>
+                <th>PP</th>
             {% endif %}
             {% if mode <= 1 %}
                 {% set colspan = colspan + 1 %}
@@ -268,8 +269,12 @@
             cambiaGestore();
         {% endif %}
     }
-
-    {% if q is not defined %}
+    function primaPagina(id) {
+        $.post('{{ path('tabellone_prima_pagina') }}', {'scheda': {'id': id}}, function(out) {
+            $('#'+out.id).removeClass(out.remove);
+            $('#'+out.id).addClass(out.add);
+        });
+    }    {% if q is not defined %}
         $(function(){
             var $container = $('#tb_container');
             $container.infinitescroll({

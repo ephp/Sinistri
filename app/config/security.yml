@@ -37,7 +37,7 @@ security:
                 provider: fos_user_bundle
                 login_path: /login
                 check_path: /login_check
-                default_target_path: /tabellone
+                default_target_path: /profilo
                 remember_me: true
                 csrf_provider: form.csrf_provider
             remember_me:

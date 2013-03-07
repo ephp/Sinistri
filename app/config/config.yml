@@ -84,6 +84,9 @@ fos_user:
         
 ephp_acl:
   user_class: Ephp\Bundle\GestoriBundle\Entity\Gestore
+  access_log:
+    enable: true
+    class: Ephp\Bundle\GestoriBundle\Entity\AccessLogGestore
     
 parameters:
     email_robot: %mail_robot%

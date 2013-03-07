@@ -92,12 +92,14 @@
         if(confirm("Vuoi cancellare l'evento \""+testo+"\"")) {
             $.post('{{ path('tabellone_cancella_evento') }}', {'evento': {'id': id}}, function(out) {
                 $('#tabella_container').html(out);
+                autoupdate();
             });
         }
     }
     function evidenziaEvento(id) {
         $.post('{{ path('tabellone_evidenzia_evento') }}', {'evento': {'id': id}}, function(out) {
-            $('#tabella_container').html(out);
+            $('#'+out.id).removeClass(out.remove);
+            $('#'+out.id).addClass(out.add);
         });
     }
     function aggiungiLink() {

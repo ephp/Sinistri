@@ -1,0 +1,30 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Gestori
+{% endblock %}
+
+{% block content %}
+<h1>{{ gestore.nome }}</h1>
+
+<table class="records_list" style="border-top: 1px solid black;">
+    <tbody>
+        <tr>
+            <td style="width: 50%; vertical-align: top;"> 
+                <h2>Oggi</h2>
+                {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_oggi} %}
+                <h2>Domani</h2>
+                {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_domani} %}
+                <h2>Ieri</h2>
+                {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_ieri} %}
+            </td>
+            <td style="width: 50%; vertical-align: top;"> 
+                <h2>Prima pagina</h2>
+                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
+                <h2>Importanti</h2>
+                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

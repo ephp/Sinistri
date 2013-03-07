@@ -160,6 +160,13 @@ class Scheda {
     private $links;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="prima_pagina", type="boolean", nullable=true)
+     */
+    private $prima_pagina;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -626,5 +633,27 @@ class Scheda {
     public function getLinks()
     {
         return $this->links;
+    }
+    /**
+     * Set prima_pagina
+     *
+     * @param boolean $prima_pagina
+     * @return Scheda
+     */
+    public function setPrimaPagina($prima_pagina)
+    {
+        $this->prima_pagina = $prima_pagina;
+
+        return $this;
+    }
+
+    /**
+     * Get prima_pagina
+     *
+     * @return boolean
+     */
+    public function getPrimaPagina()
+    {
+        return $this->prima_pagina;
     }
 }
