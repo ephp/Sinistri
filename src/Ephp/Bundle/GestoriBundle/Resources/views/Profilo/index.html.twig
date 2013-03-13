@@ -12,6 +12,7 @@ Profilo
         <li><a href="{{ path('fos_user_change_password') }}">Cambia password</a></li>
         <li><a href="{{ path('fos_user_security_logout') }}">Esci</a></li>
     </ul>
+    <div style="clear: both"></div>
     <ul class="menu">
         {% if app.user.hasRole('ROLE_ADMIN') %}
             <li><a href="{{ path('gestori') }}">Gestori</a></li>
