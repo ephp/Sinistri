@@ -54,15 +54,16 @@
                 {% block content %}
                     {% if app.user %}
                         <h1>Benvenuto {{ app.user.nome }}.</h1>
-                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 01/03/2013 ore 23:00)</p>
+                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 13/03/2013 ore 13:00)</p>
                         <dl>
-                            <dt color: red;>Profilo personale</dt>
-                            <dd color: red;>Ogni gestore ha un suo profilo, col quale lavorare<br/>
+                            <dt style="color: red;">Profilo personale</dt>
+                            <dd>Ogni gestore ha un suo profilo, col quale lavorare<br/>
                                 <ul>
-                                    <li style="padding-bottom: 0px; color: red;">Gestione ruoli</li>
-                                    <li style="padding-bottom: 0px; color: red;">Tabellone personale</li>
-                                    <li style="padding-bottom: 0px; color: red;">Calendario personale</li>
-                                    <li style="padding-bottom: 0px; color: red;">Possibilità di cambiare la password</li>
+                                    <li style="padding-bottom: 0px; color: red;">Pagina riepilogativa</li>
+                                    <li style="padding-bottom: 0px;">Gestione ruoli</li>
+                                    <li style="padding-bottom: 0px;">Tabellone personale</li>
+                                    <li style="padding-bottom: 0px;">Calendario personale</li>
+                                    <li style="padding-bottom: 0px;">Possibilità di cambiare la password</li>
                                 </ul>
                             </dd>
                             <dt>Calendario/Agenda</dt>
@@ -70,12 +71,13 @@
                                 <ul>
                                     <li style="padding-bottom: 0px;">Filtro per gestore</li>
                                     <li style="padding-bottom: 0px;">Mostra solo gli eventi futuri</li>
-                                    <li style="padding-bottom: 0px; color: red;">Invio email con agenda giornaliera per ogni gestore</li>
+                                    <li style="padding-bottom: 0px;">Invio email con agenda giornaliera per ogni gestore</li>
                                 </ul>
                             </dd>
                             <dt>Tabellone</dt>
                             <dd>Visualizza e visualizza le pratiche sinistri. Funzionalità attive<br/>
                                 <ul>
+                                    <li style="padding-bottom: 0px; color: red;">Possibilità di segnalare sinistri "preferiti" da far comparire in prima pagina</li>
                                     <li style="padding-bottom: 0px;">Filtro per ospedale e anno</li>
                                     <li style="padding-bottom: 0px;">Filtro per gestore</li>
                                     <li style="padding-bottom: 0px;">Ricerca per Claimat modificata</li>
