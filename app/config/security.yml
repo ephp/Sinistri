@@ -24,6 +24,9 @@ security:
                     eph: { password: livorno, roles: [ 'ROLE_ADMIN' ] }
 
     firewalls:
+        cron:
+            pattern: /*cron
+            security: false
         public:
             pattern: /*.(csv|ics)
             security: false
@@ -49,6 +52,9 @@ security:
                 remember_me_parameter: _remember_me
             logout:       true
             anonymous:    false
+        cron:
+            pattern: /*cron
+            security: false
         login:
             pattern:  ^/login$
             security: false

@@ -1,9 +1,26 @@
 {% extends '::base.html.twig' %}
 
 {% block title %}
-Gestori
+Profilo
 {% endblock %}
 
+{% block header %}
+    <ul class="menu">
+        <li>Profilo</li>
+        <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tabellone</a></li>
+        <li><a href="{{ path('calendario_sinistri', {'gestore': gestore.sigla}) }}">Calendario</a></li>
+        <li><a href="{{ path('fos_user_change_password') }}">Cambia password</a></li>
+        <li><a href="{{ path('fos_user_security_logout') }}">Esci</a></li>
+    </ul>
+    <ul class="menu">
+        {% if app.user.hasRole('ROLE_ADMIN') %}
+            <li><a href="{{ path('gestori') }}">Gestori</a></li>
+            <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
+        {% endif %}
+    </ul>
+    <div style="clear: both"></div>
+{% endblock %}
+    
 {% block content %}
 <h1>{{ gestore.nome }}</h1>
 
@@ -11,18 +28,28 @@ Gestori
     <tbody>
         <tr>
             <td style="width: 50%; vertical-align: top;"> 
-                <h2>Oggi</h2>
-                {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_oggi} %}
-                <h2>Domani</h2>
-                {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_domani} %}
-                <h2>Ieri</h2>
-                {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_ieri} %}
+                {% if eventi_oggi|length > 0 %}
+                    <h2>Oggi</h2>
+                    {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_oggi} %}
+                {% endif %}
+                {% if eventi_domani|length > 0 %}
+                    <h2>Domani</h2>
+                    {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_domani} %}
+                {% endif %}
+                {% if eventi_ieri|length > 0 %}
+                    <h2>Ieri</h2>
+                    {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_ieri} %}
+                {% endif %}
             </td>
             <td style="width: 50%; vertical-align: top;"> 
-                <h2>Prima pagina</h2>
-                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
-                <h2>Importanti</h2>
-                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
+                {% if prima_pagina|length > 0 %}
+                    <h2>Prima pagina</h2>
+                    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
+                {% endif %}
+                {% if attenzione|length > 0 %}
+                    <h2>Importanti</h2>
+                    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
+                {% endif %}
             </td>
         </tr>
     </tbody>

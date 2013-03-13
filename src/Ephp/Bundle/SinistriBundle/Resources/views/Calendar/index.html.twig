@@ -24,7 +24,16 @@
     {% endif %}
 {% endblock %}
 {% block header %}
-    <a href="{{ path('tabellone') }}">Tabellone</a>
+    <ul class="menu">
+        <li><a href="{{ path('profilo') }}">Profilo</a></li>
+        {% if gestore != '' %}
+            <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tabellone</a></li>
+        {% else %}
+            <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
+        {% endif %}
+        <li>Calendario</li>
+    </ul>
+    <div style="clear: both"></div>
 {% endblock %}
 
 {% block content %}

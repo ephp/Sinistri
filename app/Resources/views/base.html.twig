@@ -27,7 +27,16 @@
         <div id="symfony-wrapper">
             <div id="symfony-header">
                 <a href="{{ path('home') }}"><img src="{{ asset('bundles/ephpsinistri/images/logo.png') }}" alt="JFclaims logo" style="vertical-align: middle; margin-right: 25px;" /></a>
+                <div style="clear: both"></div>
                 {% block header %}
+                    {% if app.user %}
+                        <ul class="menu">
+                            <li><a href="{{ path('profilo') }}">Profilo</a></li>
+                            <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
+                            <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
+                        </ul>
+                        <div style="clear: both"></div>
+                    {% endif %}
                 {% endblock %}
             </div>
 
@@ -38,18 +47,6 @@
             {% endfor %}
 
             {% block content_header %}
-                {% if app.user %}
-                    <ul class="menu">
-                        {% if app.user.hasRole('ROLE_ADMIN') %}
-                            <li><a href="{{ path('gestori') }}">Gestori</a></li>
-                            <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
-                        {% endif %}
-                        <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
-                        <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
-                        <li><a href="{{ path('fos_user_change_password') }}">Cambia password</a></li>
-                        <li><a href="{{ path('fos_user_security_logout') }}">Esci</a></li>
-                    </ul>
-                {% endif %}
                 <div style="clear: both"></div>
             {% endblock %}
 

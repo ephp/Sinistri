@@ -20,7 +20,7 @@ class ProfiloController extends Controller {
     /**
      * Lists all Gestore entities.
      *
-     * @Route("/", name="gestori")
+     * @Route("/", name="profilo")
      * @Template()
      */
     public function indexAction() {

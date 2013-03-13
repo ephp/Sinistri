@@ -21,6 +21,16 @@
 {% block title %}{{titolo}}{% endblock %}
 
 {% block header %}
+    <ul class="menu">
+        <li><a href="{{ path('profilo') }}">Profilo</a></li>
+        <li>Tabellone</li>
+        {% if gestore is defined and gestore %}
+            <li><a href="{{ path('calendario_sinistri', {'gestore': gestore.sigla}) }}">Calendario</a></li>
+        {% else %}
+            <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
+        {% endif %}
+    </ul>
+    <div style="clear: both"></div>
     {% if false %}
         <button><a href="{{ path('tabellone_upload_drive_default') }}">Importa da Google Drive</a></button>
         <button><a href="{{ path('tabellone_upload_drive_piemonte') }}">Importa Piemonte da Google Drive</a></button>
@@ -29,7 +39,6 @@
         <button><a href="{{ path('tabellone_upload_xls_default') }}">Importa da Bordereau</a></button>
         <button><a href="{{ path('tabellone_upload_xls_piemonte') }}">Importa da Bordereau Piemonte</a></button>
     {% endif %}
-    <a href="{{ path('calendario_sinistri') }}">Calendario</a>
 {% endblock %}
 
 {% block content_header %}
