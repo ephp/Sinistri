@@ -61,4 +61,9 @@ class Stato
     {
         return $this->stato;
     }
+    
+    public function __toString()
+    {
+        return $this->stato;
+    }
 }

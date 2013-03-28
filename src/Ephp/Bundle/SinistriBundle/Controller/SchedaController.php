@@ -13,11 +13,13 @@ use Ephp\Bundle\SinistriBundle\Entity\Link;
 use Ephp\Bundle\SinistriBundle\Entity\Ospedale;
 use Ephp\Bundle\SinistriBundle\Entity\Priorita;
 use Ephp\Bundle\SinistriBundle\Entity\Scheda;
+use Ephp\Bundle\SinistriBundle\Form\SchedaType;
 use Ephp\Bundle\WsInvokerBundle\PhpExcel\SpreadsheetExcelReader;
 use Ephp\UtilityBundle\Utility\Debug;
 use Ephp\UtilityBundle\Utility\Dom;
 use Ephp\UtilityBundle\Utility\String;
 use Ephp\UtilityBundle\Utility\Time;
+
 
 /**
  * Scheda controller.
@@ -74,7 +76,8 @@ class SchedaController extends DragDropController {
             'ospedali' => $ospedali,
             'gestori' => $gestori,
             'priorita' => $priorita,
-            'anni' => range(7, date('y'))
+            'anni' => range(7, date('y')),
+            'scroll' => true,
         );
     }
 
@@ -123,7 +126,93 @@ class SchedaController extends DragDropController {
             'ospedali' => $ospedali,
             'gestori' => $gestori,
             'priorita' => $priorita,
-            'anni' => range(7, date('y'))
+            'anni' => range(7, date('y')),
+            'scroll' => true,
+        );
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-form-ricerca-avanzata/{gestore}/{ospedale}/{anno}", name="tabellone_form_ricerca", defaults={"gestore"="TUTTI", "ospedale"="TUTTI", "anno"="TUTTI"})
+     * @Template()
+     */
+    public function formRicercaAction($gestore, $ospedale, $anno) {
+        $scheda = new Scheda();
+        $form   = $this->createForm(new SchedaType(), $scheda);
+        return array(
+            'plain_gestore' => $gestore,
+            'plain_ospedale' => $ospedale,
+            'plain_anno' => $anno,
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-ricerca-avanzata/{gestore}/{ospedale}/{anno}", name="tabellone_ricerca", defaults={"gestore"="TUTTI", "ospedale"="TUTTI", "anno"="TUTTI"})
+     * @Template("EphpSinistriBundle:Scheda:index.html.twig")
+     */
+    public function ricercaAction($gestore, $ospedale, $anno) {
+        $em = $this->getEm();
+        $mode = 0;
+        $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
+        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
+        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
+        $__gestore = $gestore;
+        $__ospedale = $ospedale;
+        $__anno = $anno;
+        if ($gestore != 'TUTTI') {
+            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+        } else {
+            $gestore = false;
+        };
+        $ospedali_id = array();
+        if ($ospedale != 'TUTTI') {
+            $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
+            foreach ($ospedali as $ospedale) {
+                $ospedali_id[] = $ospedale->getId();
+            }
+        } else {
+            $ospedale = false;
+        };
+        if ($anno == 'TUTTI') {
+            $anno = false;
+        };
+        if ($ospedale && $anno) {
+            $mode = 3;
+        } elseif ($ospedale) {
+            $mode = 2;
+        } else {
+            $mode = 1;
+        }
+        $scheda = new Scheda();
+        $form   = $this->createForm(new SchedaType(), $scheda);
+        $form->bind($this->getRequest());
+        if ($form->isValid()) {
+            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->cerca($gestore, $ospedali_id, $anno, $scheda);
+        } else {
+            $entities = array();
+        }
+        $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
+        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
+        $priorita = $_priorita->findAll();
+        return array(
+            'entities' => $entities,
+            'mode' => $mode,
+            'ospedale' => $ospedale,
+            'anno' => $anno < 10 ? '0' . $anno : $anno,
+            'gestore' => $gestore,
+            'ospedali' => $ospedali,
+            'gestori' => $gestori,
+            'priorita' => $priorita,
+            'anni' => range(7, date('y')),
+            'plain_gestore' => $__gestore,
+            'plain_ospedale' => $__ospedale,
+            'plain_anno' => $__anno,
+            'form' => $form->createView(),
+            'scroll' => false,
         );
     }
 
@@ -181,6 +270,7 @@ class SchedaController extends DragDropController {
             'priorita' => $priorita,
             'anni' => range(7, date('y')),
             'q' => $q,
+            'scroll' => false,
         );
     }
 

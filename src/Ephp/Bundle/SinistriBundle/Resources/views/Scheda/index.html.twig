@@ -16,6 +16,7 @@
     {% set titolo = gestore.nome ~ ' | ' ~ titolo %}
     {% set params_gestore = gestore.sigla %}
 {% endif %}
+{% set params_ricerca = {'gestore': params_gestore, 'ospedale': params_ospedale, 'anno': params_anno} %}
 {% set params_cerca = {'gestore': params_gestore, 'ospedale': params_ospedale, 'anno': params_anno, 'q': '__query__'} %}
 {% set params = {'gestore': params_gestore, 'ospedale': params_ospedale, 'anno': params_anno, 'pagina': 2} %}
 {% block title %}{{titolo}}{% endblock %}
@@ -116,7 +117,7 @@
         {% include 'EphpSinistriBundle:Scheda:index/tbody.html.twig' %}
     </tbody>
 </table>
-{% if q is not defined %}
+{% if scroll %}
     <nav id="page_nav">
         <a href="{{ path('tabellone_scroll', params) }}">Ancora</a>
     </nav>
@@ -246,6 +247,11 @@
     }
     checkUm();
     
+    function avanzata(url) {
+        $.post(url, function(html) {
+            $('#ricerca_avanzata').html(html);
+        });
+    }
     function filtra(filter) {
         $('#find_claimant').val('');
         filtro_nome = '';
@@ -283,7 +289,8 @@
             $('#'+out.id).removeClass(out.remove);
             $('#'+out.id).addClass(out.add);
         });
-    }    {% if q is not defined %}
+    }    
+    {% if scroll %}
         $(function(){
             var $container = $('#tb_container');
             $container.infinitescroll({

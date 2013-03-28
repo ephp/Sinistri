@@ -23,7 +23,21 @@ class SchedaRepository extends EntityRepository {
         if ($anno) {
             $qb->andWhere('s.anno = :anno')->setParameter('anno', $anno);
         }
-        $qb->andWhere('s.claimant like :q')->setParameter('q', "%{$find}%");
+        if($find instanceof Scheda) {
+            /* @var $find Scheda */
+            if($find->getClaimant()) {
+                $qb->andWhere('s.claimant like :q')->setParameter('q', "%{$find->getClaimant()}%");
+            }
+            if($find->getSoi()) {
+                $qb->andWhere('s.soi = :s')->setParameter('s', $find->getSoi());
+            }
+            if($find->getStato()) {
+                $qb->andWhere('s.stato = :st')->setParameter('st', $find->getStato()->getId());
+            }
+        }
+        if(is_string($find)) {
+            $qb->andWhere('s.claimant like :q')->setParameter('q', "%{$find}%");
+        }
         return $qb->getQuery()->execute();
     }
 

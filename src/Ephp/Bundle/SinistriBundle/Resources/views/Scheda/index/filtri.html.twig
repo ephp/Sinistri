@@ -5,6 +5,12 @@
         <li><a href="javascript:filtra({'.r': true, '.na': false});">Nascondi senza DASC</a></li>
         <li><a href="javascript:filtra({'.r': true, '.na': false, '.cg': false});">Mostra senza gestore</a></li>
         <li><a href="javascript:filtra({'.r': true, '.na': false, '.ng': false});">Mostra con gestore</a></li>
+        <li><a href="javascript:avanzata('{{ path('tabellone_form_ricerca', params_ricerca) }}');">Avanzata</a></li>
     {% endif %}
-            <li>oppure <input type="text" id="find_claimant" placeholder="Cerca per Claimant e premi invio" style="width: 250px;" value="{% if q is defined %}{{q}}{% endif %}">{% if q is defined %}<button onclick="resetQ()">Cancella ricerca</button>{% endif %}</li>
+    <li>oppure <input type="text" id="find_claimant" placeholder="Cerca per Claimant e premi invio" style="width: 250px;" value="{% if q is defined %}{{q}}{% endif %}">{% if q is defined %}<button onclick="resetQ()">Cancella ricerca</button>{% endif %}</li>
 </ul>
+<div id="ricerca_avanzata">
+    {% if form is defined %}
+        {% include 'EphpSinistriBundle:Scheda:formRicerca.html.twig' %}
+    {% endif %}
+</div>

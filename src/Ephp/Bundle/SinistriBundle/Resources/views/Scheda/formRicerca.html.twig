@@ -1,0 +1,18 @@
+<form action="{{ path('tabellone_ricerca', {'gestore': plain_gestore, 'ospedale': plain_ospedale, 'anno': plain_anno}) }}" method="POST">
+    <div style="float: left; margin-left: 20px;">
+        {{ form_label(form.claimant,null,{'attr': {style: 'margin-rigth: 10px;'}}) }}
+        {{ form_widget(form.claimant) }}
+    </div>
+    <div style="float: left; margin-left: 20px;">
+        {{ form_label(form.soi,null,{'attr': {style: 'margin-rigth: 10px;'}}) }}
+        {{ form_widget(form.soi) }}
+    </div>
+    <div style="float: left; margin-left: 20px;">
+        {{ form_label(form.stato,null,{'attr': {style: 'margin-rigth: 10px;'}}) }}
+        {{ form_widget(form.stato) }}
+    </div>
+    <div style="float: left; margin-left: 20px;">
+        {{ form_rest(form) }}
+        <button type="submit">Cerca</button>
+    </div>
+</form>
