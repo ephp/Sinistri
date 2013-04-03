@@ -42,6 +42,13 @@ class Priorita
      */
     private $css;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="show", type="boolean")
+     */
+    private $show;
+
 
     /**
      * Get id
@@ -120,5 +127,28 @@ class Priorita
     public function getCss()
     {
         return $this->css;
+    }
+
+    /**
+     * Set show
+     *
+     * @param boolean $show
+     * @return Priorita
+     */
+    public function setShow($show)
+    {
+        $this->show = $show;
+    
+        return $this;
+    }
+
+    /**
+     * Get show
+     *
+     * @return boolean 
+     */
+    public function getShow()
+    {
+        return $this->show;
     }
 }

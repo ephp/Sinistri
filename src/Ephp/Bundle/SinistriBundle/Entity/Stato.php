@@ -28,7 +28,6 @@ class Stato
      */
     private $stato;
 
-
     /**
      * Get id
      *
@@ -66,4 +65,5 @@ class Stato
     {
         return $this->stato;
     }
+
 }

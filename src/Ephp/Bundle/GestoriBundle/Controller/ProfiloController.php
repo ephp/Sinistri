@@ -30,9 +30,15 @@ class ProfiloController extends Controller {
         $priorita = array(
             $em->getRepository('EphpSinistriBundle:Priorita')->findOneBy(array('priorita' => 'attenzione'))->getId(),
             $em->getRepository('EphpSinistriBundle:Priorita')->findOneBy(array('priorita' => 'alta'))->getId(),
+            $em->getRepository('EphpSinistriBundle:Priorita')->findOneBy(array('priorita' => 'assegnato'))->getId(),
+        );
+        $priorita_adm = array(
+            $em->getRepository('EphpSinistriBundle:Priorita')->findOneBy(array('priorita' => 'nuovo'))->getId(),
+            $em->getRepository('EphpSinistriBundle:Priorita')->findOneBy(array('priorita' => 'riattivato'))->getId(),
         );
         $prima_pagina = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'prima_pagina' => true), array('claimant' => 'ASC'));
         $attenzione = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'priorita' => $priorita), array('claimant' => 'ASC'));
+        $nuove = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('priorita' => $priorita_adm), array('claimant' => 'ASC'));
 
         return array(
             'gestore' => $gestore,
@@ -42,6 +48,7 @@ class ProfiloController extends Controller {
             'eventi_domani' => $this->eventi($gestore, 1),
             'prima_pagina' => $prima_pagina,
             'attenzione' => $attenzione,
+            'nuove' => $nuove,
         );
     }
 

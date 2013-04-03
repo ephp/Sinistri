@@ -395,6 +395,7 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
 
         $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
+        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
         $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
 
         $scheda = $_scheda->find($req['id']);
@@ -405,6 +406,7 @@ class SchedaController extends DragDropController {
         $genera = is_null($scheda->getGestore());
         try {
             $scheda->setGestore($gestore);
+            $scheda->setPriorita($_priorita->findOneBy(array('priorita' => 'assegnato')));
             $em->persist($scheda);
             $em->flush();
             if ($genera) {
@@ -1117,6 +1119,7 @@ class SchedaController extends DragDropController {
                 try {
                     $conn->beginTransaction();
                     $scheda = new Scheda();
+                    $scheda->setPriorita($em->getRepository('EphpSinistriBundle:Priorita')->findOneBy(array('priorita' => 'nuovo')));
                     foreach ($colonne as $index => $colonna) {
                         switch ($colonna) {
                             case 'gestore':
@@ -1332,6 +1335,7 @@ class SchedaController extends DragDropController {
                         try {
                             $em->beginTransaction();
                             $scheda = new Scheda();
+                            $scheda->setPriorita($_priorita->findOneBy(array('priorita' => 'nuovo')));
                             foreach ($tds as $idx => $td) {
                                 switch ($colonne[$idx]) {
                                     case 'TDA Ref.':
@@ -1411,6 +1415,11 @@ class SchedaController extends DragDropController {
                             $old = $_scheda->findOneBy(array('ospedale' => $scheda->getOspedale()->getId(), 'anno' => $scheda->getAnno(), 'tpa' => $scheda->getTpa()));
                             /* @var $old Scheda */
                             if ($old) {
+                                if($old->getPriorita()->getPriorita() == 'definita') {
+                                    if($old->getStato()->getId() != $scheda->getStato()->getId()) {
+                                        $old->setPriorita($_priorita->findOneBy(array('priorita' => 'riattivato')));
+                                    }
+                                }
                                 $old->setAmountReserved($scheda->getAmountReserved());
                                 $old->setFirstReserve($scheda->getFirstReserve());
                                 $old->setSoi($scheda->getSoi());
@@ -1453,6 +1462,7 @@ class SchedaController extends DragDropController {
                                 try {
                                     $em->beginTransaction();
                                     $scheda = new Scheda();
+                                    $scheda->setPriorita($_priorita->findOneBy(array('priorita' => 'nuovo')));
                                     foreach ($valori_riga as $idx => $value) {
                                         if (!isset($colonne[$idx])) {
                                             break;
@@ -1554,6 +1564,11 @@ class SchedaController extends DragDropController {
                                     /* @var $old Scheda */
                                     if ($old) {
 //                                        Debug::vd($old, true);
+                                        if($old->getPriorita()->getPriorita() == 'definita') {
+                                            if($old->getStato()->getId() != $scheda->getStato()->getId()) {
+                                                $old->setPriorita($_priorita->findOneBy(array('priorita' => 'riattivato')));
+                                            }
+                                        }
                                         $old->setAmountReserved($scheda->getAmountReserved());
                                         $old->setFirstReserve($scheda->getFirstReserve());
                                         $old->setDasc($scheda->getDasc());

@@ -54,12 +54,12 @@
                 {% block content %}
                     {% if app.user %}
                         <h1>Benvenuto {{ app.user.nome }}.</h1>
-                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 28/03/2013 ore 15:00)</p>
+                        <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 04/04/2013 ore 00:45)</p>
                         <dl>
-                            <dt style="color: red;">Profilo personale</dt>
+                            <dt>Profilo personale</dt>
                             <dd>Ogni gestore ha un suo profilo, col quale lavorare<br/>
                                 <ul>
-                                    <li style="padding-bottom: 0px;">Pagina riepilogativa</li>
+                                    <li style="padding-bottom: 0px; color: red;">Pagina riepilogativa (visualizzazione delle tre nuove priorità)</li>
                                     <li style="padding-bottom: 0px;">Gestione ruoli</li>
                                     <li style="padding-bottom: 0px;">Tabellone personale</li>
                                     <li style="padding-bottom: 0px;">Calendario personale</li>
@@ -74,9 +74,16 @@
                                     <li style="padding-bottom: 0px;">Invio email con agenda giornaliera per ogni gestore</li>
                                 </ul>
                             </dd>
-                            <dt style="color: red;">Tabellone</dt>
+                            <dt>Tabellone</dt>
                             <dd>Visualizza e visualizza le pratiche sinistri. Funzionalità attive<br/>
                                 <ul>
+                                    <li style="padding-bottom: 0px; color: red;">Aggiunte Priorità:
+                                        <ul>
+                                            <li><b>nuovo</b> verde, segnala i nuovi sinistri caricati da bordereau</li>
+                                            <li><b>assegnato</b> arancio, indica ai gestoori i sinistri appena assegnati a loro</li>
+                                            <li><b>riattivato</b> celeste, segnala i sinistri che cambiano stato quando la loro priorità è in 'definita'</li>
+                                        </ul>
+                                    </li>
                                     <li style="padding-bottom: 0px; color: red;">Ricerca avanzata con combinazione Claimant/SOI/Stato</li>
                                     <li style="padding-bottom: 0px;">Possibilità di segnalare sinistri "preferiti" da far comparire in prima pagina</li>
                                     <li style="padding-bottom: 0px;">Filtro per ospedale e anno</li>

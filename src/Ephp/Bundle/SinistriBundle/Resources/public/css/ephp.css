@@ -379,6 +379,18 @@ tr.bg-yellow td {
     background-color: #EEEE77 !important;
 }
 
+tr.bg-green td {
+    background-color: #77EE77 !important;
+}
+
+tr.bg-cyan td {
+    background-color: #77EEEE !important;
+}
+
+tr.bg-orange td {
+    background-color: #EEAA77 !important;
+}
+
 tr.bg-gray td {
     background-color: #BBBBBB !important;
     color: #999999 !important;
