@@ -51,7 +51,7 @@ Profilo
                     <h2>Importanti</h2>
                     {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
                 {% endif %}
-                {% if app.user.hasRole('ROLE_ADMIN') && nuovi|length > 0 %}
+                {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
                     <h2>Nuovi e riattivati</h2>
                     {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
                 {% endif %}
