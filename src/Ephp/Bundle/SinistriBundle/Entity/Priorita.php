@@ -82,6 +82,16 @@ class Priorita
     {
         return $this->priorita;
     }
+    
+    /**
+     * Get priorita
+     *
+     * @return string 
+     */
+    public function __toString()
+    {
+        return $this->priorita;
+    }
 
     /**
      * Set on_change
@@ -151,4 +161,6 @@ class Priorita
     {
         return $this->show;
     }
+    
+    
 }

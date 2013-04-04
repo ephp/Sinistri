@@ -34,6 +34,9 @@ class SchedaRepository extends EntityRepository {
             if($find->getStato()) {
                 $qb->andWhere('s.stato = :st')->setParameter('st', $find->getStato()->getId());
             }
+            if($find->getPriorita()) {
+                $qb->andWhere('s.priorita = :pr')->setParameter('pr', $find->getPriorita()->getId());
+            }
         }
         if(is_string($find)) {
             $qb->andWhere('s.claimant like :q')->setParameter('q', "%{$find}%");

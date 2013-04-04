@@ -29,7 +29,7 @@ class SchedaType extends AbstractType
 //            ->add('ospedale')
 //            ->add('gestore')
             ->add('stato', null, array('required' => false))
-//            ->add('priorita')
+            ->add('priorita')
         ;
     }
 
