@@ -1415,7 +1415,7 @@ class SchedaController extends DragDropController {
                             $old = $_scheda->findOneBy(array('ospedale' => $scheda->getOspedale()->getId(), 'anno' => $scheda->getAnno(), 'tpa' => $scheda->getTpa()));
                             /* @var $old Scheda */
                             if ($old) {
-                                if($old->getPriorita()->getPriorita() == 'definita') {
+                                if($old->getPriorita() && $old->getPriorita()->getPriorita() == 'definita') {
                                     if($old->getStato()->getId() != $scheda->getStato()->getId()) {
                                         $old->setPriorita($_priorita->findOneBy(array('priorita' => 'riattivato')));
                                     }
@@ -1564,7 +1564,7 @@ class SchedaController extends DragDropController {
                                     /* @var $old Scheda */
                                     if ($old) {
 //                                        Debug::vd($old, true);
-                                        if($old->getPriorita()->getPriorita() == 'definita') {
+                                        if($old->getPriorita() && $old->getPriorita()->getPriorita() == 'definita') {
                                             if($old->getStato()->getId() != $scheda->getStato()->getId()) {
                                                 $old->setPriorita($_priorita->findOneBy(array('priorita' => 'riattivato')));
                                             }
