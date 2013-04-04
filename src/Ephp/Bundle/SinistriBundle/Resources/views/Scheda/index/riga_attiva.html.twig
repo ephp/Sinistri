@@ -6,16 +6,16 @@
     {% endif %}
     {% if mode <= 1 %}
         {% if gestore is defined and gestore %}
-            <td style="text-align: center"><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla}) }}"><abbr title="{{ entity.ospedale.nome }}">{{ entity.ospedale.sigla|upper }}</abbr></a></td>
+            <td style="text-align: center"><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.gruppo}) }}"><abbr title="{{ entity.ospedale.nome }}">{{ entity.ospedale.sigla|upper }}</abbr></a></td>
         {% else %}
-            <td style="text-align: center"><a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla}) }}"><abbr title="{{ entity.ospedale.nome }}">{{ entity.ospedale.sigla|upper }}</abbr></a></td>
+            <td style="text-align: center"><a href="{{ path('tabellone', {'ospedale': entity.ospedale.gruppo}) }}"><abbr title="{{ entity.ospedale.nome }}">{{ entity.ospedale.sigla|upper }}</abbr></a></td>
         {% endif %}
     {% endif %}
     {% if mode <= 2 %}
         {% if gestore is defined and gestore %}
-            <td style="text-align: center"><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}">{{ entity.anno2 }}</abbr></a></td>
+            <td style="text-align: center"><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla, 'ospedale': entity.ospedale.gruppo, 'anno': entity.anno}) }}"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}">{{ entity.anno2 }}</abbr></a></td>
         {% else %}
-            <td style="text-align: center"><a href="{{ path('tabellone', {'ospedale': entity.ospedale.sigla, 'anno': entity.anno}) }}"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}">{{ entity.anno2 }}</abbr></a></td>
+            <td style="text-align: center"><a href="{{ path('tabellone', {'ospedale': entity.ospedale.gruppo, 'anno': entity.anno}) }}"><abbr title="{{ entity.ospedale.nome }} 20{{ entity.anno2 }}">{{ entity.anno2 }}</abbr></a></td>
         {% endif %}
     {% endif %}
     <td style="text-align: center"><input type="text" class="autoupdate auto_date" pratica="{{ entity.id }}" name="dasc" value="{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}"/></td>
@@ -26,7 +26,7 @@
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
     <td nowrap><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved >= 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
-    <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
+    <td style="text-align: center"><textarea class="autoupdate" style="height: 20px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
     <td style="text-align: center" class="chp"><a href="#fb_cambia_priorita" class="fancybox">{% if entity.priorita %}{{ entity.priorita.priorita }}{% else %}N/A{% endif %}</a></td>
     <td>
         <button type="button" onclick="javascript:$('#detail_{{ entity.id }}').toggle()">
@@ -48,6 +48,7 @@
                     <th>Offerta Loro</th>
                     <th>Recupero Offerta Nostra</th>
                     <th>Recupero Offerta Loro</th>
+                    <th>Stato</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,10 +59,7 @@
                     <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="offertaLoro" value="{{ entity.offertaLoro }}"/> €</td>
                     <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaNostra" value="{{ entity.recuperoOffertaNostra }}" id="recuperoOffertaNostra_{{ entity.id }}" /> <span class="um" target="recuperoOffertaNostra_{{ entity.id }}"></span></td>
                     <td><input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="recuperoOffertaLoro" value="{{ entity.recuperoOffertaLoro }}" id="recuperoOffertaLoro_{{ entity.id }}"/>  <span class="um" target="recuperoOffertaLoro_{{ entity.id }}"></span></td>
-                </tr>
-                <tr>
-                    <th>Note</th>
-                    <td colspan="6"><textarea class="autoupdate autogrow" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
+                    <td>{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
                 </tr>
             </tbody>
         </table>
