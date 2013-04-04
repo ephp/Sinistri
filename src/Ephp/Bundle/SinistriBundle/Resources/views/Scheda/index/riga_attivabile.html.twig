@@ -22,7 +22,7 @@
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
     <td nowrap><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved >= 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
-    <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
+    <td style="text-align: center">&nbsp;</td>
     <td style="text-align: center">non avviata</td>
     <td>
         <button type="button" onclick="javascript:$('#detail_{{ entity.id }}').toggle()">
@@ -41,6 +41,7 @@
                     <th>Offerta Loro</th>
                     <th>Recupero Offerta Nostra</th>
                     <th>Recupero Offerta Loro</th>
+                    <th>Stato</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,6 +52,7 @@
                     <td>{% if entity.offertaLoro %}{{ entity.offertaLoro }} €{% endif %}</td>
                     <td>{% if entity.recuperoOffertaNostra %}{{ entity.recuperoOffertaNostra }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}{% endif %}</td>
                     <td>{% if entity.recuperoOffertaLoro %}{{ entity.recuperoOffertaLoro }} {% if entity.offertaNostra <= 100 %}%{% else %}€{% endif %}{% endif %}</td>
+                    <td>{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
                 </tr>
             </tbody>
         </table>

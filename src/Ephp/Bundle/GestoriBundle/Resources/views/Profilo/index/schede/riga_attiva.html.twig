@@ -4,7 +4,7 @@
     <td id="star_{{ entity.id }}" style="background-color: transparent;" class="{% if entity.primaPagina %}cal_important{% else %}cal_normal{% endif %}" onclick="primaPagina({{ entity.id }})"></td>
     <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
     <td>{{ entity.claimant }}</td>
-    <td style="text-align: center">{% if entity.stato %}{{ entity.stato.stato }}{% endif%}</td>
+    <td style="text-align: center"><span title="{{ entity.note }}">{{ entity.note|truncate(100)|nl2br }}</span></td>
     <td>
         <button type="button" onclick="javascript:$('#detail_{{ entity.id }}').toggle()">
             Note
