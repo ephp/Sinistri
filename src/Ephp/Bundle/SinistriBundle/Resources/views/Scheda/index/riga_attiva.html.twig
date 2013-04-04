@@ -26,7 +26,7 @@
     {% endif %}
     <td style="text-align: center">{{ entity.soi }}</td>
     <td nowrap><input type="text" class="autoupdate currency" readonly="readonly" pratica="{{ entity.id }}" name="amountReserved" value="{% if entity.amountReserved >= 0 %}{{ entity.amountReserved }}{% else %}NP{% endif %}"/> €</td>
-    <td style="text-align: center"><textarea class="autoupdate" style="height: 20px; width: 200px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
+    <td style="text-align: center"><textarea class="autoupdate" style="height: 40px; width: 250px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
     <td style="text-align: center" class="chp"><a href="#fb_cambia_priorita" class="fancybox">{% if entity.priorita %}{{ entity.priorita.priorita }}{% else %}N/A{% endif %}</a></td>
     <td>
         <button type="button" onclick="javascript:$('#detail_{{ entity.id }}').toggle()">
