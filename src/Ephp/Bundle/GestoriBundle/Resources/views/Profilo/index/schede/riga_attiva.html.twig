@@ -4,24 +4,10 @@
     <td id="star_{{ entity.id }}" style="background-color: transparent;" class="{% if entity.primaPagina %}cal_important{% else %}cal_normal{% endif %}" onclick="primaPagina({{ entity.id }})"></td>
     <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
     <td>{{ entity.claimant }}</td>
-    <td style="text-align: center"><span title="{{ entity.note }}">{{ entity.note|nl2br }}</span></td>
+    <td style="text-align: left"><span title="{{ entity.stato.stato }}">{{ entity.note|nl2br }}</span></td>
     <td>
-        <button type="button" onclick="javascript:$('#detail_{{ entity.id }}').toggle()">
-            Note
-        </button>
         <button type="button" onclick="javascript:window.location='{{ path('tabellone_show', {'id': entity.id}) }}'">
             Apri
         </button>
-    </td>
-</tr>
-<tr style="display: none" class="r detail" id="detail_{{ entity.id }}">
-    <td colspan="6">
-        <table class="records_list">
-            <tbody>
-                    <th>Note</th>
-                    <td>{{ entity.note|nl2br }}</td>
-                </tr>
-            </tbody>
-        </table>
     </td>
 </tr>
