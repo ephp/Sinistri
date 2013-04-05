@@ -20,7 +20,6 @@ use Ephp\UtilityBundle\Utility\Dom;
 use Ephp\UtilityBundle\Utility\String;
 use Ephp\UtilityBundle\Utility\Time;
 
-
 /**
  * Scheda controller.
  *
@@ -37,7 +36,7 @@ class SchedaController extends DragDropController {
     public function indexAction($ospedale, $anno) {
         $user = $this->getUser();
         /* @var $user \Ephp\Bundle\GestoriBundle\Entity\Gestore */
-        if(!$user->hasRole('ROLE_ADMIN')) {
+        if (!$user->hasRole('ROLE_ADMIN')) {
             return $this->redirect($this->generateUrl('tabellone_gestore', array('gestore' => $user->getSigla(), 'ospedale' => $ospedale, 'anno' => $anno)));
         }
         $em = $this->getEm();
@@ -139,7 +138,7 @@ class SchedaController extends DragDropController {
      */
     public function formRicercaAction($gestore, $ospedale, $anno) {
         $scheda = new Scheda();
-        $form   = $this->createForm(new SchedaType(), $scheda);
+        $form = $this->createForm(new SchedaType(), $scheda);
         return array(
             'plain_gestore' => $gestore,
             'plain_ospedale' => $ospedale,
@@ -188,7 +187,7 @@ class SchedaController extends DragDropController {
             $mode = 1;
         }
         $scheda = new Scheda();
-        $form   = $this->createForm(new SchedaType(), $scheda);
+        $form = $this->createForm(new SchedaType(), $scheda);
         $form->bind($this->getRequest());
         if ($form->isValid()) {
             $entities = $em->getRepository('EphpSinistriBundle:Scheda')->cerca($gestore, $ospedali_id, $anno, $scheda);
@@ -592,6 +591,62 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
+     * @Route("-attivita-cron", name="tabellone_attivita_cron", defaults={"_format"="json"})
+     */
+    public function attivitaCronAction() {
+        $i = 0;
+        $oggi = new \DateTime();
+        $oggi->setTime(5, 0, 0);
+        $em = $this->getEm();
+        $tipo = $this->getTipoEvento('VER');
+        $cal = $this->getCalendar();
+        $verifiche = 0;
+        do {
+            $schede = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array(), 200, $i * 200);
+            foreach ($schede as $scheda) {
+                set_time_limit(300);
+                /* @var $scheda Scheda */
+                $dasc = $scheda->getDasc();
+                if ($dasc && count($scheda->getEventi()) > 0 && $scheda->getPriorita() && $scheda->getPriorita()->getPriorita() != 'definita') {
+                    $verifica = $em->getRepository('EphpSinistriBundle:Evento')->findOneBy(array('scheda' => $scheda->getId(), 'tipo' => $tipo->getId()), array('delta_g' => 'DESC'));
+                    /* @var $verifica Evento */
+                    $delta_g = 0;
+                    if ($verifica) {
+                        $delta_g = $verifica->getDeltaG();
+                    }
+                    $dasc->setTime(3, 0, 0);
+                    $delta_g += 30;
+                    $dasc = \Ephp\UtilityBundle\Utility\Time::calcolaData($dasc, 30);
+                    while ($oggi->getTimestamp() > $dasc->getTimestamp()) {
+                        $eventoVerifica = new Evento();
+                        $eventoVerifica->setCalendario($cal);
+                        $eventoVerifica->setDataOra($dasc);
+                        $eventoVerifica->setDeltaG($delta_g);
+                        $eventoVerifica->setGiornoIntero(true);
+                        $eventoVerifica->setImportante(true);
+                        $eventoVerifica->setNote("Verifica a {$delta_g} giorni");
+                        $eventoVerifica->setOrdine($delta_g / 30);
+                        $eventoVerifica->setRischedulazione(false);
+                        $eventoVerifica->setScheda($scheda);
+                        $eventoVerifica->setTipo($tipo);
+                        $eventoVerifica->setTitolo('Verifica');
+                        $em->persist($eventoVerifica);
+                        $em->flush();
+                        $verifiche++;
+
+                        $delta_g += 30;
+                        $dasc = \Ephp\UtilityBundle\Utility\Time::calcolaData($dasc, 30);
+                    };
+                }
+            }
+            $i++;
+        } while (count($schede) > 0);
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('verifiche' => $verifiche)));
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
      * @Route("-uploadXlsSingle", name="tabellone_xls_upload_single")
      * @Template("EphpDragDropBundle:DragDrop:singleXls.html.php")
      */
@@ -684,13 +739,13 @@ class SchedaController extends DragDropController {
         if (!$scheda) {
             throw $this->createNotFoundException('Unable to find Scheda entity.');
         }
-        $out = array('id' => 'star_'.$req['id'], 'remove' => $scheda->getPrimaPagina() ? 'cal_important' : 'cal_normal', 'add' => $scheda->getPrimaPagina() ? 'cal_normal' : 'cal_important');
+        $out = array('id' => 'star_' . $req['id'], 'remove' => $scheda->getPrimaPagina() ? 'cal_important' : 'cal_normal', 'add' => $scheda->getPrimaPagina() ? 'cal_normal' : 'cal_important');
         $scheda->setPrimaPagina(!$scheda->getPrimaPagina());
         $em->persist($scheda);
         $em->flush();
         return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
     }
-    
+
     /**
      * Lists all Scheda entities.
      *
@@ -704,7 +759,7 @@ class SchedaController extends DragDropController {
         if (!$evento) {
             throw $this->createNotFoundException('Unable to find Scheda entity.');
         }
-        $out = array('id' => 'star_'.$req['id'], 'remove' => $evento->getImportante() ? 'cal_important' : 'cal_normal', 'add' => $evento->getImportante() ? 'cal_normal' : 'cal_important');
+        $out = array('id' => 'star_' . $req['id'], 'remove' => $evento->getImportante() ? 'cal_important' : 'cal_normal', 'add' => $evento->getImportante() ? 'cal_normal' : 'cal_important');
         $evento->setImportante(!$evento->getImportante());
         $em->persist($evento);
         $em->flush();
@@ -901,7 +956,7 @@ class SchedaController extends DragDropController {
                         'scheda' => $entity->getId(),
                         'titolo' => $evento->getTitolo(),
                         'note' => $evento->getNote(),
-                            ));
+                    ));
 //                    Debug::vd($old);
                     if (!$olds) {
                         $em->persist($evento);
@@ -978,7 +1033,7 @@ class SchedaController extends DragDropController {
                         'scheda' => $entity->getId(),
                         'titolo' => $evento->getTitolo(),
                         'note' => $evento->getNote(),
-                            ));
+                    ));
 //                    Debug::vd($old);
                     if (!$olds) {
                         $em->persist($evento);
@@ -1054,7 +1109,7 @@ class SchedaController extends DragDropController {
                         'tipo' => $tipo->getId(),
                         'scheda' => $entity->getId(),
                         'note' => $evento->getNote(),
-                            ));
+                    ));
 //                    Debug::vd($old);
                     if (!$olds) {
                         $em->persist($evento);
@@ -1415,8 +1470,8 @@ class SchedaController extends DragDropController {
                             $old = $_scheda->findOneBy(array('ospedale' => $scheda->getOspedale()->getId(), 'anno' => $scheda->getAnno(), 'tpa' => $scheda->getTpa()));
                             /* @var $old Scheda */
                             if ($old) {
-                                if($old->getPriorita() && $old->getPriorita()->getPriorita() == 'definita') {
-                                    if($old->getStato()->getId() != $scheda->getStato()->getId()) {
+                                if ($old->getPriorita() && $old->getPriorita()->getPriorita() == 'definita') {
+                                    if ($old->getStato()->getId() != $scheda->getStato()->getId()) {
                                         $old->setPriorita($_priorita->findOneBy(array('priorita' => 'riattivato')));
                                     }
                                 }
@@ -1564,8 +1619,8 @@ class SchedaController extends DragDropController {
                                     /* @var $old Scheda */
                                     if ($old) {
 //                                        Debug::vd($old, true);
-                                        if($old->getPriorita() && $old->getPriorita()->getPriorita() == 'definita') {
-                                            if($old->getStato()->getId() != $scheda->getStato()->getId()) {
+                                        if ($old->getPriorita() && $old->getPriorita()->getPriorita() == 'definita') {
+                                            if ($old->getStato()->getId() != $scheda->getStato()->getId()) {
                                                 $old->setPriorita($_priorita->findOneBy(array('priorita' => 'riattivato')));
                                             }
                                         }
@@ -1627,6 +1682,7 @@ class SchedaController extends DragDropController {
             $_tipo->createTipo('RVP', 'Ravinale Piemonte', 'ffaaff', $cal);
             $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
             $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
+            $_tipo->createTipo('VER', 'Verifica periodica', 'aaffaa', $cal);
         }
         return $cal;
     }

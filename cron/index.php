@@ -12,6 +12,12 @@ $crons = array(
         'titolo' => 'Agenda Giornaliera',
         'desc' => "Invia email a tutti i gestori con l'agenda giornaliera",
     ),
+    'verifica_30_giorni' => array(
+        'sf' => 'verifica_30_giorni',
+        'log' => 'verifica_30_giorni',
+        'titolo' => 'Verifica a 30 giorni',
+        'desc' => "Verifica che i sinistri attivi e genera gli eventi di verifica a 30 giorni",
+    ),
 );
 ?>
 <!DOCTYPE html>

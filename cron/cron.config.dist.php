@@ -17,3 +17,17 @@ $agenda_giornaliera = array(
         'send' => 'agenda_giornaliera',
     ),
 );
+$verifica_30_giorni = array(
+    'prod' => array(
+        'send' => '/tabellone-attivita-cron',
+    ),
+    'params' => array(
+        'send' => array(),
+    ),
+    'semafori' => array(
+        'send' => 'verifica_30_giorni',
+    ),
+    'log' => array(
+        'send' => 'verifica_30_giorni',
+    ),
+);

@@ -232,6 +232,7 @@ class CalendarController extends Controller {
             $_tipo->createTipo('RVP', 'Ravinale Piemonte', 'ffaaff', $cal);
             $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
             $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
+            $_tipo->createTipo('VER', 'Verifica periodica', 'aaffaa', $cal);
         }
         return $cal;
     }
