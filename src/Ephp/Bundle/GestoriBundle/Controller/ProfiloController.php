@@ -39,7 +39,6 @@ class ProfiloController extends Controller {
         $prima_pagina = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'prima_pagina' => true), array('claimant' => 'ASC'));
         $attenzione = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'priorita' => $priorita), array('claimant' => 'ASC'));
         $nuove = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('priorita' => $priorita_adm), array('claimant' => 'ASC'));
-
         return array(
             'gestore' => $gestore,
             'oggi' => new \DateTime(),
@@ -49,6 +48,7 @@ class ProfiloController extends Controller {
             'prima_pagina' => $prima_pagina,
             'attenzione' => $attenzione,
             'nuove' => $nuove,
+            'gestori' => $em->getRepository('EphpGestoriBundle:Gestore')->findBy(array(), array('sigla' => 'ASC')),
         );
     }
 

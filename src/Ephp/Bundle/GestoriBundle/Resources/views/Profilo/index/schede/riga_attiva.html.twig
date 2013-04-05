@@ -5,9 +5,13 @@
     <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
     <td>{{ entity.claimant }}</td>
     <td style="text-align: left"><span title="{{ entity.stato.stato }}">{{ entity.note|nl2br }}</span></td>
+    {% if not entity.gestore %}
+        <td style="text-align: center" class="chg"><a href="#fb_assegna_gestore" class="fancybox">Assegna</a></td>
+    {% else %}
     <td>
         <button type="button" onclick="javascript:window.location='{{ path('tabellone_show', {'id': entity.id}) }}'">
             Apri
         </button>
     </td>
+    {% endif %}
 </tr>
