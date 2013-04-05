@@ -616,7 +616,7 @@ class SchedaController extends DragDropController {
                     }
                     $dasc->setTime(3, 0, 0);
                     $delta_g += 30;
-                    $dasc = \Ephp\UtilityBundle\Utility\Time::calcolaData($dasc, 30);
+                    $dasc = \Ephp\UtilityBundle\Utility\Time::calcolaData($dasc, $delta_g);
                     while ($oggi->getTimestamp() > $dasc->getTimestamp()) {
                         $eventoVerifica = new Evento();
                         $eventoVerifica->setCalendario($cal);
@@ -624,7 +624,7 @@ class SchedaController extends DragDropController {
                         $eventoVerifica->setDeltaG($delta_g);
                         $eventoVerifica->setGiornoIntero(true);
                         $eventoVerifica->setImportante(true);
-                        $eventoVerifica->setNote("Verifica a {$delta_g} giorni");
+                        $eventoVerifica->setNote("");
                         $eventoVerifica->setOrdine($delta_g / 30);
                         $eventoVerifica->setRischedulazione(false);
                         $eventoVerifica->setScheda($scheda);
