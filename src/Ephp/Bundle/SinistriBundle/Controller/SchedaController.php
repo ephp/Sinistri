@@ -607,7 +607,8 @@ class SchedaController extends DragDropController {
                 set_time_limit(300);
                 /* @var $scheda Scheda */
                 $dasc = $scheda->getDasc();
-                if ($dasc && count($scheda->getEventi()) > 0 && $scheda->getPriorita() && $scheda->getPriorita()->getPriorita() != 'definita') {
+                $ev = $em->getRepository('EphpSinistriBundle:Evento')->findOneBy(array('scheda' => $scheda->getId()));
+                if ($dasc && $ev && $scheda->getPriorita() && $scheda->getPriorita()->getPriorita() != 'definita') {
                     $verifica = $em->getRepository('EphpSinistriBundle:Evento')->findOneBy(array('scheda' => $scheda->getId(), 'tipo' => $tipo->getId()), array('delta_g' => 'DESC'));
                     /* @var $verifica Evento */
                     $delta_g = 0;
