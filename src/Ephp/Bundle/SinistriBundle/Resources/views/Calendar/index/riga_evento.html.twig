@@ -16,5 +16,5 @@
 </tr>
 <tr id="riga_{{ entity.id }}b" style="background-color: #{{ entity.tipo.colore }}; {% if oggi|date('d-m-Y') ==  entity.dataOra|date('d-m-Y') %}font-weight: bold;{% endif %}">
     {% endif %}
-    <td {% if small is defined %}colspan="5"{% endif %} style="background-color: transparent;">{{ entity.note }}</td>
+    <td {% if small is defined %}colspan="5"{% endif %} style="background-color: transparent;"><textarea style="width: 550px; height: 20px;" class="autoupdate autogrow" evento="{{ entity.id }}" name="note" placeholder="Inserisci qui le tue note">{{ entity.note }}</textarea></td>
 </tr>

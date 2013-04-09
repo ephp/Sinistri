@@ -80,5 +80,25 @@
             //setTimeout(function(){runFiltro();}, 10);
         });
     });
+    function autoupdate() {
+        $('.autoupdate').change(function(){
+            val = $(this).val();
+            pratica = $(this).attr('pratica');
+            evento = $(this).attr('evento');
+            field = $(this).attr('name');
+            if(pratica) {
+                $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
+                    checkUm();
+                });
+            } else {
+                $.post('{{ path('tabellone_calendario_autoupdate') }}', {'evento': {'id': evento, 'field': field, 'value': val}}, function(out) {
+                    if(out.reload == 1) {
+                        window.location = window.location;
+                    }
+                });
+            }
+        });
+    }
+    autoupdate();
 </script>
 {% endblock %}
