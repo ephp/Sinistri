@@ -486,6 +486,12 @@ class SchedaController extends DragDropController {
                 case 'note':
                     $scheda->setNote($req['value']);
                     break;
+                case 'dati':
+                    $scheda->setDati($req['value']);
+                    break;
+                case 'legali_avversari':
+                    $scheda->setLegaliAvversari($req['value']);
+                    break;
             }
             $em->persist($scheda);
             $em->flush();

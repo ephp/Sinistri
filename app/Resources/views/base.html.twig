@@ -34,6 +34,7 @@
                             <li><a href="{{ path('profilo') }}">Profilo</a></li>
                             <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
                             <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
+                            <li><a href="{{ path('strumenti') }}">Strumenti</a></li>
                         </ul>
                         <div style="clear: both"></div>
                     {% endif %}
@@ -56,6 +57,8 @@
                         <h1>Benvenuto {{ app.user.nome }}.</h1>
                         <p>Il portale è in fase di sviluppo... ma cosa c'è per ora? (ultimo aggiornamento 09/04/2013 ore 14:00)</p>
                         <dl>
+                            <dt style="color: red;">Strumenti</dt>
+                            <dd style="color: red;">Sono stati aggiunti alcuni strumenti di calcolo dal sito http://www.avvocatoandreani.it/</dd>
                             <dt>Profilo personale</dt>
                             <dd>Ogni gestore ha un suo profilo, col quale lavorare<br/>
                                 <ul>
@@ -108,6 +111,7 @@
                             <dt>Pratica</dt>
                             <dd>Visualizzazione delle pratiche<br/>
                                 <ul>
+                                    <li style="padding-bottom: 0px; color: red;">Aggiunti i campi liberi "Legali avversari" e "Dati"</li>
                                     <li style="padding-bottom: 0px;">Creazione delle date automatiche</li>
                                     <li style="padding-bottom: 0px;">Inserimento di date manuali</li>
                                     <li style="padding-bottom: 0px;">Colorazione date a seconda della tipologia</li>
