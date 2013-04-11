@@ -4,6 +4,9 @@
             <button onclick="window.location = '{{ path('tabellone_stampa', {'id': entity.id}) }}'">
                 Stampa scheda
             </button>
+            <button onclick="window.location = '{{ path('tabellone_report', {'id': entity.id}) }}'">
+                Report
+            </button>
         </li>
         {% if app.user.hasRole('ROLE_ADMIN') %}
             <li>Torna al tabellone<br/>di {{ entity.gestore.nome }}</li>

@@ -33,11 +33,11 @@
             <td colspan="2">Giudiziale:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_giudiziale">{{ entity.reportGiudiziale }}</textarea></td>
         </tr>
         <tr>
-            <td colspan="2">Descrizione evento:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_other_policies">{{ entity.reportOtherPolicies }}</textarea></td>
+            <td colspan="2">Other Policies:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_other_policies">{{ entity.reportOtherPolicies }}</textarea></td>
         </tr>
         <tr>
             <td>Tipo danno (TPL):<input type="text" class="autoupdate" pratica="{{ entity.id }}" name="_tpl" value="{{ entity.reportTypeOfLoss }}"/></td>
-            <td>Dipartimento ospedaliero: {{ entity.reportDon }}</td>
+            <td>Dipartimento ospedaliero: {{ entity.serviceProvider }}</td>
         </tr>
         <tr>
             <td>Possible Recovery:<input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="_possible_recovery" value="{{ entity.reportPossibleRecovery }}"/></td>

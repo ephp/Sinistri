@@ -491,7 +491,7 @@ class SchedaController extends DragDropController {
 
         $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
         $scheda = $_scheda->find($req['id']);
-        /* @var $scheda Scheda */
+        /* @var $scheda \Ephp\Bundle\SinistriBundle\Entity\Scheda */
         try {
             switch ($req['field']) {
                 case 'firstReserve':
@@ -527,6 +527,44 @@ class SchedaController extends DragDropController {
                     break;
                 case 'legali_avversari':
                     $scheda->setLegaliAvversari($req['value']);
+                    break;
+                case '_soi':
+                    $scheda->setReportSoi($req['value']);
+                    break;
+                case '_dol':
+                    $dol = \DateTime::createFromFormat('d/m/Y', $req['value']);
+                    $scheda->setReportDol($dol);
+                    break;
+                case '_don':
+                    $don = \DateTime::createFromFormat('d/m/Y', $req['value']);
+                    $scheda->setReportDon($don);
+                    break;
+                case '_description':
+                    $scheda->setReportDescrizione($req['value']);
+                    break;
+                case '_mpl':
+                    $scheda->setReportMpl($req['value']);
+                    break;
+                case '_giudiziale':
+                    $scheda->setReportGiudiziale($req['value']);
+                    break;
+                case '_other_policies':
+                    $scheda->setReportOtherPolicies($req['value']);
+                    break;
+                case '_tpl':
+                    $scheda->setReportTypeOfLoss($req['value']);
+                    break;
+                case '_possible_recovery':
+                    $scheda->setReportPossibleRecovery($req['value']);
+                    break;
+                case '_amount_reserved':
+                    $scheda->setReportAmountReserved($req['value']);
+                    break;
+                case '_applicable_deductable':
+                    $scheda->setReportApplicableDeductable($req['value']);
+                    break;
+                case '_future_conduct':
+                    $scheda->setReportFutureConduct($req['value']);
                     break;
             }
             $em->persist($scheda);
