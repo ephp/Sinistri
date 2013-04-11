@@ -1,0 +1,77 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }} - Report
+{% endblock %}
+
+{% block content %}
+<h1>Report {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
+
+<table class="records_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
+    <thead>
+        <tr>
+            <th>Claimant: {{ entity.claimant }}</th>
+            <th>TPA: {{ entity.ospedale.tpa }}</th>
+        </tr>
+        <tr>
+            <th>SOI: <input type="text" style="color: #eeeeee;" class="autoupdate" pratica="{{ entity.id }}" name="_soi" value="{{ entity.reportSoi }}"/></th>
+            <th>N.Claim: {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Data evento (DOL):<input type="text" class="autoupdate autodate" pratica="{{ entity.id }}" name="_dol" value="{% if entity.reportDol %}{{ entity.reportDol|date('d/m/Y') }}{% endif %}"/></td>
+            <td>Data reclamo (DON):<input type="text" class="autoupdate autodate" pratica="{{ entity.id }}" name="_don" value="{% if entity.reportDon %}{{ entity.reportDon|date('d/m/Y') }}{% endif %}"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">Descrizione evento:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_description">{{ entity.reportDescrizione }}</textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2">MPL:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_mpl">{{ entity.reportMpl }}</textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2">Giudiziale:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_giudiziale">{{ entity.reportGiudiziale }}</textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2">Descrizione evento:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_other_policies">{{ entity.reportOtherPolicies }}</textarea></td>
+        </tr>
+        <tr>
+            <td>Tipo danno (TPL):<input type="text" class="autoupdate" pratica="{{ entity.id }}" name="_tpl" value="{{ entity.reportTypeOfLoss }}"/></td>
+            <td>Dipartimento ospedaliero: {{ entity.reportDon }}</td>
+        </tr>
+        <tr>
+            <td>Possible Recovery:<input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="_possible_recovery" value="{{ entity.reportPossibleRecovery }}"/></td>
+            <td>Amount Reserved:<input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="_amount_reserved" value="{{ entity.reportAmountReserved }}"/></td>
+        </tr>
+        <tr>
+            <td>Applicable Deductable:<input type="text" class="autoupdate currency" pratica="{{ entity.id }}" name="_applicable_deductable" value="{{ entity.reportApplicableDeductable }}"/></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">Future Conduct:<br/><textarea class="autoupdate autogrow" style="height: 32px; width: 620px;" pratica="{{ entity.id }}" name="_future_conduct">{{ entity.reportFutureConduct }}</textarea></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>AVV. {{ entity.reportGestore.nome }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<script type="text/javascript">
+    sanitizeCurrency([$('.currency')]);
+    sanitizeDate([$('.autodate')]);
+    function autoupdate() {
+        $('.autoupdate').change(function(){
+            val = $(this).val();
+            pratica = $(this).attr('pratica');
+            field = $(this).attr('name');
+            $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
+                checkUm();
+            });
+        });
+    }
+    autoupdate();
+</script>
+{% endblock %}

@@ -181,6 +181,148 @@ class Scheda {
     private $prima_pagina;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dol", type="date", nullable=true)
+     */
+    private $dol;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="don", type="date", nullable=true)
+     */
+    private $don;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type_of_loss", type="string", length=5, nullable=true)
+     */
+    private $type_of_loss;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="service_provider", type="string", length=5, nullable=true)
+     */
+    private $service_provider;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="possible_recovery", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $possible_recovery;
+    
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="applicable_deductable", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $applicable_deductable;
+    
+    // REPORT
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="report_soi", type="string", length=2, nullable=true)
+     */
+    private $report_soi;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="report_dol", type="date", nullable=true)
+     */
+    private $report_dol;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="report_don", type="date", nullable=true)
+     */
+    private $report_don;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_descrizione", type="text", nullable=true)
+     */
+    private $report_descrizione;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_mpl", type="text", nullable=true)
+     */
+    private $report_mpl;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_giudiziale", type="text", nullable=true)
+     */
+    private $report_giudiziale;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_other_policies", type="text", nullable=true)
+     */
+    private $report_other_policies;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="report_type_of_loss", type="string", length=5, nullable=true)
+     */
+    private $report_type_of_loss;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="report_service_provider", type="string", length=5, nullable=true)
+     */
+    private $report_service_provider;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_possible_recovery", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $report_possible_recovery;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_amount_reserved", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $report_amount_reserved;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_applicable_deductable", type="decimal", precision=15, scale=2, nullable=true)
+     */
+    private $report_applicable_deductable;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_future_conduct", type="text", nullable=true)
+     */
+    private $report_future_conduct;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Ephp\Bundle\GestoriBundle\Entity\Gestore")
+     * @ORM\JoinColumn(name="report_gestore_id", referencedColumnName="id")
+     */
+    private $report_gestore;
+    
+    
+    /**
      * Constructor
      */
     public function __construct() {
@@ -669,5 +811,465 @@ class Scheda {
     public function getPrimaPagina()
     {
         return $this->prima_pagina;
+    }
+
+    /**
+     * Set legali_avversari
+     *
+     * @param string $legaliAvversari
+     * @return Scheda
+     */
+    public function setLegaliAvversari($legaliAvversari)
+    {
+        $this->legali_avversari = $legaliAvversari;
+    
+        return $this;
+    }
+
+    /**
+     * Get legali_avversari
+     *
+     * @return string 
+     */
+    public function getLegaliAvversari()
+    {
+        return $this->legali_avversari;
+    }
+
+    /**
+     * Set dati
+     *
+     * @param string $dati
+     * @return Scheda
+     */
+    public function setDati($dati)
+    {
+        $this->dati = $dati;
+    
+        return $this;
+    }
+
+    /**
+     * Get dati
+     *
+     * @return string 
+     */
+    public function getDati()
+    {
+        return $this->dati;
+    }
+
+    /**
+     * Set dol
+     *
+     * @param \DateTime $dol
+     * @return Scheda
+     */
+    public function setDol($dol)
+    {
+        $this->dol = $dol;
+    
+        return $this;
+    }
+
+    /**
+     * Get dol
+     *
+     * @return \DateTime 
+     */
+    public function getDol()
+    {
+        return $this->dol;
+    }
+
+    /**
+     * Set don
+     *
+     * @param \DateTime $don
+     * @return Scheda
+     */
+    public function setDon($don)
+    {
+        $this->don = $don;
+    
+        return $this;
+    }
+
+    /**
+     * Get don
+     *
+     * @return \DateTime 
+     */
+    public function getDon()
+    {
+        return $this->don;
+    }
+
+    /**
+     * Set type_of_loss
+     *
+     * @param string $typeOfLoss
+     * @return Scheda
+     */
+    public function setTypeOfLoss($typeOfLoss)
+    {
+        $this->type_of_loss = $typeOfLoss;
+    
+        return $this;
+    }
+
+    /**
+     * Get type_of_loss
+     *
+     * @return string 
+     */
+    public function getTypeOfLoss()
+    {
+        return $this->type_of_loss;
+    }
+
+    /**
+     * Set possible_recovery
+     *
+     * @param float $possibleRecovery
+     * @return Scheda
+     */
+    public function setPossibleRecovery($possibleRecovery)
+    {
+        $this->possible_recovery = $possibleRecovery;
+    
+        return $this;
+    }
+
+    /**
+     * Get possible_recovery
+     *
+     * @return float 
+     */
+    public function getPossibleRecovery()
+    {
+        return $this->possible_recovery;
+    }
+
+    /**
+     * Set report_soi
+     *
+     * @param string $reportSoi
+     * @return Scheda
+     */
+    public function setReportSoi($reportSoi)
+    {
+        $this->report_soi = $reportSoi;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_soi
+     *
+     * @return string 
+     */
+    public function getReportSoi()
+    {
+        return $this->report_soi;
+    }
+
+    /**
+     * Set report_dol
+     *
+     * @param \DateTime $reportDol
+     * @return Scheda
+     */
+    public function setReportDol($reportDol)
+    {
+        $this->report_dol = $reportDol;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_dol
+     *
+     * @return \DateTime 
+     */
+    public function getReportDol()
+    {
+        return $this->report_dol;
+    }
+
+    /**
+     * Set report_don
+     *
+     * @param \DateTime $reportDon
+     * @return Scheda
+     */
+    public function setReportDon($reportDon)
+    {
+        $this->report_don = $reportDon;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_don
+     *
+     * @return \DateTime 
+     */
+    public function getReportDon()
+    {
+        return $this->report_don;
+    }
+
+    /**
+     * Set report_descrizione
+     *
+     * @param string $reportDescrizione
+     * @return Scheda
+     */
+    public function setReportDescrizione($reportDescrizione)
+    {
+        $this->report_descrizione = $reportDescrizione;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_descrizione
+     *
+     * @return string 
+     */
+    public function getReportDescrizione()
+    {
+        return $this->report_descrizione;
+    }
+
+    /**
+     * Set report_mpl
+     *
+     * @param string $reportMpl
+     * @return Scheda
+     */
+    public function setReportMpl($reportMpl)
+    {
+        $this->report_mpl = $reportMpl;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_mpl
+     *
+     * @return string 
+     */
+    public function getReportMpl()
+    {
+        return $this->report_mpl;
+    }
+
+    /**
+     * Set report_giudiziale
+     *
+     * @param string $reportGiudiziale
+     * @return Scheda
+     */
+    public function setReportGiudiziale($reportGiudiziale)
+    {
+        $this->report_giudiziale = $reportGiudiziale;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_giudiziale
+     *
+     * @return string 
+     */
+    public function getReportGiudiziale()
+    {
+        return $this->report_giudiziale;
+    }
+
+    /**
+     * Set report_other_policies
+     *
+     * @param string $reportOtherPolicies
+     * @return Scheda
+     */
+    public function setReportOtherPolicies($reportOtherPolicies)
+    {
+        $this->report_other_policies = $reportOtherPolicies;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_other_policies
+     *
+     * @return string 
+     */
+    public function getReportOtherPolicies()
+    {
+        return $this->report_other_policies;
+    }
+
+    /**
+     * Set report_type_of_loss
+     *
+     * @param string $reportTypeOfLoss
+     * @return Scheda
+     */
+    public function setReportTypeOfLoss($reportTypeOfLoss)
+    {
+        $this->report_type_of_loss = $reportTypeOfLoss;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_type_of_loss
+     *
+     * @return string 
+     */
+    public function getReportTypeOfLoss()
+    {
+        return $this->report_type_of_loss;
+    }
+
+    /**
+     * Set report_possible_recovery
+     *
+     * @param float $reportPossibleRecovery
+     * @return Scheda
+     */
+    public function setReportPossibleRecovery($reportPossibleRecovery)
+    {
+        $this->report_possible_recovery = $reportPossibleRecovery;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_possible_recovery
+     *
+     * @return float 
+     */
+    public function getReportPossibleRecovery()
+    {
+        return $this->report_possible_recovery;
+    }
+
+    /**
+     * Set report_amount_reserved
+     *
+     * @param float $reportAmountReserved
+     * @return Scheda
+     */
+    public function setReportAmountReserved($reportAmountReserved)
+    {
+        $this->report_amount_reserved = $reportAmountReserved;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_amount_reserved
+     *
+     * @return float 
+     */
+    public function getReportAmountReserved()
+    {
+        return $this->report_amount_reserved;
+    }
+
+    /**
+     * Set report_applicable_deductable
+     *
+     * @param string $reportApplicableDeductable
+     * @return Scheda
+     */
+    public function setReportApplicableDeductable($reportApplicableDeductable)
+    {
+        $this->report_applicable_deductable = $reportApplicableDeductable;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_applicable_deductable
+     *
+     * @return string 
+     */
+    public function getReportApplicableDeductable()
+    {
+        return $this->report_applicable_deductable;
+    }
+
+    /**
+     * Set report_future_conduct
+     *
+     * @param string $reportFutureConduct
+     * @return Scheda
+     */
+    public function setReportFutureConduct($reportFutureConduct)
+    {
+        $this->report_future_conduct = $reportFutureConduct;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_future_conduct
+     *
+     * @return string 
+     */
+    public function getReportFutureConduct()
+    {
+        return $this->report_future_conduct;
+    }
+
+    /**
+     * Set report_gestore
+     *
+     * @param \Ephp\Bundle\GestoriBundle\Entity\Gestore $reportGestore
+     * @return Scheda
+     */
+    public function setReportGestore(\Ephp\Bundle\GestoriBundle\Entity\Gestore $reportGestore = null)
+    {
+        $this->report_gestore = $reportGestore;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_gestore
+     *
+     * @return \Ephp\Bundle\GestoriBundle\Entity\Gestore 
+     */
+    public function getReportGestore()
+    {
+        return $this->report_gestore;
+    }
+
+    /**
+     * Set applicable_deductable
+     *
+     * @param float $applicableDeductable
+     * @return Scheda
+     */
+    public function setApplicableDeductable($applicableDeductable)
+    {
+        $this->applicable_deductable = $applicableDeductable;
+    
+        return $this;
+    }
+
+    /**
+     * Get applicable_deductable
+     *
+     * @return float 
+     */
+    public function getApplicableDeductable()
+    {
+        return $this->applicable_deductable;
     }
 }

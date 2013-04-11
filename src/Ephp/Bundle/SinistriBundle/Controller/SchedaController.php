@@ -314,6 +314,42 @@ class SchedaController extends DragDropController {
     /**
      * Finds and displays a Scheda entity.
      *
+     * @Route("-report/{id}", name="tabellone_report")
+     * @Template()
+     */
+    public function reportAction($id) {
+        $em = $this->getEm();
+
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+        
+        if(!$entity->getReportGestore()) {
+            $entity->setReportAmountReserved($entity->getAmountReserved());
+            $entity->setReportApplicableDeductable($entity->getApplicableDeductable());
+            $entity->setReportDol($entity->getDol());
+            $entity->setReportDon($entity->getDon());
+            $entity->setReportGestore($entity->getGestore());
+            $entity->setReportPossibleRecovery($entity->getPossibleRecovery());
+            $entity->setReportServiceProvider($entity->getServiceProvider());
+            $entity->setReportSoi($entity->getSoi());
+            $entity->setReportTypeOfLoss($entity->getTypeOfLoss());
+            $em->persist($entity);
+            $em->flush();
+        }
+        
+        return array(
+            'entity' => $entity,
+            'gestori' => $em->getRepository('EphpGestoriBundle:Gestore')->findBy(array(), array('nome' => 'ASC')),
+        );
+    }
+
+    /**
+     * Finds and displays a Scheda entity.
+     *
      * @Route("-stampa/{id}", name="tabellone_stampa")
      * @Template()
      */
@@ -1442,12 +1478,30 @@ class SchedaController extends DragDropController {
                                             $scheda->setSoi($td->nodeValue);
                                         }
                                         break;
+                                    case 'DOL':
+                                        if ($td->nodeValue) {
+                                            $dol = \DateTime::createFromFormat('d/m/Y', $td->nodeValue);
+                                            $scheda->setDol($dol);
+                                        }
+                                        break;
+                                    case 'DON':
+                                        if ($td->nodeValue) {
+                                            $don = \DateTime::createFromFormat('d/m/Y', $td->nodeValue);
+                                            $scheda->setDon($don);
+                                        }
+                                        break;
+                                    case 'TYPE OF LOSS':
+                                        if ($td->nodeValue) {
+                                            $scheda->setTypeOfLoss($td->nodeValue);
+                                        }
+                                        break;
                                     case 'FIRST RESERVE INDICATION':
                                         if ($td->nodeValue) {
                                             $scheda->setFirstReserve(String::currency($td->nodeValue));
                                         }
                                         break;
                                     case 'APPLICABLE DEDUCTIBLE':
+                                        $scheda->setApplicableDeductable(String::currency($td->nodeValue));
                                         $scheda->setFranchigia(String::currency($td->nodeValue));
                                         break;
                                     case 'AMOUNT RESERVED':
@@ -1457,6 +1511,14 @@ class SchedaController extends DragDropController {
                                             } else {
                                                 $scheda->setAmountReserved(-1);
                                             }
+                                        }
+                                        break;
+                                    case 'POSSIBLE RECOVERY':
+                                        $scheda->setPossibleRecovery(String::currency($td->nodeValue));
+                                        break;
+                                    case 'TYPE OF LOSS':
+                                        if ($td->nodeValue) {
+                                            $scheda->setServiceProvider($td->nodeValue);
                                         }
                                         break;
                                     case 'STATUS':
@@ -1484,6 +1546,13 @@ class SchedaController extends DragDropController {
                                 }
                                 $old->setAmountReserved($scheda->getAmountReserved());
                                 $old->setFirstReserve($scheda->getFirstReserve());
+                                $old->setDol($scheda->getDol());
+                                $old->setDon($scheda->getDon());
+                                $old->setPossibleRecovery($scheda->getPossibleRecovery());
+                                $old->setFranchigia($scheda->getFranchigia());
+                                $old->setTypeOfLoss($scheda->getTypeOfLoss());
+                                $old->setServiceProvider($scheda->getServiceProvider());
+                                $old->setApplicableDeductable($scheda->getApplicableDeductable());
                                 $old->setSoi($scheda->getSoi());
                                 $old->setStato($scheda->getStato());
                                 $em->persist($old);
@@ -1577,6 +1646,28 @@ class SchedaController extends DragDropController {
                                             case 'CLAYMANT':
                                                 $scheda->setClaimant($value);
                                                 break;
+                                            case 'DOL':
+                                                if ($value) {
+                                                    $dol = \DateTime::createFromFormat('d/m/Y', $value);
+                                                    $scheda->setDol($dol);
+                                                }
+                                                break;
+                                            case 'DON':
+                                                if ($value) {
+                                                    $don = \DateTime::createFromFormat('d/m/Y', $value);
+                                                    $scheda->setDon($don);
+                                                }
+                                                break;
+                                            case 'TYPE OF LOSS':
+                                                if ($value) {
+                                                    $scheda->setTypeOfLoss($value);
+                                                }
+                                                break;
+                                            case 'S.P.':
+                                                if ($value) {
+                                                    $scheda->setServiceProvider($value);
+                                                }
+                                                break;
                                             case 'S.of I.':
                                                 if ($value) {
                                                     $scheda->setSoi($value);
@@ -1592,16 +1683,22 @@ class SchedaController extends DragDropController {
                                                 break;
                                             case 'FIRST RESERVE INDICATION':
                                                 if ($value) {
-                                                    $scheda->setFirstReserve(String::currency($value));
+                                                    $scheda->setFirstReserve(String::currency($value, ',', '.'));
+                                                }
+                                                break;
+                                            case 'POSSIBLE RECOVERY':
+                                                if ($value) {
+                                                    $scheda->setPossibleRecovery(String::currency($value, ',', '.'));
                                                 }
                                                 break;
                                             case 'DEDUC. RESERVE':
-                                                $scheda->setFranchigia(String::currency($value));
+                                                $scheda->setApplicableDeductable(String::currency($value, ',', '.'));
+                                                $scheda->setFranchigia(String::currency($value, ',', '.'));
                                                 break;
                                             case 'AMOUNT RESERVED':
                                                 if ($value) {
                                                     if ($value != 'N.P.') {
-                                                        $scheda->setAmountReserved(String::currency($value));
+                                                        $scheda->setAmountReserved(String::currency($value, ',', '.'));
                                                     } else {
                                                         $scheda->setAmountReserved(-1);
                                                     }
@@ -1634,6 +1731,13 @@ class SchedaController extends DragDropController {
                                         $old->setAmountReserved($scheda->getAmountReserved());
                                         $old->setFirstReserve($scheda->getFirstReserve());
                                         $old->setDasc($scheda->getDasc());
+                                        $old->setDol($scheda->getDol());
+                                        $old->setDon($scheda->getDon());
+                                        $old->setPossibleRecovery($scheda->getPossibleRecovery());
+                                        $old->setFranchigia($scheda->getFranchigia());
+                                        $old->setTypeOfLoss($scheda->getTypeOfLoss());
+                                        $old->setServiceProvider($scheda->getServiceProvider());
+                                        $old->setApplicableDeductable($scheda->getApplicableDeductable());
                                         $old->setSoi($scheda->getSoi());
                                         $old->setStato($scheda->getStato());
 //                                        Debug::vd($old);

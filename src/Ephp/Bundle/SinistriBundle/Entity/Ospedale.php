@@ -49,6 +49,13 @@ class Ospedale
      */
     private $nome;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tpa", type="string", length=16)
+     */
+    private $tpa;
+
 
     /**
      * Get id
@@ -150,5 +157,28 @@ class Ospedale
     public function getNomeGruppo()
     {
         return $this->nome_gruppo;
+    }
+
+    /**
+     * Set tpa
+     *
+     * @param string $tpa
+     * @return Ospedale
+     */
+    public function setTpa($tpa)
+    {
+        $this->tpa = $tpa;
+    
+        return $this;
+    }
+
+    /**
+     * Get tpa
+     *
+     * @return string 
+     */
+    public function getTpa()
+    {
+        return $this->tpa;
     }
 }
