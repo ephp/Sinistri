@@ -1,0 +1,25 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Report
+{% endblock %}
+
+{% block content %}
+<h1>Report creation</h1>
+
+<form action="{{ path('report_tabellone_create', {'scheda': scheda}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Create</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('report_tabellone', {'scheda': scheda}) }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+
+{% endblock %}

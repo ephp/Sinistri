@@ -1,0 +1,561 @@
+<?php
+
+namespace Ephp\Bundle\SinistriBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Report
+ *
+ * @ORM\Table(name="sx_report")
+ * @ORM\Entity(repositoryClass="Ephp\Bundle\SinistriBundle\Entity\ReportRepository")
+ */
+class Report
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Scheda")
+     * @ORM\JoinColumn(name="scheda_id", referencedColumnName="id")
+     */
+    private $scheda;
+
+    /**
+     * @var date
+     *
+     * @ORM\Column(name="data", type="date")
+     */
+    private $data;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="number", type="integer")
+     */
+    private $number;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="copertura", type="text")
+     */
+    private $copertura;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="stato", type="text")
+     */
+    private $stato;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descrizione_in_fatto", type="text")
+     */
+    private $descrizione_in_fatto;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="relazione_avversaria", type="text")
+     */
+    private $relazione_avversaria;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="relazione_ex_adverso", type="text")
+     */
+    private $relazione_ex_adverso;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valutazione_responsabilita", type="text")
+     */
+    private $valutazione_responsabilita;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="analisi_danno", type="text")
+     */
+    private $analisi_danno;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="riserva", type="text")
+     */
+    private $riserva;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="possibile_rivalsa", type="text")
+     */
+    private $possibile_rivalsa;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="azioni", type="text")
+     */
+    private $azioni;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="richiesta_sa", type="text")
+     */
+    private $richiesta_sa;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text")
+     */
+    private $note;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="validato", type="boolean")
+     */
+    private $validato;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="MedicoLegale")
+     * @ORM\JoinTable(name="sx_report_medici_legali",
+     *      joinColumns={@ORM\JoinColumn(name="report_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="medico_legale_id", referencedColumnName="id")}
+     *      )
+     */
+    private $medici_legali;
+    /**
+     * Set scheda
+     *
+     * @param string $scheda
+     * @return Report
+     */
+    public function setScheda($scheda)
+    {
+        $this->scheda = $scheda;
+    
+        return $this;
+    }
+
+    /**
+     * Get scheda
+     *
+     * @return string 
+     */
+    public function getScheda()
+    {
+        return $this->scheda;
+    }
+
+    /**
+     * Set number
+     *
+     * @param integer $number
+     * @return Report
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    
+        return $this;
+    }
+
+    /**
+     * Get number
+     *
+     * @return integer 
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set copertura
+     *
+     * @param string $copertura
+     * @return Report
+     */
+    public function setCopertura($copertura)
+    {
+        $this->copertura = $copertura;
+    
+        return $this;
+    }
+
+    /**
+     * Get copertura
+     *
+     * @return string 
+     */
+    public function getCopertura()
+    {
+        return $this->copertura;
+    }
+
+    /**
+     * Set stato
+     *
+     * @param string $stato
+     * @return Report
+     */
+    public function setStato($stato)
+    {
+        $this->stato = $stato;
+    
+        return $this;
+    }
+
+    /**
+     * Get stato
+     *
+     * @return string 
+     */
+    public function getStato()
+    {
+        return $this->stato;
+    }
+
+    /**
+     * Set descrizione_in_fatto
+     *
+     * @param string $descrizioneInFatto
+     * @return Report
+     */
+    public function setDescrizioneInFatto($descrizioneInFatto)
+    {
+        $this->descrizione_in_fatto = $descrizioneInFatto;
+    
+        return $this;
+    }
+
+    /**
+     * Get descrizione_in_fatto
+     *
+     * @return string 
+     */
+    public function getDescrizioneInFatto()
+    {
+        return $this->descrizione_in_fatto;
+    }
+
+    /**
+     * Set relazione_avversaria
+     *
+     * @param string $relazioneAvversaria
+     * @return Report
+     */
+    public function setRelazioneAvversaria($relazioneAvversaria)
+    {
+        $this->relazione_avversaria = $relazioneAvversaria;
+    
+        return $this;
+    }
+
+    /**
+     * Get relazione_avversaria
+     *
+     * @return string 
+     */
+    public function getRelazioneAvversaria()
+    {
+        return $this->relazione_avversaria;
+    }
+
+    /**
+     * Set relazione_ex_adverso
+     *
+     * @param string $relazioneExAdverso
+     * @return Report
+     */
+    public function setRelazioneExAdverso($relazioneExAdverso)
+    {
+        $this->relazione_ex_adverso = $relazioneExAdverso;
+    
+        return $this;
+    }
+
+    /**
+     * Get relazione_ex_adverso
+     *
+     * @return string 
+     */
+    public function getRelazioneExAdverso()
+    {
+        return $this->relazione_ex_adverso;
+    }
+
+    /**
+     * Set valutazione_responsabilita
+     *
+     * @param string $valutazioneResponsabilita
+     * @return Report
+     */
+    public function setValutazioneResponsabilita($valutazioneResponsabilita)
+    {
+        $this->valutazione_responsabilita = $valutazioneResponsabilita;
+    
+        return $this;
+    }
+
+    /**
+     * Get valutazione_responsabilita
+     *
+     * @return string 
+     */
+    public function getValutazioneResponsabilita()
+    {
+        return $this->valutazione_responsabilita;
+    }
+
+    /**
+     * Set analisi_danno
+     *
+     * @param string $analisiDanno
+     * @return Report
+     */
+    public function setAnalisiDanno($analisiDanno)
+    {
+        $this->analisi_danno = $analisiDanno;
+    
+        return $this;
+    }
+
+    /**
+     * Get analisi_danno
+     *
+     * @return string 
+     */
+    public function getAnalisiDanno()
+    {
+        return $this->analisi_danno;
+    }
+
+    /**
+     * Set riserva
+     *
+     * @param string $riserva
+     * @return Report
+     */
+    public function setRiserva($riserva)
+    {
+        $this->riserva = $riserva;
+    
+        return $this;
+    }
+
+    /**
+     * Get riserva
+     *
+     * @return string 
+     */
+    public function getRiserva()
+    {
+        return $this->riserva;
+    }
+
+    /**
+     * Set possibile_rivalsa
+     *
+     * @param string $possibileRivalsa
+     * @return Report
+     */
+    public function setPossibileRivalsa($possibileRivalsa)
+    {
+        $this->possibile_rivalsa = $possibileRivalsa;
+    
+        return $this;
+    }
+
+    /**
+     * Get possibile_rivalsa
+     *
+     * @return string 
+     */
+    public function getPossibileRivalsa()
+    {
+        return $this->possibile_rivalsa;
+    }
+
+    /**
+     * Set azioni
+     *
+     * @param string $azioni
+     * @return Report
+     */
+    public function setAzioni($azioni)
+    {
+        $this->azioni = $azioni;
+    
+        return $this;
+    }
+
+    /**
+     * Get azioni
+     *
+     * @return string 
+     */
+    public function getAzioni()
+    {
+        return $this->azioni;
+    }
+
+    /**
+     * Set richiesta_sa
+     *
+     * @param string $richiestaSa
+     * @return Report
+     */
+    public function setRichiestaSa($richiestaSa)
+    {
+        $this->richiesta_sa = $richiestaSa;
+    
+        return $this;
+    }
+
+    /**
+     * Get richiesta_sa
+     *
+     * @return string 
+     */
+    public function getRichiestaSa()
+    {
+        return $this->richiesta_sa;
+    }
+
+    /**
+     * Set note
+     *
+     * @param string $note
+     * @return Report
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string 
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->medici_legali = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set validato
+     *
+     * @param boolean $validato
+     * @return Report
+     */
+    public function setValidato($validato)
+    {
+        $this->validato = $validato;
+    
+        return $this;
+    }
+
+    /**
+     * Get validato
+     *
+     * @return boolean 
+     */
+    public function getValidato()
+    {
+        return $this->validato;
+    }
+
+    /**
+     * Add medici_legali
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali
+     * @return Report
+     */
+    public function addMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali)
+    {
+        $this->medici_legali[] = $mediciLegali;
+    
+        return $this;
+    }
+
+    /**
+     * Remove medici_legali
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali
+     */
+    public function removeMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali)
+    {
+        $this->medici_legali->removeElement($mediciLegali);
+    }
+
+    /**
+     * Get medici_legali
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMediciLegali()
+    {
+        return $this->medici_legali;
+    }
+
+    /**
+     * Set data
+     *
+     * @param \DateTime $data
+     * @return Report
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    
+        return $this;
+    }
+
+    /**
+     * Get data
+     *
+     * @return \DateTime 
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+}

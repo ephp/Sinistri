@@ -168,6 +168,14 @@ class Scheda {
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
+     * @ORM\OneToMany(targetEntity="Report", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
+     * @ORM\OrderBy({"number" = "ASC"})
+     */
+    private $reports;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Link", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
      * @ORM\OrderBy({"sito" = "ASC"})
      */
@@ -320,6 +328,13 @@ class Scheda {
      * @ORM\JoinColumn(name="report_gestore_id", referencedColumnName="id")
      */
     private $report_gestore;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_old", type="text", nullable=true)
+     */
+    private $report_old;
     
     
     /**
@@ -1271,5 +1286,51 @@ class Scheda {
     public function getApplicableDeductable()
     {
         return $this->applicable_deductable;
+    }
+
+    /**
+     * Set service_provider
+     *
+     * @param string $serviceProvider
+     * @return Scheda
+     */
+    public function setServiceProvider($serviceProvider)
+    {
+        $this->service_provider = $serviceProvider;
+    
+        return $this;
+    }
+
+    /**
+     * Get service_provider
+     *
+     * @return string 
+     */
+    public function getServiceProvider()
+    {
+        return $this->service_provider;
+    }
+
+    /**
+     * Set report_service_provider
+     *
+     * @param string $reportServiceProvider
+     * @return Scheda
+     */
+    public function setReportServiceProvider($reportServiceProvider)
+    {
+        $this->report_service_provider = $reportServiceProvider;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_service_provider
+     *
+     * @return string 
+     */
+    public function getReportServiceProvider()
+    {
+        return $this->report_service_provider;
     }
 }

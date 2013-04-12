@@ -168,6 +168,14 @@ class Scheda {
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
+     * @ORM\OneToMany(targetEntity="Report", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
+     * @ORM\OrderBy({"number" = "ASC"})
+     */
+    private $reports;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Link", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
      * @ORM\OrderBy({"sito" = "ASC"})
      */
@@ -320,6 +328,13 @@ class Scheda {
      * @ORM\JoinColumn(name="report_gestore_id", referencedColumnName="id")
      */
     private $report_gestore;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="report_old", type="text", nullable=true)
+     */
+    private $report_old;
     
     
     /**
@@ -1318,4 +1333,65 @@ class Scheda {
     {
         return $this->report_service_provider;
     }
+
+    /**
+     * Set report_old
+     *
+     * @param string $reportOld
+     * @return Scheda
+     */
+    public function setReportOld($reportOld)
+    {
+        $this->report_old = $reportOld;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_old
+     *
+     * @return string 
+     */
+    public function getReportOld()
+    {
+        return $this->report_old;
+    }
+
+    /**
+     * Add reports
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Report $reports
+     * @return Scheda
+     */
+    public function addReport(\Ephp\Bundle\SinistriBundle\Entity\Report $reports)
+    {
+        $this->reports[] = $reports;
+    
+        return $this;
+    }
+
+    /**
+     * Remove reports
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Report $reports
+     */
+    public function removeReport(\Ephp\Bundle\SinistriBundle\Entity\Report $reports)
+    {
+        $this->reports->removeElement($reports);
+    }
+
+    /**
+     * Get reports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReports()
+    {
+        return $this->reports;
+    }
+    
+    public function __toString() {
+        return "{$this->getOspedale()->getSigla()}/{$this->getAnno2()}/{$this->getTpa()} {$this->getClaimant()}";
+    }
+
 }

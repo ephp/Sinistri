@@ -1,0 +1,94 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Report
+{% endblock %}
+
+{% block content %}
+<h1>Report</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Number</th>
+            <td>{{ entity.number }}</td>
+        </tr>
+        <tr>
+            <th>Copertura</th>
+            <td>{{ entity.copertura }}</td>
+        </tr>
+        <tr>
+            <th>Stato</th>
+            <td>{{ entity.stato }}</td>
+        </tr>
+        <tr>
+            <th>Descrizione_in_fatto</th>
+            <td>{{ entity.descrizioneinfatto }}</td>
+        </tr>
+        <tr>
+            <th>Relazione_avversaria</th>
+            <td>{{ entity.relazioneavversaria }}</td>
+        </tr>
+        <tr>
+            <th>Relazione_ex_adverso</th>
+            <td>{{ entity.relazioneexadverso }}</td>
+        </tr>
+        <tr>
+            <th>Valutazione_responsabilita</th>
+            <td>{{ entity.valutazioneresponsabilita }}</td>
+        </tr>
+        <tr>
+            <th>Analisi_danno</th>
+            <td>{{ entity.analisidanno }}</td>
+        </tr>
+        <tr>
+            <th>Riserva</th>
+            <td>{{ entity.riserva }}</td>
+        </tr>
+        <tr>
+            <th>Possibile_rivalsa</th>
+            <td>{{ entity.possibilerivalsa }}</td>
+        </tr>
+        <tr>
+            <th>Azioni</th>
+            <td>{{ entity.azioni }}</td>
+        </tr>
+        <tr>
+            <th>Richiesta_sa</th>
+            <td>{{ entity.richiestasa }}</td>
+        </tr>
+        <tr>
+            <th>Note</th>
+            <td>{{ entity.note }}</td>
+        </tr>
+        <tr>
+            <th>Validato</th>
+            <td>{{ entity.validato }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('report_tabellone') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('report_tabellone_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('report_tabellone_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+{% endblock %}
