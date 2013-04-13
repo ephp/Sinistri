@@ -506,10 +506,10 @@ class Report
     /**
      * Add medici_legali
      *
-     * @param \Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali
+     * @param \Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali
      * @return Report
      */
-    public function addMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali)
+    public function addMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali)
     {
         $this->medici_legali[] = $mediciLegali;
     
@@ -519,9 +519,9 @@ class Report
     /**
      * Remove medici_legali
      *
-     * @param \Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali
+     * @param \Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali
      */
-    public function removeMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali)
+    public function removeMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali)
     {
         $this->medici_legali->removeElement($mediciLegali);
     }

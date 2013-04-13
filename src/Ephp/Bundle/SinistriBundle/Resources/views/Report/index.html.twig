@@ -1,4 +1,11 @@
-<h1>Report list</h1>
+<h1>Report</h1>
+<ul>
+    <li>
+        <a href="{{ path('report_tabellone_new', { 'scheda': scheda }) }}">
+            Nuovo Report
+        </a>
+    </li>
+</ul>
 
 <table class="records_list">
     <thead>
@@ -28,10 +35,3 @@
     </tbody>
 </table>
 
-<ul>
-    <li>
-        <a href="{{ path('report_tabellone_new', { 'scheda': scheda }) }}">
-            Create a new entry
-        </a>
-    </li>
-</ul>
