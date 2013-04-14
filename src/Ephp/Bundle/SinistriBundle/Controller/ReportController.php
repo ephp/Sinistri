@@ -27,7 +27,7 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('EphpSinistriBundle:Report')->findBy(array('scheda' => $scheda));
+        $entities = $em->getRepository('EphpSinistriBundle:Report')->findBy(array('scheda' => $scheda), array('number' => 'DESC'));
 
         return array(
             'entities' => $entities,
@@ -68,8 +68,32 @@ class ReportController extends Controller
      */
     public function newAction($scheda)
     {
+        $em = $this->getDoctrine()->getManager();
+        $old = $em->getRepository('EphpSinistriBundle:Report')->findOneBy(array('scheda' => $scheda), array('number' => 'DESC'));
+        /* @var $old \Ephp\Bundle\SinistriBundle\Entity\Report */
         $entity = new Report();
+        if($old) {
+            $entity->setNumber($old->getNumber()+1);
+            $entity->setAnalisiDanno($old->getAnalisiDanno());
+            $entity->setAzioni($old->getAzioni());
+            $entity->setCopertura($old->getCopertura());
+            $entity->setDescrizioneInFatto($old->getDescrizioneInFatto());
+            $entity->setMedicoLegale1($old->getMedicoLegale1());
+            $entity->setMedicoLegale2($old->getMedicoLegale2());
+            $entity->setMedicoLegale3($old->getMedicoLegale3());
+            $entity->setNote($old->getNote());
+            $entity->setPossibileRivalsa($old->getPossibileRivalsa());
+            $entity->setRelazioneAvversaria($old->getRelazioneAvversaria());
+            $entity->setRelazioneExAdverso($old->getRelazioneExAdverso());
+            $entity->setRichiestaSa($old->getRichiestaSa());
+            $entity->setRiserva($old->getRiserva());
+            $entity->setStato($old->getStato());
+            $entity->setValutazioneResponsabilita($old->getValutazioneResponsabilita());
+        } else {
+            $entity->setNumber('1');
+        }
         $entity->setData(new \DateTime());
+        $entity->setScheda($em->getRepository('EphpSinistriBundle:Report')->find($scheda));
         $form   = $this->createForm(new ReportType($scheda), $entity);
 
         return array(
@@ -89,6 +113,7 @@ class ReportController extends Controller
     public function createAction(Request $request, $scheda)
     {
         $entity  = new Report();
+        $entity->setValidato(false);
         $form = $this->createForm(new ReportType($scheda), $entity);
         $form->bind($request);
 
@@ -97,7 +122,7 @@ class ReportController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('report_tabellone_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('tabellone_report', array('id' => $scheda)));
         }
 
         return array(

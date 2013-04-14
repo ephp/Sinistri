@@ -125,6 +125,27 @@ class Report
      * @ORM\Column(name="note", type="text")
      */
     private $note;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medico_legale1", type="text")
+     */
+    private $medico_legale1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medico_legale2", type="text")
+     */
+    private $medico_legale2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medico_legale3", type="text")
+     */
+    private $medico_legale3;
     
     /**
      * @var string
@@ -557,5 +578,74 @@ class Report
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Set medico_legale1
+     *
+     * @param string $medicoLegale1
+     * @return Report
+     */
+    public function setMedicoLegale1($medicoLegale1)
+    {
+        $this->medico_legale1 = $medicoLegale1;
+    
+        return $this;
+    }
+
+    /**
+     * Get medico_legale1
+     *
+     * @return string 
+     */
+    public function getMedicoLegale1()
+    {
+        return $this->medico_legale1;
+    }
+
+    /**
+     * Set medico_legale2
+     *
+     * @param string $medicoLegale2
+     * @return Report
+     */
+    public function setMedicoLegale2($medicoLegale2)
+    {
+        $this->medico_legale2 = $medicoLegale2;
+    
+        return $this;
+    }
+
+    /**
+     * Get medico_legale2
+     *
+     * @return string 
+     */
+    public function getMedicoLegale2()
+    {
+        return $this->medico_legale2;
+    }
+
+    /**
+     * Set medico_legale3
+     *
+     * @param string $medicoLegale3
+     * @return Report
+     */
+    public function setMedicoLegale3($medicoLegale3)
+    {
+        $this->medico_legale3 = $medicoLegale3;
+    
+        return $this;
+    }
+
+    /**
+     * Get medico_legale3
+     *
+     * @return string 
+     */
+    public function getMedicoLegale3()
+    {
+        return $this->medico_legale3;
     }
 }

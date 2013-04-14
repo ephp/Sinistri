@@ -1,4 +1,30 @@
-<h1>Report</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Numero</th>
+            <th>Operazione</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('report_tabellone_show', { 'scheda': scheda, 'id': entity.id }) }}">{{ entity.data|date('d/m/Y') }}</a></td>
+            <td style="text-align: right">{{ entity.number }}</td>
+            <td>
+                <button type="button" onclick="javascript:window.location='{{ path('report_tabellone_show', { 'scheda': scheda,'id': entity.id }) }}'">
+                    Vedi
+                </button>
+                <button type="button" onclick="javascript:window.location='{{ path('report_tabellone_edit', { 'scheda': scheda,'id': entity.id }) }}'">
+                    Modifica
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 <ul>
     <li>
         <a href="{{ path('report_tabellone_new', { 'scheda': scheda }) }}">
@@ -6,32 +32,3 @@
         </a>
     </li>
 </ul>
-
-<table class="records_list">
-    <thead>
-        <tr>
-            <th>Data</th>
-            <th>Number</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for entity in entities %}
-        <tr>
-            <td><a href="{{ path('report_tabellone_show', { 'scheda': scheda, 'id': entity.id }) }}">{{ entity.data|date('d/m/Y') }}</a></td>
-            <td>{{ entity.number }}</td>
-            <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('report_tabellone_show', { 'scheda': scheda,'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('report_tabellone_edit', { 'scheda': scheda,'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-

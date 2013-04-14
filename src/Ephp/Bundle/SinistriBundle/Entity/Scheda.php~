@@ -1333,4 +1333,65 @@ class Scheda {
     {
         return $this->report_service_provider;
     }
+
+    /**
+     * Set report_old
+     *
+     * @param string $reportOld
+     * @return Scheda
+     */
+    public function setReportOld($reportOld)
+    {
+        $this->report_old = $reportOld;
+    
+        return $this;
+    }
+
+    /**
+     * Get report_old
+     *
+     * @return string 
+     */
+    public function getReportOld()
+    {
+        return $this->report_old;
+    }
+
+    /**
+     * Add reports
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Report $reports
+     * @return Scheda
+     */
+    public function addReport(\Ephp\Bundle\SinistriBundle\Entity\Report $reports)
+    {
+        $this->reports[] = $reports;
+    
+        return $this;
+    }
+
+    /**
+     * Remove reports
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\Report $reports
+     */
+    public function removeReport(\Ephp\Bundle\SinistriBundle\Entity\Report $reports)
+    {
+        $this->reports->removeElement($reports);
+    }
+
+    /**
+     * Get reports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReports()
+    {
+        return $this->reports;
+    }
+    
+    public function __toString() {
+        return "{$this->getOspedale()->getSigla()}/{$this->getAnno2()}/{$this->getTpa()} {$this->getClaimant()}";
+    }
+
 }

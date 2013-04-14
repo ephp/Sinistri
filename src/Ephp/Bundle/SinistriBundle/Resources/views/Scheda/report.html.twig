@@ -6,7 +6,7 @@
 
 {% block content %}
 <h1>Report {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
-
+<div style="float: left;">
 <table class="records_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
     <thead>
         <tr>
@@ -56,8 +56,11 @@
         </tr>
     </tbody>
 </table>
-
+</div>
+<div style="float: left; margin-left: 20px;">
 {% render 'EphpSinistriBundle:Report:index' with { 'scheda': entity.id } %}
+</div>
+<div style="clear: both"></div>
 
 
 <script type="text/javascript">

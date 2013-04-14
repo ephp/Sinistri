@@ -125,6 +125,27 @@ class Report
      * @ORM\Column(name="note", type="text")
      */
     private $note;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medico_legale1", type="text")
+     */
+    private $medico_legale1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medico_legale2", type="text")
+     */
+    private $medico_legale2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medico_legale3", type="text")
+     */
+    private $medico_legale3;
     
     /**
      * @var string
@@ -506,10 +527,10 @@ class Report
     /**
      * Add medici_legali
      *
-     * @param \Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali
+     * @param \Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali
      * @return Report
      */
-    public function addMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali)
+    public function addMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali)
     {
         $this->medici_legali[] = $mediciLegali;
     
@@ -519,9 +540,9 @@ class Report
     /**
      * Remove medici_legali
      *
-     * @param \Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali
+     * @param \Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali
      */
-    public function removeMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\Group $mediciLegali)
+    public function removeMediciLegali(\Ephp\Bundle\SinistriBundle\Entity\MedicoLegale $mediciLegali)
     {
         $this->medici_legali->removeElement($mediciLegali);
     }
@@ -534,5 +555,28 @@ class Report
     public function getMediciLegali()
     {
         return $this->medici_legali;
+    }
+
+    /**
+     * Set data
+     *
+     * @param \DateTime $data
+     * @return Report
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    
+        return $this;
+    }
+
+    /**
+     * Get data
+     *
+     * @return \DateTime 
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }
