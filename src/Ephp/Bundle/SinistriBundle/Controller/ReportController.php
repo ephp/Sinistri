@@ -15,16 +15,15 @@ use Ephp\Bundle\SinistriBundle\Form\ReportType;
  *
  * @Route("/report/tabellone")
  */
-class ReportController extends Controller
-{
+class ReportController extends Controller {
+
     /**
      * Lists all Report entities.
      *
      * @Route("/{scheda}", name="report_tabellone")
      * @Template()
      */
-    public function indexAction($scheda)
-    {
+    public function indexAction($scheda) {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('EphpSinistriBundle:Report')->findBy(array('scheda' => $scheda), array('number' => 'DESC'));
@@ -41,8 +40,7 @@ class ReportController extends Controller
      * @Route("/{scheda}/{id}/show", name="report_tabellone_show")
      * @Template()
      */
-    public function showAction($scheda, $id)
-    {
+    public function showAction($scheda, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('EphpSinistriBundle:Report')->find($id);
@@ -54,7 +52,7 @@ class ReportController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
             'scheda' => $scheda,
         );
@@ -66,14 +64,13 @@ class ReportController extends Controller
      * @Route("/new/{scheda}", name="report_tabellone_new")
      * @Template()
      */
-    public function newAction($scheda)
-    {
+    public function newAction($scheda) {
         $em = $this->getDoctrine()->getManager();
         $old = $em->getRepository('EphpSinistriBundle:Report')->findOneBy(array('scheda' => $scheda), array('number' => 'DESC'));
         /* @var $old \Ephp\Bundle\SinistriBundle\Entity\Report */
         $entity = new Report();
-        if($old) {
-            $entity->setNumber($old->getNumber()+1);
+        if ($old) {
+            $entity->setNumber($old->getNumber() + 1);
             $entity->setAnalisiDanno($old->getAnalisiDanno());
             $entity->setAzioni($old->getAzioni());
             $entity->setCopertura($old->getCopertura());
@@ -94,11 +91,11 @@ class ReportController extends Controller
         }
         $entity->setData(new \DateTime());
         $entity->setScheda($em->getRepository('EphpSinistriBundle:Report')->find($scheda));
-        $form   = $this->createForm(new ReportType($scheda), $entity);
+        $form = $this->createForm(new ReportType($scheda), $entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
             'scheda' => $scheda,
         );
     }
@@ -110,9 +107,8 @@ class ReportController extends Controller
      * @Method("POST")
      * @Template("EphpSinistriBundle:Report:new.html.twig")
      */
-    public function createAction(Request $request, $scheda)
-    {
-        $entity  = new Report();
+    public function createAction(Request $request, $scheda) {
+        $entity = new Report();
         $entity->setValidato(false);
         $form = $this->createForm(new ReportType($scheda), $entity);
         $form->bind($request);
@@ -127,7 +123,7 @@ class ReportController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
             'scheda' => $scheda,
         );
     }
@@ -138,8 +134,7 @@ class ReportController extends Controller
      * @Route("/{scheda}/{id}/edit", name="report_tabellone_edit")
      * @Template()
      */
-    public function editAction($scheda, $id)
-    {
+    public function editAction($scheda, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('EphpSinistriBundle:Report')->find($id);
@@ -152,8 +147,8 @@ class ReportController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'scheda' => $scheda,
         );
@@ -166,8 +161,7 @@ class ReportController extends Controller
      * @Method("POST")
      * @Template("EphpSinistriBundle:Report:edit.html.twig")
      */
-    public function updateAction(Request $request, $scheda, $id)
-    {
+    public function updateAction(Request $request, $scheda, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('EphpSinistriBundle:Report')->find($id);
@@ -188,8 +182,8 @@ class ReportController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'scheda' => $scheda,
         );
@@ -201,8 +195,7 @@ class ReportController extends Controller
      * @Route("/{id}/delete", name="report_tabellone_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, $id)
-    {
+    public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -221,11 +214,32 @@ class ReportController extends Controller
         return $this->redirect($this->generateUrl('report_tabellone'));
     }
 
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
+                        ->add('id', 'hidden')
+                        ->getForm()
         ;
     }
+
+    /**
+     * Finds and displays a Scheda entity.
+     *
+     * @Route("/mostra/{id}", name="report_full")
+     * @Template()
+     */
+    public function fullAction($id) {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('EphpSinistriBundle:Scheda')->find($id);
+        /* @var $entity Scheda */
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Scheda entity.');
+        }
+
+        return array(
+            'entity' => $entity,
+        );
+    }
+
 }

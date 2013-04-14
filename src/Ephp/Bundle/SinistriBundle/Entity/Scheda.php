@@ -169,7 +169,7 @@ class Scheda {
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Report", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
-     * @ORM\OrderBy({"number" = "ASC"})
+     * @ORM\OrderBy({"number" = "DESC"})
      */
     private $reports;
 

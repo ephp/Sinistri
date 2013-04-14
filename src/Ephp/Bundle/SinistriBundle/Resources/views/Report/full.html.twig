@@ -1,0 +1,65 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }} - Report
+{% endblock %}
+
+{% block content %}
+<h1>Report {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
+<table class="records_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
+    <thead>
+        <tr>
+            <th>Claimant: {{ entity.claimant }}</th>
+            <th>TPA: {{ entity.ospedale.tpa }}</th>
+        </tr>
+        <tr>
+            <th>SOI: {{ entity.reportSoi }}</th>
+            <th>N.Claim: {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Data evento (DOL): {% if entity.reportDol %}{{ entity.reportDol|date('d/m/Y') }}{% endif %}</td>
+            <td>Data reclamo (DON): {% if entity.reportDon %}{{ entity.reportDon|date('d/m/Y') }}{% endif %}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Descrizione evento:<br/>{{ entity.reportDescrizione|nl2br }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">MPL:<br/>{{ entity.reportMpl|nl2br }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Giudiziale:<br/>{{ entity.reportGiudiziale|nl2br }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">Other Policies:<br/>{{ entity.reportOtherPolicies|nl2br }}</td>
+        </tr>
+        <tr>
+            <td>Tipo danno (TPL):{{ entity.reportTypeOfLoss }}</td>
+            <td>Dipartimento ospedaliero: {{ entity.serviceProvider }}</td>
+        </tr>
+        <tr>
+            <td>Possible Recovery:{{ entity.reportPossibleRecovery }} €</td>
+            <td>Amount Reserved:{{ entity.reportAmountReserved }} €</td>
+        </tr>
+        <tr>
+            <td>Applicable Deductable:{{ entity.reportApplicableDeductable }} €</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">Future Conduct:<br/>{{ entity.reportFutureConduct|nl2br }}</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>AVV. {{ entity.reportGestore.nome }}</td>
+        </tr>
+    </tbody>
+</table>
+<div style="clear: both; margin-bottom: 10px;"></div>
+{% for report in entity.reports %}
+    {% include 'EphpSinistriBundle:Report:show_content.html.twig' with { 'entity': report } %}
+    <div style="clear: both; margin-bottom: 10px;"></div>
+{% endfor %}
+
+
+{% endblock %}
