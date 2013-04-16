@@ -58,7 +58,7 @@
 <div style="clear: both; margin-bottom: 10px;"></div>
 {% for report in entity.reports %}
     {% include 'EphpSinistriBundle:Report:show_content.html.twig' with { 'entity': report } %}
-    <div style="clear: both; margin-bottom: 10px;"></div>
+    <div style="clear: both; margin-bottom: 10px; page-break-after: always;"></div>
 {% endfor %}
 
 
