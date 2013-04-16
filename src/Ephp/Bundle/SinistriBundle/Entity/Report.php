@@ -45,105 +45,105 @@ class Report
     /**
      * @var string
      *
-     * @ORM\Column(name="copertura", type="text")
+     * @ORM\Column(name="copertura", type="text", nullable=true)
      */
     private $copertura;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="stato", type="text")
+     * @ORM\Column(name="stato", type="text", nullable=true)
      */
     private $stato;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descrizione_in_fatto", type="text")
+     * @ORM\Column(name="descrizione_in_fatto", type="text", nullable=true)
      */
     private $descrizione_in_fatto;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="relazione_avversaria", type="text")
+     * @ORM\Column(name="relazione_avversaria", type="text", nullable=true)
      */
     private $relazione_avversaria;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="relazione_ex_adverso", type="text")
+     * @ORM\Column(name="relazione_ex_adverso", type="text", nullable=true)
      */
     private $relazione_ex_adverso;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="valutazione_responsabilita", type="text")
+     * @ORM\Column(name="valutazione_responsabilita", type="text", nullable=true)
      */
     private $valutazione_responsabilita;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="analisi_danno", type="text")
+     * @ORM\Column(name="analisi_danno", type="text", nullable=true)
      */
     private $analisi_danno;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="riserva", type="text")
+     * @ORM\Column(name="riserva", type="text", nullable=true)
      */
     private $riserva;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="possibile_rivalsa", type="text")
+     * @ORM\Column(name="possibile_rivalsa", type="text", nullable=true)
      */
     private $possibile_rivalsa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="azioni", type="text")
+     * @ORM\Column(name="azioni", type="text", nullable=true)
      */
     private $azioni;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="richiesta_sa", type="text")
+     * @ORM\Column(name="richiesta_sa", type="text", nullable=true)
      */
     private $richiesta_sa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="note", type="text")
+     * @ORM\Column(name="note", type="text", nullable=true)
      */
     private $note;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="medico_legale1", type="text")
+     * @ORM\Column(name="medico_legale1", type="text", nullable=true)
      */
     private $medico_legale1;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="medico_legale2", type="text")
+     * @ORM\Column(name="medico_legale2", type="text", nullable=true)
      */
     private $medico_legale2;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="medico_legale3", type="text")
+     * @ORM\Column(name="medico_legale3", type="text", nullable=true)
      */
     private $medico_legale3;
     
