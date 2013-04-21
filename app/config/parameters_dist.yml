@@ -1,10 +1,10 @@
 parameters:
   database_driver: pdo_mysql
-  database_host: 95.110.160.63
+  database_host: localhost
   database_port: null
-  database_name: sinistri
+  database_name: jfclaims
   database_user: root
-  database_password: ch3p4ll3
+  database_password: Ephraim76
   
   mailer_transport: gmail
   mailer_encryption: ssl
