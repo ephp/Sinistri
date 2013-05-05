@@ -38,7 +38,21 @@ class SchedaRepository extends EntityRepository {
                 $qb->andWhere('s.priorita = :pr')->setParameter('pr', $find->getPriorita()->getId());
             }
             if($find->getGiudiziale()) {
-                $qb->andWhere('s.giudiziale = :g')->setParameter('g', $find->getGiudiziale());
+                switch($find->getGiudiziale()) {
+                    case '':
+                    case null:
+                    case false:
+                        break;
+                    case '-':
+                        $qb->andWhere("(s.giudiziale = '' OR s.giudiziale IS NULL)");
+                        break;
+                    case '*':
+                        $qb->andWhere($qb->expr()->in('s.giudiziale', array('Y', 'J', 'A', 'C')));
+                        break;
+                    default:
+                        $qb->andWhere('s.giudiziale = :g')->setParameter('g', $find->getGiudiziale());
+                        break;
+                }
             }
         }
         if(is_string($find)) {
