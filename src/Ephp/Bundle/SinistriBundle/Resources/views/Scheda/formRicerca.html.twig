@@ -16,6 +16,10 @@
         {{ form_widget(form.priorita) }}
     </div>
     <div style="float: left; margin-left: 20px;">
+        {{ form_label(form.giudiziale,'Giudiziale',{'attr': {style: 'margin-rigth: 10px;'}}) }}
+        {{ form_widget(form.giudiziale) }}
+    </div>
+    <div style="float: left; margin-left: 20px;">
         {{ form_rest(form) }}
         <button type="submit">Cerca</button>
     </div>
