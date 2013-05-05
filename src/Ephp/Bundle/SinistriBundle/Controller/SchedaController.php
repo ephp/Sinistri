@@ -1779,6 +1779,7 @@ class SchedaController extends DragDropController {
                                         $old->setDasc($scheda->getDasc());
                                         $old->setDol($scheda->getDol());
                                         $old->setDon($scheda->getDon());
+                                        $old->setGiudiziale($scheda->getGiudiziale());
                                         $old->setPossibleRecovery($scheda->getPossibleRecovery());
                                         $old->setFranchigia($scheda->getFranchigia());
                                         $old->setTypeOfLoss($scheda->getTypeOfLoss());
