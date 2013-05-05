@@ -358,6 +358,31 @@ table.records_list {
     border-left: 1px solid #222222;
 }
 
+table.report_list {
+    width: 100%;
+}
+
+.report_list tr {
+    border-right: 1px solid #222222;
+    border-bottom: 1px solid #222222;
+}
+.report_list th {
+    background-color: #EEEEEE;
+    color: #111111;
+    margin: 2px;
+    padding: 2px;
+    border-left: 1px solid #222222;
+    text-align: center;
+    font-weight: bold;
+}
+.report_list td {
+    background-color: #EEEEEE;
+    color: #222222;
+    margin: 2px;
+    padding: 2px;
+    border-left: 1px solid #222222;
+}
+
 tr.bg-transparent td {
     background-color: #EEEEEE !important;
     color: #AAAAAA !important;

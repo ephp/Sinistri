@@ -28,6 +28,7 @@ class SchedaType extends AbstractType
 //            ->add('prima_pagina')
 //            ->add('ospedale')
 //            ->add('gestore')
+            ->add('giudiziale', 'choices', array('choices' => array('' => 'Tutti', 'J' => 'J', 'Y' => 'Y')))
             ->add('stato', null, array('required' => false))
             ->add('priorita')
         ;

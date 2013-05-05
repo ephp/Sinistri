@@ -1,4 +1,4 @@
-<table class="records_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
+<table class="report_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
     <tbody>
         <tr style="valign: top">
             <th style="width: 15%">Data</th>
@@ -21,6 +21,14 @@
             <td>{{ entity.descrizioneInFatto|nl2br }}</td>
         </tr>
         <tr style="valign: top">
+            <th>Relazione Avversaria</th>
+            <td>{{ entity.relazioneAvversaria|nl2br }}</td>
+        </tr>
+        <tr style="valign: top">
+            <th>Relazione Ex Adverso</th>
+            <td>{{ entity.relazioneExAdverso|nl2br }}</td>
+        </tr>
+        <tr style="valign: top">
             <th>Primo medico legale</th>
             <td>{{ entity.medicoLegale1|nl2br }}</td>
         </tr>
@@ -31,14 +39,6 @@
         <tr style="valign: top">
             <th>Terzo medico legale</th>
             <td>{{ entity.medicoLegale3|nl2br }}</td>
-        </tr>
-        <tr style="valign: top">
-            <th>Relazione Avversaria</th>
-            <td>{{ entity.relazioneAvversaria|nl2br }}</td>
-        </tr>
-        <tr style="valign: top">
-            <th>Relazione Ex Adverso</th>
-            <td>{{ entity.relazioneExAdverso|nl2br }}</td>
         </tr>
         <tr style="valign: top">
             <th>Valutazione Responsabilita</th>

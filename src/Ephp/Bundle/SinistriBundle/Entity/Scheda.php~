@@ -69,6 +69,13 @@ class Scheda {
     private $soi;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="giudiziale", type="string", length=1, nullable=true)
+     */
+    private $giudiziale;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="first_reserve", type="decimal", precision=15, scale=2, nullable=true)
@@ -169,7 +176,7 @@ class Scheda {
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Report", mappedBy="scheda", cascade={"persist", "remove", "merge", "refresh"}, orphanRemoval=true)
-     * @ORM\OrderBy({"number" = "ASC"})
+     * @ORM\OrderBy({"number" = "DESC"})
      */
     private $reports;
 

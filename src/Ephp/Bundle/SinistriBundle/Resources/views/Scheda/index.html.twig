@@ -82,7 +82,7 @@
 {% block content %}
 <h1>{{titolo}}</h1>
 
-{% set colspan = 8 %}
+{% set colspan = 9 %}
 {% include 'EphpSinistriBundle:Scheda:index/filtri.html.twig' %}
 <table class="records_list">
     <thead>
@@ -101,6 +101,7 @@
                 <th>Anno</th>
             {% endif %}
             <th>Dasc</th>
+            <th>Giud</th>
             <th>Tpa</th>
             <th>Claimant</th>
             {% if gestore is not defined or not gestore %}

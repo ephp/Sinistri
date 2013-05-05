@@ -19,6 +19,7 @@
         {% endif %}
     {% endif %}
     <td style="text-align: center"><input type="text" class="autoupdate auto_date" pratica="{{ entity.id }}" name="dasc" value="{% if entity.dasc %}{{ entity.dasc|date('d/m/Y') }}{% endif%}"/></td>
+    <td style="text-align: center">{{ entity.giudiziale }}</td>
     <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
     <td>{{ entity.claimant }}</td>
     {% if gestore is not defined or not gestore %}

@@ -69,6 +69,13 @@ class Scheda {
     private $soi;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="giudiziale", type="string", length=1, nullable=true)
+     */
+    private $giudiziale;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="first_reserve", type="decimal", precision=15, scale=2, nullable=true)
@@ -1394,4 +1401,27 @@ class Scheda {
         return "{$this->getOspedale()->getSigla()}/{$this->getAnno2()}/{$this->getTpa()} {$this->getClaimant()}";
     }
 
+
+    /**
+     * Set giudiziale
+     *
+     * @param string $giudiziale
+     * @return Scheda
+     */
+    public function setGiudiziale($giudiziale)
+    {
+        $this->giudiziale = $giudiziale;
+    
+        return $this;
+    }
+
+    /**
+     * Get giudiziale
+     *
+     * @return string 
+     */
+    public function getGiudiziale()
+    {
+        return $this->giudiziale;
+    }
 }

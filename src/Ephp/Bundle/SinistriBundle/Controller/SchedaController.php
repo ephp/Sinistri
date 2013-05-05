@@ -387,6 +387,11 @@ class SchedaController extends DragDropController {
                     array('tipo' => 'TAX', 'giorni' => 14),
                     array('tipo' => 'TAX', 'giorni' => 14)
                 );
+                if(!$entity->getDasc()) {
+                    $entity->setDasc(new \DateTime());
+                    $em->persist($entity);
+                    $em->flush();
+                }
                 $data = $entity->getDasc();
                 foreach ($generatore as $i => $gen) {
                     $data = Time::calcolaData($data, $gen['giorni']);
@@ -1683,6 +1688,9 @@ class SchedaController extends DragDropController {
 
                                             case 'CLAYMANT':
                                                 $scheda->setClaimant($value);
+                                                break;
+                                            case 'COURT':
+                                                $scheda->setGiudiziale($value);
                                                 break;
                                             case 'DOL':
                                                 if ($value) {

@@ -6,7 +6,7 @@
 
 {% block content %}
 <h1>Report {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}</h1>
-<table class="records_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
+<table class="report_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
     <thead>
         <tr>
             <th>Claimant: {{ entity.claimant }}</th>
@@ -59,7 +59,6 @@
 {% for report in entity.reports %}
     <div style="clear: both; margin-bottom: 10px; page-break-before: always;"></div>
     {% include 'EphpSinistriBundle:Report:show_content.html.twig' with { 'entity': report } %}
-    <div style="clear: both; margin-bottom: 10px; page-break-after: always;"></div>
 {% endfor %}
 
 
