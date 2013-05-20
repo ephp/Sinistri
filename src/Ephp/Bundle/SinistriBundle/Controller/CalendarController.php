@@ -15,6 +15,8 @@ use Ephp\Bundle\CalendarBundle\Vendor\ICalCreator\ICalUtilityFunctions;
  */
 class CalendarController extends Controller {
 
+    use \Ephp\UtilityBundle\Controller\Traits\BaseController;
+
     /**
      * Lists all Scheda entities.
      *
@@ -22,21 +24,56 @@ class CalendarController extends Controller {
      * @Template()
      */
     public function indexAction($gestore) {
+        if(!$this->hasRole('ROLE_COORD') || $gestore == '') {
+            $gestore = $this->getUser();
+        } else {
+            $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $gestore));
+        }
+        return array(
+            'gestore' => $gestore,
+            'oggi' => new \DateTime(),
+            'eventi_oggi' => $this->eventi($gestore),
+            'eventi_ieri' => $this->eventi($gestore, -1),
+            'eventi_domani' => $this->eventi($gestore, 1),
+            'gestori' => $this->hasRole('ROLE_COORD') ? $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC')) : false,
+        );
+    }
+
+    private function eventi(\Ephp\Bundle\GestoriBundle\Entity\Gestore $gestore, $day = 0) {
+        $calendario = $this->getCalendar();
+        $eventi = $this->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
+        $oggi = new \DateTime();
+        $out = array();
+        foreach ($eventi as $evento) {
+            /* @var $evento \Ephp\Bundle\SinistriBundle\Entity\Evento */
+            $t = $evento->getDataOra();
+            if (date('d-m-Y', $t->getTimestamp()) == date('d-m-Y', $oggi->getTimestamp() + $day * 86400)) {
+                $out[] = $evento;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-completo/{gestore}", name="calendario_sinistri_completo", defaults={"gestore"=""})
+     * @Template()
+     */
+    public function completoAction($gestore) {
         $user = $this->getUser();
         /* @var $user \Ephp\Bundle\GestoriBundle\Entity\Gestore */
-        if($gestore == '' && !$user->hasRole('ROLE_ADMIN')) {
+        if ($gestore == '' && !$user->hasRole('ROLE_ADMIN')) {
             return $this->redirect($this->generateUrl('calendario_sinistri', array('gestore' => $user->getSigla())));
         }
-        $em = $this->getEm();
-        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
         $calendario = $this->getCalendar();
         if ($gestore) {
-            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
-            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
+            $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $gestore));
+            $entities = $this->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
         } else {
-            $entities = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null);
+            $entities = $this->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, null);
         }
-        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
+        $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
         return array(
             'oggi' => new \DateTime(),
             'entities' => $entities,
@@ -204,13 +241,6 @@ class CalendarController extends Controller {
             $this->get('mailer')->send($message);
         }
         return array($gestore->getSigla() => count($send));
-    }
-
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    protected function getEm() {
-        return $this->getDoctrine()->getEntityManager();
     }
 
     private function getCalendar() {

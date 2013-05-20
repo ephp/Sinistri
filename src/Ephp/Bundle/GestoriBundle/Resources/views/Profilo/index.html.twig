@@ -26,40 +26,18 @@ Profilo
 {% block content %}
 <h1>{{ gestore.nome }}</h1>
 
-<table class="records_list" style="border-top: 1px solid black;">
-    <tbody>
-        <tr>
-            <td style="width: 50%; vertical-align: top;"> 
-                {% if eventi_oggi|length > 0 %}
-                    <h2>Oggi</h2>
-                    {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_oggi} %}
-                {% endif %}
-                {% if eventi_domani|length > 0 %}
-                    <h2>Domani</h2>
-                    {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_domani} %}
-                {% endif %}
-                {% if eventi_ieri|length > 0 %}
-                    <h2>Ieri</h2>
-                    {% include 'EphpGestoriBundle:Profilo:index/calendario.html.twig' with {'entities': eventi_ieri} %}
-                {% endif %}
-            </td>
-            <td style="width: 50%; vertical-align: top;"> 
-                {% if prima_pagina|length > 0 %}
-                    <h2>Prima pagina</h2>
-                    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
-                {% endif %}
-                {% if attenzione|length > 0 %}
-                    <h2>Importanti</h2>
-                    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
-                {% endif %}
-                {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-                    <h2>Nuovi e riattivati</h2>
-                    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
-                {% endif %}
-            </td>
-        </tr>
-    </tbody>
-</table>
+{% if prima_pagina|length > 0 %}
+    <h2>Prima pagina</h2>
+    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
+{% endif %}
+{% if attenzione|length > 0 %}
+    <h2>Importanti</h2>
+    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
+{% endif %}
+{% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
+    <h2>Nuovi e riattivati</h2>
+    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
+{% endif %}
 
 <div style="display: none" id="fb_assegna_gestore">
     <form id="assegna_gestore_scheda">

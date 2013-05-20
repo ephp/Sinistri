@@ -1,0 +1,112 @@
+{% extends '::base.html.twig' %}
+{% set titolo = 'Calendario sinistri' %}
+{% set params_gestore = 'TUTTI' %}
+{% set route = 'tabellone' %}
+{% if gestore != '' %}
+    {% set titolo = gestore.nome ~ ' | ' ~ titolo %}
+    {% set params_gestore = gestore.sigla %}
+{% endif %}
+{% set params = {'gestore': params_gestore, 'pagina': 2} %}
+{% block title %}{{titolo}}{% endblock %}
+
+{% block content_header %}
+    {% if app.user.hasRole('ROLE_ADMIN') %}
+        <div style="clear: both"></div>
+        <h2>Gestori</h2>
+        <div style="clear: both"></div>
+        <ul class="menu">
+            <li><a href="{{ path('calendario_sinistri') }}">Tutti</a></li>
+            {% for ges in gestori %}
+                <li><a href="{{ path('calendario_sinistri', {'gestore': ges.sigla}) }}">{{ges.nome}}</a></li>
+            {% endfor %}
+        </ul>
+        <div style="clear: both"></div>
+    {% endif %}
+{% endblock %}
+{% block header %}
+    <ul class="menu">
+        <li><a href="{{ path('profilo') }}">Profilo</a></li>
+        <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tabellone</a></li>
+        <li><a href="{{ path('calendario_sinistri', {'gestore': gestore.sigla}) }}">Calendario</a></li>
+        <li><a href="{{ path('strumenti') }}">Strumenti</a></li>
+    </ul>
+    <div style="clear: both"></div>
+    {% if app.user.hasRole('ROLE_COORD') %}
+        <ul class="menu">
+            {% for gest in gestori %}
+                {% if gest.hasRole('ROLE_GEST') %}
+                    <li><a href="{{ path('calendario_sinistri_completo', {'gestore': gest.sigla}) }}">{{ gest.nome }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div style="clear: both"></div>
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+<h1>{{titolo}}</h1>
+
+{#% include 'EphpSinistriBundle:Scheda:completo/filtri.html.twig' %#}
+<table class="records_list">
+    <thead>
+        <tr>
+            {% if gestore != '' %}
+                <th>#</th>
+            {% endif %}
+            <th>&nbsp;</th>
+            <th>Data</th>
+            <th>Tpa</th>
+            <th>Claimant</th>
+            {% if gestore == '' %}
+                <th>Gestore</th>
+            {% endif %}
+            <th>Titolo</th>
+            <th>Note</th>
+        </tr>
+    </thead>
+    <tbody id="tb_container">
+        {% include 'EphpSinistriBundle:Calendar:completo/tbody.html.twig' %}
+    </tbody>
+</table>
+<nav id="page_nav">
+    <a href="{{ path('calendario_sinistri_scroll', params) }}">Ancora</a>
+</nav>
+<script type="text/javascript">
+    $(function(){
+        var $container = $('#tb_container');
+        $container.infinitescroll({
+            navSelector  : '#page_nav',    // selector for the paged navigation 
+            nextSelector : '#page_nav a',  // selector for the NEXT link (to page 2)
+            itemSelector : '.r',     // selector for all items you'll retrieve
+            loading: {
+                finishedMsg: 'Fine',
+                msgText: 'Attendere',
+                img: 'http://i.imgur.com/qkKy8.gif'
+            }
+        }, function() {
+            //setTimeout(function(){runFiltro();}, 10);
+        });
+    });
+    function autoupdate() {
+        $('.autoupdate').change(function(){
+            val = $(this).val();
+            pratica = $(this).attr('pratica');
+            evento = $(this).attr('evento');
+            field = $(this).attr('name');
+            if(pratica) {
+                $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
+                    checkUm();
+                });
+            } else {
+                $.post('{{ path('tabellone_calendario_autoupdate') }}', {'evento': {'id': evento, 'field': field, 'value': val}}, function(out) {
+                    if(out.reload == 1) {
+                        window.location = window.location;
+                    }
+                });
+            }
+        });
+    }
+    autoupdate();
+</script>
+{% endblock %}

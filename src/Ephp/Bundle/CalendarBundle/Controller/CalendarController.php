@@ -11,32 +11,31 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  *
  * @Route("/calendario")
  */
-class CalendarController extends Controller
-{
+class CalendarController extends Controller {
+
+    use \Ephp\UtilityBundle\Controller\Traits\BaseController;
+
     /**
      * Lists all Scheda entities.
      *
-     * @Route("/{calendario}/{gestore}", name="calendario", defaults={"gestore"=""})
+     * @Route("-completo/{calendario}/{gestore}", name="calendario_completo", defaults={"gestore"=""})
      * @Template()
      */
     public function indexAction($calendario, $gestore) {
-        $em = $this->getEm();
         $mode = 0;
-        $_calendario = $em->getRepository('EphpCalendarBundle:Calendario');
-        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
+        $_calendario = $this->getRepository('EphpCalendarBundle:Calendario');
         $calendario = $_calendario->findOneBy(array('sigla' => $calendario));
         if ($calendario && $gestore) {
-            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
-            $entities = $em->getRepository('EphpCalendarBundle:Evento')->prossimiEventi($calendario, $gestore, 100);
+            $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $gestore));
+            $entities = $this->getRepository('EphpCalendarBundle:Evento')->prossimiEventi($calendario, $gestore, 100);
         } else {
-            $entities = $em->getRepository('EphpCalendarBundle:Evento')->prossimiEventi($calendario, null, 100);
+            $entities = $this->getRepository('EphpCalendarBundle:Evento')->prossimiEventi($calendario, null, 100);
         }
-        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
+        $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
         return array(
             'entities' => $entities,
             'mode' => $mode,
             'ospedale' => $calendario,
-            'anno' => $anno < 10 ? '0' . $anno : $anno,
             'gestori' => $gestori,
             'anni' => range(7, date('y'))
         );
