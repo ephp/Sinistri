@@ -10,7 +10,7 @@ Report
 <form action="{{ path('report_tabellone_update', { 'id': entity.id, 'scheda': scheda }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
     <p>
-        <button type="submit">Modifica</button>
+        <button type="button">Modifica</button>
     </p>
 </form>
 
@@ -22,6 +22,30 @@ Report
     </li>   
 </ul>
 <script type="text/javascript">
-    $('textarea').css('width', '500px').css('hegith', '100px');
+    var id = null;
+    $('textarea').addClass('autoupdate').css('width', '500px').css('hegith', '100px');
+    $('.autoupdate').focus(function(){
+        id = $(this).attr('id');
+    }).change(function(){
+        id = null;
+        val = $(this).val();
+        scheda = '{{ scheda }}';
+        report = '{{ entity.id }}';
+        field = $(this).attr('name');
+        $.post('{{ path('report_autoupdate') }}', {'report': {'id': report, 'field': field, 'value': val}}, function(out) {
+            console.log(out);
+        });
+    });
+    window.setInterval( function() {
+        if(id) {
+            val = $('#'+id).val();
+            scheda = '{{ scheda }}';
+            report = '{{ entity.id }}';
+            field = $('#'+id).attr('name');
+            $.post('{{ path('report_autoupdate') }}', {'report': {'id': report, 'field': field, 'value': val}}, function(out) {
+                console.log(out);
+            });
+        }
+    }, 30000);
 </script>
 {% endblock %}

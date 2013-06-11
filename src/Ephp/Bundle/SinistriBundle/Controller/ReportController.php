@@ -17,6 +17,8 @@ use Ephp\Bundle\SinistriBundle\Form\ReportType;
  */
 class ReportController extends Controller {
 
+    use \Ephp\UtilityBundle\Controller\Traits\BaseController;
+    
     /**
      * Lists all Report entities.
      *
@@ -24,9 +26,7 @@ class ReportController extends Controller {
      * @Template()
      */
     public function indexAction($scheda) {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('EphpSinistriBundle:Report')->findBy(array('scheda' => $scheda), array('number' => 'DESC'));
+        $entities = $this->findBy('EphpSinistriBundle:Report', array('scheda' => $scheda), array('number' => 'DESC'));
 
         return array(
             'entities' => $entities,
@@ -41,9 +41,7 @@ class ReportController extends Controller {
      * @Template()
      */
     public function showAction($scheda, $id) {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('EphpSinistriBundle:Report')->find($id);
+        $entity = $this->find('EphpSinistriBundle:Report', $id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Report entity.');
@@ -65,8 +63,7 @@ class ReportController extends Controller {
      * @Template()
      */
     public function newAction($scheda) {
-        $em = $this->getDoctrine()->getManager();
-        $old = $em->getRepository('EphpSinistriBundle:Report')->findOneBy(array('scheda' => $scheda), array('number' => 'DESC'));
+        $old = $this->findOneBy('EphpSinistriBundle:Report', array('scheda' => $scheda), array('number' => 'DESC'));
         /* @var $old \Ephp\Bundle\SinistriBundle\Entity\Report */
         $entity = new Report();
         if ($old) {
@@ -89,8 +86,15 @@ class ReportController extends Controller {
         } else {
             $entity->setNumber('1');
         }
+        $entity->setScheda($this->find('EphpSinistriBundle:Scheda', $scheda));
         $entity->setData(new \DateTime());
-        $entity->setScheda($em->getRepository('EphpSinistriBundle:Report')->find($scheda));
+        $entity->setValidato(false);
+        $em = $this->getEm();
+        $em->persist($entity);
+        $em->flush();
+        
+        return $this->redirect($this->generateUrl('report_tabellone_edit', array('scheda' => $scheda, 'id' => $entity->getId())));
+        
         $form = $this->createForm(new ReportType($scheda), $entity);
 
         return array(
@@ -162,9 +166,8 @@ class ReportController extends Controller {
      * @Template("EphpSinistriBundle:Report:edit.html.twig")
      */
     public function updateAction(Request $request, $scheda, $id) {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('EphpSinistriBundle:Report')->find($id);
+        $entity = $this->find('EphpSinistriBundle:Report', $id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Report entity.');
@@ -175,6 +178,7 @@ class ReportController extends Controller {
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -240,6 +244,74 @@ class ReportController extends Controller {
         return array(
             'entity' => $entity,
         );
+    }
+    
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-autoupdate", name="report_autoupdate", defaults={"_format"="json"})
+     */
+    public function autoupdateAction() {
+        $req = $this->getRequest()->get('report');
+        $em = $this->getEm();
+
+        $report = $this->find('EphpSinistriBundle:Report', $req['id']);
+        /* @var $report \Ephp\Bundle\SinistriBundle\Entity\Report */
+        try {
+            switch ($req['field']) {
+                case 'report[data]':
+                    $data = \DateTime::createFromFormat('d/m/Y', $req['value']);
+                    $report->setData($data);
+                    break;
+                case 'report[copertura]':
+                    $report->setCopertura($req['value']);
+                    break;
+                case 'report[stato]':
+                    $report->setStato($req['value']);
+                    break;
+                case 'report[descrizione_in_fatto]':
+                    $report->setDescrizioneInFatto($req['value']);
+                    break;
+                case 'report[relazione_avversaria]':
+                    $report->setRelazioneAvversaria($req['value']);
+                    break;
+                case 'report[relazione_ex_adverso]':
+                    $report->setRelazioneExAdverso($req['value']);
+                    break;
+                case 'report[medico_legale1]':
+                    $report->setMedicoLegale1($req['value']);
+                    break;
+                case 'report[medico_legale2]':
+                    $report->setMedicoLegale2($req['value']);
+                    break;
+                case 'report[medico_legale3]':
+                    $report->setMedicoLegale3($req['value']);
+                    break;
+                case 'report[valutazione_responsabilita]':
+                    $report->setValutazioneResponsabilita($req['value']);
+                    break;
+                case 'report[analisi_danno]':
+                    $report->setAnalisiDanno($req['value']);
+                    break;
+                case 'report[riserva]':
+                    $report->setRiserva($req['value']);
+                    break;
+                case 'report[possibile_rivalsa]':
+                    $report->setPossibileRivalsa($req['value']);
+                    break;
+                case 'report[richiesta_sa]':
+                    $report->setRichiestaSa($req['value']);
+                    break;
+                case 'report[note]':
+                    $report->setNote($req['value']);
+                    break;
+            }
+            $em->persist($report);
+            $em->flush();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($req));
     }
 
 }

@@ -52,7 +52,7 @@ class ReportType extends AbstractType {
     }
 
     public function getName() {
-        return 'ephp_bundle_sinistribundle_reporttype';
+        return 'report';
     }
 
 }
