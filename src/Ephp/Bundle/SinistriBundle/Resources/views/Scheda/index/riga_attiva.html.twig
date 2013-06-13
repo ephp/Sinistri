@@ -1,5 +1,5 @@
 <!-- RIGA ATTIVA -->
-<tr id="riga_{{ entity.id }}" class="r cg ca bg-{% if entity.priorita %}{{ entity.priorita.css }}{% else %}white{% endif %}" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}" gestore="{{ entity.gestore.sigla }}" priorita="{% if entity.priorita %}{{ entity.priorita.id }}{% else %}0{% endif %}">
+<tr id="riga_{{ entity.id }}" class="r cg ca bg-{% if entity.priorita %}{{ entity.priorita.css }}{% else %}white{% endif %}" titolo="{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }}" riga="{{ entity.id }}" gestore="{{ entity.gestore.sigla }}" priorita="{% if entity.priorita %}{{ entity.priorita.id }}{% else %}0{% endif %}" {% if entity.priorita and entity.priorita.priorita == 'definita' %}style="display: none;"{% endif %}>
     {% if gestore is defined and gestore %}
         <th style="text-align: right;">{{ index }}</th>
         <td id="star_{{ entity.id }}" style="background-color: transparent;" class="{% if entity.primaPagina %}cal_important{% else %}cal_normal{% endif %}" onclick="primaPagina({{ entity.id }})"></td>
