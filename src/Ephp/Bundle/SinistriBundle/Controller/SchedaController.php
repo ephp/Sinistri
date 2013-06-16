@@ -518,7 +518,7 @@ class SchedaController extends DragDropController {
             $evento->setDeltaG(0);
             $evento->setGiornoIntero(true);
             $evento->setImportante(true);
-            $evento->setNote('Da "' . $old->getStato() . '" a "' + $stato->getStato() + '"');
+            $evento->setNote('Da "' . $old->getStato() . '" a "' . $stato->getStato() . '"');
             $evento->setOrdine(0);
             $evento->setRischedulazione(false);
             $evento->setScheda($scheda);
