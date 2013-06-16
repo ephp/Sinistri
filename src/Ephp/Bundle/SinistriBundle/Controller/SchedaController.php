@@ -66,8 +66,8 @@ class SchedaController extends DragDropController {
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
-        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
+        $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -115,8 +115,8 @@ class SchedaController extends DragDropController {
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
-        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
+        $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -196,8 +196,8 @@ class SchedaController extends DragDropController {
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
-        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
+        $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -257,8 +257,8 @@ class SchedaController extends DragDropController {
         $entities = $em->getRepository('EphpSinistriBundle:Scheda')->cerca($gestore, $ospedali_id, $anno, $q);
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
-        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
+        $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,

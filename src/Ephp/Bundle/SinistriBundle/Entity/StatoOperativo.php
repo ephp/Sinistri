@@ -151,4 +151,8 @@ class StatoOperativo
     {
         return $this->primo;
     }
+    
+    public function __toString() {
+        return $this->stato;
+    }
 }
