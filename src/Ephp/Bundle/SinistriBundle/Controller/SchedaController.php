@@ -67,7 +67,7 @@ class SchedaController extends DragDropController {
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
         $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatoOperativo', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -116,7 +116,7 @@ class SchedaController extends DragDropController {
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
         $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatoOperativo', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -197,7 +197,7 @@ class SchedaController extends DragDropController {
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
         $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatoOperativo', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -258,7 +258,7 @@ class SchedaController extends DragDropController {
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
         $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
         $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
-        $stati_operativi = $this->findBy('EphpSinistriBundle:StatiOperativi', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatoOperativo', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
