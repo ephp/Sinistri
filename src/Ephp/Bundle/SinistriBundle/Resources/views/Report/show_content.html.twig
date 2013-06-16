@@ -1,72 +1,69 @@
+<h3 style="text-align: center">Aggiornamento: {{ entity.number }} del {{ entity.data|date('d/m/Y') }}</h3>
 <table class="report_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
     <tbody>
         <tr style="valign: top">
-            <th style="width: 15%">Data</th>
-            <td style="width: 85%">{{ entity.data|date('d/M/Y') }}</td>
+            <th style="width: 25%">Copertura</th>
+            <td style="width: 75%">{{ entity.copertura|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Number</th>
-            <td>{{ entity.number }}</td>
+            <th style="width: 25%">Stato</th>
+            <td style="width: 75%">{{ entity.stato|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Copertura</th>
-            <td>{{ entity.copertura|nl2br }}</td>
+            <th style="width: 25%">Descrizione In Fatto</th>
+            <td style="width: 75%">{{ entity.descrizioneInFatto|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Stato</th>
-            <td>{{ entity.stato|nl2br }}</td>
+            <th style="width: 25%">Relazione Avversaria</th>
+            <td style="width: 75%">{{ entity.relazioneAvversaria|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Descrizione In Fatto</th>
-            <td>{{ entity.descrizioneInFatto|nl2br }}</td>
+            <th style="width: 25%">Relazione Ex Adverso</th>
+            <td style="width: 75%">{{ entity.relazioneExAdverso|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Relazione Avversaria</th>
-            <td>{{ entity.relazioneAvversaria|nl2br }}</td>
+            <th style="width: 25%">Primo medico legale</th>
+            <td style="width: 75%">{{ entity.medicoLegale1|nl2br }}</td>
+        </tr>
+        {% if entity.medicoLegale2 %}
+            <tr style="valign: top">
+                <th style="width: 25%">Secondo medico legale</th>
+                <td style="width: 75%">{{ entity.medicoLegale2|nl2br }}</td>
+            </tr>
+        {% endif %}
+        {% if entity.medicoLegale3 %}
+            <tr style="valign: top">
+                <th style="width: 25%">Terzo medico legale</th>
+                <td style="width: 75%">{{ entity.medicoLegale3|nl2br }}</td>
+            </tr>
+        {% endif %}
+        <tr style="valign: top">
+            <th style="width: 25%">Valutazione Responsabilita</th>
+            <td style="width: 75%">{{ entity.valutazioneResponsabilita|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Relazione Ex Adverso</th>
-            <td>{{ entity.relazioneExAdverso|nl2br }}</td>
+            <th style="width: 25%">Analisi Danno</th>
+            <td style="width: 75%">{{ entity.analisiDanno|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Primo medico legale</th>
-            <td>{{ entity.medicoLegale1|nl2br }}</td>
+            <th style="width: 25%">Riserva</th>
+            <td style="width: 75%">{{ entity.riserva|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Secondo medico legale</th>
-            <td>{{ entity.medicoLegale2|nl2br }}</td>
+            <th style="width: 25%">Possibile Rivalsa</th>
+            <td style="width: 75%">{{ entity.possibileRivalsa|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Terzo medico legale</th>
-            <td>{{ entity.medicoLegale3|nl2br }}</td>
+            <th style="width: 25%">Azioni</th>
+            <td style="width: 75%">{{ entity.azioni|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Valutazione Responsabilita</th>
-            <td>{{ entity.valutazioneResponsabilita|nl2br }}</td>
+            <th style="width: 25%">Richiesta SA</th>
+            <td style="width: 75%">{{ entity.richiestaSa|nl2br }}</td>
         </tr>
         <tr style="valign: top">
-            <th>Analisi Danno</th>
-            <td>{{ entity.analisiDanno|nl2br }}</td>
-        </tr>
-        <tr style="valign: top">
-            <th>Riserva</th>
-            <td>{{ entity.riserva|nl2br }}</td>
-        </tr>
-        <tr style="valign: top">
-            <th>Possibile Rivalsa</th>
-            <td>{{ entity.possibileRivalsa|nl2br }}</td>
-        </tr>
-        <tr style="valign: top">
-            <th>Azioni</th>
-            <td>{{ entity.azioni|nl2br }}</td>
-        </tr>
-        <tr style="valign: top">
-            <th>Richiesta SA</th>
-            <td>{{ entity.richiestaSa|nl2br }}</td>
-        </tr>
-        <tr style="valign: top">
-            <th>Note</th>
-            <td>{{ entity.note|nl2br }}</td>
+            <th style="width: 25%">Note</th>
+            <td style="width: 75%">{{ entity.note|nl2br }}</td>
         </tr>
     </tbody>
 </table>

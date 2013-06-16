@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends '::stampa.html.twig' %}
 
 {% block title %}
 {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }} - Report
@@ -9,48 +9,65 @@
 <table class="report_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
     <thead>
         <tr>
-            <th>Claimant: {{ entity.claimant }}</th>
-            <th>TPA: {{ entity.ospedale.tpa }}</th>
+            <th>
+                Intestatario: {{ entity.reportGestore.nome }}<br/>
+                Claimant: {{ entity.claimant }}<br/>
+            </th>
+            <th>
+                TPA: {{ entity.ospedale.tpa }}<br/>
+                N.Claim: {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}
+            </th>
         </tr>
         <tr>
             <th>SOI: {{ entity.reportSoi }}</th>
-            <th>N.Claim: {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Data evento (DOL): {% if entity.reportDol %}{{ entity.reportDol|date('d/m/Y') }}{% endif %}</td>
-            <td>Data reclamo (DON): {% if entity.reportDon %}{{ entity.reportDon|date('d/m/Y') }}{% endif %}</td>
+            <td>
+                Data evento (DOL): {% if entity.reportDol %}{{ entity.reportDol|date('d/m/Y') }}{% endif %}<br/>
+                Data reclamo (DON): {% if entity.reportDon %}{{ entity.reportDon|date('d/m/Y') }}{% endif %}<br/>
+            </td>
+            <td>
+                Descrizione evento:<br/>{{ entity.reportDescrizione|nl2br }}
+            </td>
         </tr>
         <tr>
-            <td colspan="2">Descrizione evento:<br/>{{ entity.reportDescrizione|nl2br }}</td>
+            <td>
+                MPL: {{ entity.reportMpl|nl2br }}<br/>
+                Giudiziale: {{ entity.reportGiudiziale|nl2br }}<br/>
+            </td>
+            <td>
+                Other Policies:<br/>{{ entity.reportOtherPolicies|nl2br }}
+            </td>
         </tr>
         <tr>
-            <td colspan="2">MPL:<br/>{{ entity.reportMpl|nl2br }}</td>
-        </tr>
-        <tr>
-            <td colspan="2">Giudiziale:<br/>{{ entity.reportGiudiziale|nl2br }}</td>
-        </tr>
-        <tr>
-            <td colspan="2">Other Policies:<br/>{{ entity.reportOtherPolicies|nl2br }}</td>
-        </tr>
-        <tr>
-            <td>Tipo danno (TPL):{{ entity.reportTypeOfLoss }}</td>
-            <td>Dipartimento ospedaliero: {{ entity.serviceProvider }}</td>
-        </tr>
-        <tr>
-            <td>Possible Recovery:{{ entity.reportPossibleRecovery }} €</td>
-            <td>Amount Reserved:{{ entity.reportAmountReserved }} €</td>
-        </tr>
-        <tr>
-            <td>Applicable Deductable:{{ entity.reportApplicableDeductable }} €</td>
+            <td>
+                Tipo danno<br/>
+                TPL - negligenza medica coinvolta):<br/>
+                {{ entity.reportTypeOfLoss }}
+            </td>
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <td colspan="2">Future Conduct:<br/>{{ entity.reportFutureConduct|nl2br }}</td>
+            <td>
+                Dipartimento ospedaliero: {{ entity.ospedale.nome }}
+            </td>
+            <td>
+                Possible Recovery: {{ entity.reportPossibleRecovery }} €
+            </td>
         </tr>
         <tr>
-            <td>&nbsp;</td>
+            <td>
+                Amount Reserved: {% if entity.reportAmountReserved >= 0 %}{{ entity.reportAmountReserved }} €{% else %}N.P.{% endif %}
+            </td>
+            <td>
+                Applicable Deductable: {{ entity.reportApplicableDeductable }} €
+            </td>
+        </tr>
+        <tr>
+            <td>Future Conduct:<br/>{{ entity.reportFutureConduct|nl2br }}</td>
             <td>AVV. {{ entity.reportGestore.nome }}</td>
         </tr>
     </tbody>

@@ -370,17 +370,18 @@ table.report_list {
     background-color: #EEEEEE;
     color: #111111;
     margin: 2px;
-    padding: 2px;
+    padding: 5px;
     border-left: 1px solid #222222;
-    text-align: center;
+    text-align: left;
     font-weight: bold;
 }
 .report_list td {
     background-color: #EEEEEE;
     color: #222222;
     margin: 2px;
-    padding: 2px;
+    padding: 5px;
     border-left: 1px solid #222222;
+    text-align: justify;
 }
 
 tr.bg-transparent td {
