@@ -23,15 +23,15 @@
         <script src="{{ asset('/js/jquery/FancyBox/helpers/jquery.fancybox-thumbs.js') }}"></script>
         <script src="{{ asset('/js/commons.js') }}"></script>
     </head>
-    <body>
-        <div id="symfony-wrapper">
-            <div id="symfony-header">
+    <body class="stampa">
+        <div id="stampa-wrapper">
+            <div id="stampa-header">
                 <img src="{{ asset('bundles/ephpsinistri/images/logo.png') }}" alt="JFclaims logo" style="vertical-align: middle; margin-right: 25px;" />
             </div>
 
                 <div style="clear: both"></div>
 
-            <div class="symfony-content">
+            <div class="stampa-content">
                 {% block content %}
                 {% endblock %}
             </div>

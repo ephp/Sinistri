@@ -21,6 +21,13 @@ body
     color:            #313131;
 }
 
+body.stampa
+{
+    font-size:        14px;
+    font-family:      "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+    color:            #ffffff;
+}
+
 a
 {
     color:           #08C;
@@ -134,6 +141,29 @@ dd
     -webkit-border-radius:      16px;
     border-radius:              16px;
     margin-bottom:              20px;
+    word-wrap:                  break-word;
+}
+
+#stampa-header
+{
+    position: relative;
+    padding: 10px 10px 5px 10px;
+}
+
+#stampa-wrapper
+{
+    width:  95%;
+    margin: 0 auto;
+}
+
+.stampa-content
+{
+    background-color:           white;
+    border:                     1px solid #DFDFDF;
+    -moz-border-radius:         4px;
+    -webkit-border-radius:      4px;
+    border-radius:              4px;
+    margin-bottom:              15px;
     word-wrap:                  break-word;
 }
 
@@ -373,6 +403,7 @@ table.report_list {
     padding: 5px;
     border-left: 1px solid #222222;
     text-align: left;
+    vertical-align: top;
     font-weight: bold;
 }
 .report_list td {
@@ -382,6 +413,7 @@ table.report_list {
     padding: 5px;
     border-left: 1px solid #222222;
     text-align: justify;
+    vertical-align: top;
 }
 
 tr.bg-transparent td {
