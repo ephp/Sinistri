@@ -490,7 +490,7 @@ class SchedaController extends DragDropController {
     /**
      * Lists all Scheda entities.
      *
-     * @Route("-cambia-priorita-scheda", name="tabellone_cambia_stato_operativo", defaults={"_format"="json"})
+     * @Route("-cambia-stato-operativo-scheda", name="tabellone_cambia_stato_operativo", defaults={"_format"="json"})
      */
     public function cambiaStatoOperativoAction() {
         $req = $this->getRequest()->get('stato_operativo');
