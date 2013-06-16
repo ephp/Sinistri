@@ -237,7 +237,7 @@
     function assegnaStatoOperativo() {
         form = $('#cambia_stato_operativo');
         $.post('{{ path('tabellone_cambia_stato_operativo') }}', form.serialize(), function(out) {
-            riga = $('#riga_'+$('#priorita_id').val());
+            riga = $('#riga_'+$('#stato_operativo_id').val());
             riga.attr('stato', out.id);
             td = riga.find('.chs a');
             td.html(out.label);

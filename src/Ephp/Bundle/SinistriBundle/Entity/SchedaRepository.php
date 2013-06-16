@@ -37,6 +37,9 @@ class SchedaRepository extends EntityRepository {
             if($find->getPriorita()) {
                 $qb->andWhere('s.priorita = :pr')->setParameter('pr', $find->getPriorita()->getId());
             }
+            if($find->getStatoOperativo()) {
+                $qb->andWhere('s.stato_operativo = :so')->setParameter('so', $find->getStatoOperativo()->getId());
+            }
             if($find->getGiudiziale()) {
                 switch($find->getGiudiziale()) {
                     case '':
