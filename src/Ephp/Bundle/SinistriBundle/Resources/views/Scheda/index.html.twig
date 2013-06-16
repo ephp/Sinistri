@@ -72,7 +72,7 @@
 {% block content %}
 <h1>{{titolo}}</h1>
 
-{% set colspan = 9 %}
+{% set colspan = 10 %}
 {% include 'EphpSinistriBundle:Scheda:index/filtri.html.twig' %}
 <table class="records_list">
     <thead>
@@ -102,6 +102,7 @@
             <th>Amount Reserved</th>
             <th>Note</th>
             <th>Priorita</th>
+            <th>Stato Op.</th>
             <th>Operazioni</th>
         </tr>
     </thead>
@@ -141,6 +142,19 @@
         </select>
         <input type="hidden" name="priorita[id]" id="priorita_id" value="" />    
         <button type="button" onclick="assegnaPriorita()">Cambia</button>
+    </form>
+</div>
+<div style="display: none" id="fb_stato_operativo">
+    <form id="cambia_stato_operativo">
+        <h2>Cambia stato operativo <span id="cambia_stato_operativo_a"></span></h2>
+        <div style="clear: both"></div>
+        <select name="stato_operativo[stato]" id="priorita_priorita">
+            {% for so in stati_operativi %}
+                <option value="{{ so.id }}">{{so.stato}}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="stato_operativo[id]" id="stato_operativo_id" value="" />    
+        <button type="button" onclick="assegnaStatoOperativo()">Cambia</button>
     </form>
 </div>
 <script type="text/javascript">

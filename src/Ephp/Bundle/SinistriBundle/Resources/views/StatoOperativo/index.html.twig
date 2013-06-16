@@ -37,19 +37,22 @@ StatoOperativo
 </table>
 <script type="text/javascript">
     $('.tt').click(function(){
+        $this = $(this);
         $.post('{{ path('stati_operativi_tab') }}', {id: $(this).attr('stato')}, function(bt){
-            $(this).html(bt);
+            $this.html(bt);
         });
     });
     $('.ss').click(function(){
+        $this = $(this);
         $.post('{{ path('stati_operativi_stats') }}', {id: $(this).attr('stato')}, function(bt){
-            $(this).html(bt);
+            $this.html(bt);
         });
     });
     $('.pp').click(function(){
+        $this = $(this);
         $.post('{{ path('stati_operativi_primo') }}', {id: $(this).attr('stato')}, function(bt){
             $('.pp').html('<button>Imposta</button>');
-            $(this).html('DEFAULT');
+            $this.html('DEFAULT');
         });
     });
 </script>

@@ -26,6 +26,8 @@ use Ephp\UtilityBundle\Utility\Time;
  * @Route("/tabellone")
  */
 class SchedaController extends DragDropController {
+    
+    use \Ephp\UtilityBundle\Controller\Traits\BaseController;
 
     /**
      * Lists all Scheda entities.
@@ -42,8 +44,6 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
-        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
         if ($ospedale && $anno) {
             $mode = 3;
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
@@ -51,7 +51,7 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 200);
+            $entities = $this->findBy('EphpSinistriBundle:Scheda', array('ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'ASC'), 200);
         } elseif ($ospedale) {
             $mode = 2;
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
@@ -59,14 +59,15 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('ospedale' => $ospedali_id), array('anno' => 'DESC'), 200);
+            $entities = $this->findBy('EphpSinistriBundle:Scheda', array('ospedale' => $ospedali_id), array('anno' => 'DESC'), 200);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array('anno' => 'DESC'), 200);
+            $entities = $this->findBy('EphpSinistriBundle:Scheda', array(), array('anno' => 'DESC'), 200);
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
-        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
-        $priorita = $_priorita->findAll();
+        $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
+        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -75,6 +76,7 @@ class SchedaController extends DragDropController {
             'ospedali' => $ospedali,
             'gestori' => $gestori,
             'priorita' => $priorita,
+            'stati_operativi' => $stati_operativi,
             'anni' => range(7, date('y')),
             'scroll' => true,
         );
@@ -90,9 +92,7 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
-        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
-        $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+        $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $gestore));
         if ($ospedale && $anno) {
             $mode = 3;
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
@@ -100,7 +100,7 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'DESC'), 200);
+            $entities = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id, 'anno' => $anno), array('anno' => 'DESC'), 200);
         } elseif ($ospedale) {
             $mode = 2;
             $ospedali = $_ospedale->findBy(array('gruppo' => $ospedale));
@@ -108,14 +108,15 @@ class SchedaController extends DragDropController {
             foreach ($ospedali as $ospedale) {
                 $ospedali_id[] = $ospedale->getId();
             }
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id), array('anno' => 'DESC'), 200);
+            $entities = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'ospedale' => $ospedali_id), array('anno' => 'DESC'), 200);
         } else {
             $mode = 1;
-            $entities = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array('gestore' => $gestore->getId()), array('anno' => 'DESC'), 200);
+            $entities = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId()), array('anno' => 'DESC'), 200);
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
-        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
-        $priorita = $_priorita->findAll();
+        $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
+        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -125,6 +126,7 @@ class SchedaController extends DragDropController {
             'ospedali' => $ospedali,
             'gestori' => $gestori,
             'priorita' => $priorita,
+            'stati_operativi' => $stati_operativi,
             'anni' => range(7, date('y')),
             'scroll' => true,
         );
@@ -157,13 +159,11 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
-        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
         $__gestore = $gestore;
         $__ospedale = $ospedale;
         $__anno = $anno;
         if ($gestore != 'TUTTI') {
-            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+            $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $gestore));
         } else {
             $gestore = false;
         };
@@ -195,8 +195,9 @@ class SchedaController extends DragDropController {
             $entities = array();
         }
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
-        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
-        $priorita = $_priorita->findAll();
+        $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
+        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -206,6 +207,7 @@ class SchedaController extends DragDropController {
             'ospedali' => $ospedali,
             'gestori' => $gestori,
             'priorita' => $priorita,
+            'stati_operativi' => $stati_operativi,
             'anni' => range(7, date('y')),
             'plain_gestore' => $__gestore,
             'plain_ospedale' => $__ospedale,
@@ -228,10 +230,8 @@ class SchedaController extends DragDropController {
         $em = $this->getEm();
         $mode = 0;
         $_ospedale = $em->getRepository('EphpSinistriBundle:Ospedale');
-        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
-        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
         if ($gestore != 'TUTTI') {
-            $gestore = $_gestore->findOneBy(array('sigla' => $gestore));
+            $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $gestore));
         } else {
             $gestore = false;
         };
@@ -256,8 +256,9 @@ class SchedaController extends DragDropController {
         }
         $entities = $em->getRepository('EphpSinistriBundle:Scheda')->cerca($gestore, $ospedali_id, $anno, $q);
         $ospedali = $_ospedale->findBy(array(), array('gruppo' => 'ASC'));
-        $gestori = $_gestore->findBy(array(), array('sigla' => 'ASC'));
-        $priorita = $_priorita->findAll();
+        $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
+        $priorita = $this->find('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->find('EphpSinistriBundle:StatiOperativi', array());
         return array(
             'entities' => $entities,
             'mode' => $mode,
@@ -267,6 +268,7 @@ class SchedaController extends DragDropController {
             'ospedali' => $ospedali,
             'gestori' => $gestori,
             'priorita' => $priorita,
+            'stati_operativi' => $stati_operativi,
             'anni' => range(7, date('y')),
             'q' => $q,
             'scroll' => false,
@@ -1602,6 +1604,7 @@ class SchedaController extends DragDropController {
                                 $em->flush();
                                 $schede_aggiornate++;
                             } else {
+                                $scheda->setStatoOperativo($this->findOneBy('EphpSinistriBundle:StatoOperativo', array('primo' => true)));
                                 $em->persist($scheda);
                                 $em->flush();
                                 $schede_aggiunte++;
@@ -1792,6 +1795,7 @@ class SchedaController extends DragDropController {
                                         $em->flush();
                                         $schede_aggiornate++;
                                     } else {
+                                        $scheda->setStatoOperativo($this->findOneBy('EphpSinistriBundle:StatoOperativo', array('primo' => true)));
                                         $em->persist($scheda);
                                         $em->flush();
                                         $schede_aggiunte++;

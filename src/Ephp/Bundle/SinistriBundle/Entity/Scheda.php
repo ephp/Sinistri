@@ -103,6 +103,12 @@ class Scheda {
     private $stato;
 
     /**
+     * @ORM\ManyToOne(targetEntity="StatoOperativo")
+     * @ORM\JoinColumn(name="stato_operativo_id", referencedColumnName="id", nullable=true)
+     */
+    private $stato_operativo;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="sa", type="decimal", precision=15, scale=2, nullable=true)
@@ -703,6 +709,27 @@ class Scheda {
      */
     public function getStato() {
         return $this->stato;
+    }
+
+    /**
+     * Set stato_operativo
+     *
+     * @param \Ephp\Bundle\SinistriBundle\Entity\StatoOperativo $stato_operativo
+     * @return Scheda
+     */
+    public function setStatoOperativo(\Ephp\Bundle\SinistriBundle\Entity\StatoOperativo $stato_operativo = null) {
+        $this->stato_operativo = $stato_operativo;
+
+        return $this;
+    }
+
+    /**
+     * Get stato_operativo
+     *
+     * @return \Ephp\Bundle\SinistriBundle\Entity\StatoOperativo
+     */
+    public function getStatoOperativo() {
+        return $this->stato_operativo;
     }
 
     /**

@@ -30,6 +30,7 @@ class SchedaType extends AbstractType
 //            ->add('gestore')
             ->add('giudiziale', 'choice', array('choices' => array('' => '-', '-' => 'Non Giudiziali', '*' => 'Tutti i Gidiziali', 'J' => 'J', 'Y' => 'Y', 'A' => 'A', 'C' => 'C')))
             ->add('stato', null, array('required' => false))
+            ->add('stato_operativo', null, array('required' => false))
             ->add('priorita')
         ;
     }
