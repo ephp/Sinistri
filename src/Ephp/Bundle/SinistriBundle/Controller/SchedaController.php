@@ -26,7 +26,7 @@ use Ephp\UtilityBundle\Utility\Time;
  * @Route("/tabellone")
  */
 class SchedaController extends DragDropController {
-    
+
     use \Ephp\UtilityBundle\Controller\Traits\BaseController;
 
     /**
@@ -328,8 +328,8 @@ class SchedaController extends DragDropController {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Scheda entity.');
         }
-        
-        if(!$entity->getReportGestore()) {
+
+        if (!$entity->getReportGestore()) {
             $entity->setReportAmountReserved($entity->getAmountReserved());
             $entity->setReportApplicableDeductable($entity->getApplicableDeductable());
             $entity->setReportDol($entity->getDol());
@@ -342,7 +342,7 @@ class SchedaController extends DragDropController {
             $em->persist($entity);
             $em->flush();
         }
-        
+
         return array(
             'entity' => $entity,
             'gestori' => $em->getRepository('EphpGestoriBundle:Gestore')->findBy(array(), array('nome' => 'ASC')),
@@ -389,7 +389,7 @@ class SchedaController extends DragDropController {
                     array('tipo' => 'TAX', 'giorni' => 14),
                     array('tipo' => 'TAX', 'giorni' => 14)
                 );
-                if(!$entity->getDasc()) {
+                if (!$entity->getDasc()) {
                     $entity->setDasc(new \DateTime());
                     $em->persist($entity);
                     $em->flush();
@@ -486,7 +486,7 @@ class SchedaController extends DragDropController {
         }
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $priorita->getId(), 'label' => $priorita->getPriorita(), 'css' => 'bg-' . $priorita->getCss(), 'js' => $priorita->getOnChange())));
     }
-    
+
     /**
      * Lists all Scheda entities.
      *
@@ -505,8 +505,26 @@ class SchedaController extends DragDropController {
         /* @var $priorita Priorita */
 
         try {
+            $old = $scheda->getStatoOperativo();
             $scheda->setStatoOperativo($stato);
             $em->persist($scheda);
+            $em->flush();
+            $cal = $this->getCalendar();
+            $data = new \DateTime();
+            $tipo = $this->getTipoEvento('CHS');
+            $evento = new Evento();
+            $evento->setCalendario($cal);
+            $evento->setDataOra($data);
+            $evento->setDeltaG(0);
+            $evento->setGiornoIntero(true);
+            $evento->setImportante(true);
+            $evento->setNote('Da "' . $old->getStato() . '" a "' + $stato->getStsto() + '"');
+            $evento->setOrdine(0);
+            $evento->setRischedulazione(false);
+            $evento->setScheda($scheda);
+            $evento->setTipo($tipo);
+            $evento->setTitolo($tipo->getNome());
+            $em->persist($evento);
             $em->flush();
         } catch (\Exception $e) {
             throw $e;
@@ -1872,6 +1890,7 @@ class SchedaController extends DragDropController {
             $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
             $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
             $_tipo->createTipo('VER', 'Verifica periodica', 'aaffaa', $cal);
+            $_tipo->createTipo('CHS', 'Cambio Stato Operativo', 'aaaaff', $cal);
         }
         return $cal;
     }

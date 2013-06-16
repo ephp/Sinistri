@@ -263,6 +263,7 @@ class CalendarController extends Controller {
             $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
             $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
             $_tipo->createTipo('VER', 'Verifica periodica', 'aaffaa', $cal);
+            $_tipo->createTipo('CHS', 'Cambio Stato Operativo', 'aaaaff', $cal);
         }
         return $cal;
     }
