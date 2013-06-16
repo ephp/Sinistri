@@ -486,6 +486,33 @@ class SchedaController extends DragDropController {
         }
         return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $priorita->getId(), 'label' => $priorita->getPriorita(), 'css' => 'bg-' . $priorita->getCss(), 'js' => $priorita->getOnChange())));
     }
+    
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-cambia-priorita-scheda", name="tabellone_cambia_stato_operativo", defaults={"_format"="json"})
+     */
+    public function cambiaStatoOperativoAction() {
+        $req = $this->getRequest()->get('stato_operativo');
+        $em = $this->getEm();
+
+        $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
+        $_priorita = $em->getRepository('EphpSinistriBundle:StatoOperativo');
+
+        $scheda = $_scheda->find($req['id']);
+        /* @var $scheda Scheda */
+        $stato = $_priorita->find($req['stato']);
+        /* @var $priorita Priorita */
+
+        try {
+            $scheda->setStatoOperativo($stato);
+            $em->persist($scheda);
+            $em->flush();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $stato->getId(), 'label' => $stato->getStato())));
+    }
 
     /**
      * Lists all Scheda entities.
