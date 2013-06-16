@@ -1,0 +1,53 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Stato Operativo
+{% endblock %}
+
+{% block content %}
+<h1>Stato Operativo</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Stato</th>
+            <td>{{ entity.stato }}</td>
+        </tr>
+        <tr>
+            <th>Tab</th>
+            <td>{{ entity.tab }}</td>
+        </tr>
+        <tr>
+            <th>Stats</th>
+            <td>{{ entity.stats }}</td>
+        </tr>
+        <tr>
+            <th>Primo</th>
+            <td>{{ entity.primo }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('stati_operativi') }}">
+            Torna indietro
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('stati_operativi_edit', { 'id': entity.id }) }}">
+            Modifica
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('stati_operativi_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Elimina</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

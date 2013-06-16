@@ -21,18 +21,8 @@
 {% set params = {'gestore': params_gestore, 'ospedale': params_ospedale, 'anno': params_anno, 'pagina': 2} %}
 {% block title %}{{titolo}}{% endblock %}
 
-{% block header %}
-    <ul class="menu">
-        <li><a href="{{ path('profilo') }}">Profilo</a></li>
-        <li>Tabellone</li>
-        {% if gestore is defined and gestore %}
-            <li><a href="{{ path('calendario_sinistri', {'gestore': gestore.sigla}) }}">Calendario</a></li>
-        {% else %}
-            <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
-        {% endif %}
-        <li><a href="{{ path('strumenti') }}">Strumenti</a></li>
-    </ul>
-    <div style="clear: both"></div>
+{% block menu %}
+    {% include "::components/menu/base.html.twig" %}
     {% if false %}
         <button><a href="{{ path('tabellone_upload_drive_default') }}">Importa da Google Drive</a></button>
         <button><a href="{{ path('tabellone_upload_drive_piemonte') }}">Importa Piemonte da Google Drive</a></button>

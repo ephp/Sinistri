@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+StatoOperativo
+{% endblock %}
+
+{% block content %}
+<h1>Nuovo StatoOperativo</h1>
+
+<form action="{{ path('stati_operativi_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+        <button type="submit">Salva</button>
+    </p>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('stati_operativi') }}">
+            Torna indietro
+        </a>
+    </li>
+</ul>
+{% endblock %}

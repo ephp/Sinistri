@@ -9,66 +9,66 @@
 <table class="report_list" style="width: 640px; border-top: 1px solid black; margin-bottom: 10px;">
     <thead>
         <tr>
-            <th>
+            <th style="width: 50%">
                 Intestatario: {{ entity.reportGestore.nome }}<br/>
                 Claimant: {{ entity.claimant }}<br/>
             </th>
-            <th>
+            <th style="width: 50%">
                 TPA: {{ entity.ospedale.tpa }}<br/>
                 N.Claim: {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}
             </th>
         </tr>
         <tr>
-            <th>SOI: {{ entity.reportSoi }}</th>
-            <th>&nbsp;</th>
+            <th style="width: 50%">SOI: {{ entity.reportSoi }}</th>
+            <th style="width: 50%">&nbsp;</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>
+            <td style="width: 50%">
                 Data evento (DOL): {% if entity.reportDol %}{{ entity.reportDol|date('d/m/Y') }}{% endif %}<br/>
                 Data reclamo (DON): {% if entity.reportDon %}{{ entity.reportDon|date('d/m/Y') }}{% endif %}<br/>
             </td>
-            <td>
+            <td style="width: 50%">
                 Descrizione evento:<br/>{{ entity.reportDescrizione|nl2br }}
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 50%">
                 MPL: {{ entity.reportMpl|nl2br }}<br/>
                 Giudiziale: {{ entity.reportGiudiziale|nl2br }}<br/>
             </td>
-            <td>
+            <td style="width: 50%">
                 Other Policies:<br/>{{ entity.reportOtherPolicies|nl2br }}
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 50%">
                 Tipo danno<br/>
                 TPL - negligenza medica coinvolta):<br/>
                 {{ entity.reportTypeOfLoss }}
             </td>
-            <td>&nbsp;</td>
+            <td style="width: 50%">&nbsp;</td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 50%">
                 Dipartimento ospedaliero: {{ entity.ospedale.nome }}
             </td>
-            <td>
+            <td style="width: 50%">
                 Possible Recovery: {{ entity.reportPossibleRecovery }} €
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 50%">
                 Amount Reserved: {% if entity.reportAmountReserved >= 0 %}{{ entity.reportAmountReserved }} €{% else %}N.P.{% endif %}
             </td>
-            <td>
+            <td style="width: 50%">
                 Applicable Deductable: {{ entity.reportApplicableDeductable }} €
             </td>
         </tr>
         <tr>
-            <td>Future Conduct:<br/>{{ entity.reportFutureConduct|nl2br }}</td>
-            <td>AVV. {{ entity.reportGestore.nome }}</td>
+            <td style="width: 50%">Future Conduct:<br/>{{ entity.reportFutureConduct|nl2br }}</td>
+            <td style="width: 50%">AVV. {{ entity.reportGestore.nome }}</td>
         </tr>
     </tbody>
 </table>

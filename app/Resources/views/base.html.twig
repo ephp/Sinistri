@@ -28,16 +28,8 @@
             <div id="symfony-header">
                 <a href="{{ path('home') }}"><img src="{{ asset('bundles/ephpsinistri/images/logo.png') }}" alt="JFclaims logo" style="vertical-align: middle; margin-right: 25px;" /></a>
                 <div style="clear: both"></div>
-                {% block header %}
-                    {% if app.user %}
-                        <ul class="menu">
-                            <li><a href="{{ path('profilo') }}">Profilo</a></li>
-                            <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
-                            <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
-                            <li><a href="{{ path('strumenti') }}">Strumenti</a></li>
-                        </ul>
-                        <div style="clear: both"></div>
-                    {% endif %}
+                {% block menu %}
+                    {% include "::components/menu/base.html.twig" %}
                 {% endblock %}
             </div>
 
@@ -60,7 +52,8 @@
                             <dt>Tabellone</dt>
                             <dd>Nascosti i sinistri in stato "definito"<br/>
                                 <ul>
-                                    <li style="padding-bottom: 0px; color: red;">Aggiunta colorra Giudiziale, con possibilità di ricerca</li>
+                                    <li style="padding-bottom: 0px; color: red;">Aggiunta gestione Stati operativi</li>
+                                    <li style="padding-bottom: 0px; color: red;">Aggiunta colonna Giudiziale, con possibilità di ricerca</li>
                                 </ul>
                             </dd>
                             <dt>Report</dt>

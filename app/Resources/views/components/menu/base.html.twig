@@ -1,0 +1,24 @@
+{% if app.user %}
+    <ul class="menu">
+        <li><a href="{{ path('profilo') }}">Profilo</a></li>
+        {% if gestore is defined and gestore %}
+            <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tabellone</a></li>
+            <li><a href="{{ path('calendario_sinistri', {'gestore': gestore.sigla}) }}">Calendario</a></li>
+        {% else %}
+            <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
+            <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
+        {% endif %}
+        <li><a href="{{ path('strumenti') }}">Strumenti</a></li>
+    </ul>
+    <div style="clear: both"></div>
+    <ul class="menu">
+        <li><a href="{{ path('fos_user_change_password') }}">Cambia password</a></li>
+        <li><a href="{{ path('fos_user_security_logout') }}">Esci</a></li>
+        {% if app.user.hasRole('ROLE_ADMIN') %}
+            <li><a href="{{ path('gestori') }}">Gestori</a></li>
+            <li><a href="{{ path('stati_operativi') }}">Stati Operativi</a></li>
+            <li><a href="{{ path('ospedali') }}">Ospedali</a></li>
+        {% endif %}
+    </ul>
+    <div style="clear: both"></div>
+{% endif %}
