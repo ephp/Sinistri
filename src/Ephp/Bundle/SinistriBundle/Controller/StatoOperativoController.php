@@ -83,7 +83,7 @@ class StatoOperativoController extends Controller {
         if ($form->isValid()) {
             $em = $this->getEm();
             if ($entity->getPrimo()) {
-                $primo = $this->findOneBy('EphpSinistriBundle:StatoOperativo', array('pirmo' => true));
+                $primo = $this->findOneBy('EphpSinistriBundle:StatoOperativo', array('primo' => true));
                 if ($primo) {
                     $primo->setPrimo(false);
                     $em->persist($primo);
@@ -250,7 +250,7 @@ class StatoOperativoController extends Controller {
             throw $this->createNotFoundException('Unable to find StatoOperativo entity.');
         }
 
-        $primo = $this->findOneBy('EphpSinistriBundle:StatoOperativo', array('pirmo' => true));
+        $primo = $this->findOneBy('EphpSinistriBundle:StatoOperativo', array('primo' => true));
         if ($primo) {
             $primo->setPrimo(false);
             $em->persist($primo);
