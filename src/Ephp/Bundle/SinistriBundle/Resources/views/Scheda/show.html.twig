@@ -4,16 +4,17 @@
 {{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }} {{ entity.claimant }} - Scheda sinistro
 {% endblock %}
 
-{% block header %}
-<ul class="menu" style="float: right;">
-    {% if false %}
-        <li><a href="javascript:attivaImport('Google','{{ path('calendario_import_google', {'id': entity.id}) }}')">Google</a></li>
-    {% endif %}
-    <li><a href="javascript:attivaImport('JWeb-Claims','{{ path('calendario_import_jweb', {'id': entity.id}) }}')">JWeb-Claims</a></li>
-    <li><a href="javascript:attivaImport('Cancelleria Telematica','{{ path('calendario_import_cancelleria', {'id': entity.id}) }}')">Cancelleria Telematica</a></li>
-    <li><a href="javascript:attivaImport('Ravinale Piemonte','{{ path('calendario_import_ravinale', {'id': entity.id}) }}')">Ravinale Piemonte</a></li>
-</ul>
-<h2 style="float: right; margin-right: 10px;">Importa calendario:</h2>
+{% block menu %}
+    {% include "::components/menu/base.html.twig" %}
+    <ul class="menu" style="float: right;">
+        {% if false %}
+            <li><a href="javascript:attivaImport('Google','{{ path('calendario_import_google', {'id': entity.id}) }}')">Google</a></li>
+        {% endif %}
+        <li><a href="javascript:attivaImport('JWeb-Claims','{{ path('calendario_import_jweb', {'id': entity.id}) }}')">JWeb-Claims</a></li>
+        <li><a href="javascript:attivaImport('Cancelleria Telematica','{{ path('calendario_import_cancelleria', {'id': entity.id}) }}')">Cancelleria Telematica</a></li>
+        <li><a href="javascript:attivaImport('Ravinale Piemonte','{{ path('calendario_import_ravinale', {'id': entity.id}) }}')">Ravinale Piemonte</a></li>
+    </ul>
+    <h2 style="float: right; margin-right: 10px;">Importa calendario:</h2>
 {% endblock %}
         
 {% block content %}
