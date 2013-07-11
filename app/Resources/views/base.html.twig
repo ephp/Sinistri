@@ -22,6 +22,16 @@
         <script src="{{ asset('/js/jquery/FancyBox/helpers/jquery.fancybox-buttons.js') }}"></script>
         <script src="{{ asset('/js/jquery/FancyBox/helpers/jquery.fancybox-thumbs.js') }}"></script>
         <script src="{{ asset('/js/commons.js') }}"></script>
+        <style type="text/css">
+            .clearfix:after {
+                content: ".";
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+        {% block css_inline %}{% endblock %}
+        </style>
     </head>
     <body>
         <div id="symfony-wrapper">
