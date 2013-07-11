@@ -1546,6 +1546,7 @@ class SchedaController extends DragDropController {
                                                 $ospedale->setSigla($tpa2[0]);
                                                 $ospedale->setNome($tpa2[0]);
                                                 $ospedale->setGruppo('Piemonte');
+                                                $ospedale->setTpa('Ravinale');
                                                 $ospedale->setNomeGruppo('Ospedali Piemonte');
                                                 $em->persist($ospedale);
                                                 $em->flush();
@@ -1701,6 +1702,7 @@ class SchedaController extends DragDropController {
                                                         $ospedale->setNome($sheet[6][14]);
                                                         $ospedale->setGruppo($tpa[0]);
                                                         $ospedale->setNomeGruppo($sheet[6][14]);
+                                                        $ospedale->setTpa('Contec');
                                                         $em->persist($ospedale);
                                                         $em->flush();
                                                     }
