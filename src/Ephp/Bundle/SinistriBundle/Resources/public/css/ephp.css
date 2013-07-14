@@ -339,6 +339,7 @@ ul.menu
     float: left;
     margin-bottom: 20px;
     padding-left: 0;
+    width: 100%;
 }
 
 .menu li:after { 
