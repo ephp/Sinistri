@@ -47,7 +47,7 @@ Profilo
             {% endif %}
             {% if attribute(pubbliche, tab.id)|length > 0 %}
                 <h3>Tutte</h3>
-                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id, 'gest': true)} %}
+                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id), 'gest': true} %}
             {% endif %}
         </div>
     {% endif %}
