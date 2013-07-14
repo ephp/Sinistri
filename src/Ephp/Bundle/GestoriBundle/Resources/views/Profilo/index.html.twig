@@ -7,40 +7,40 @@ Profilo
 {% block content %}
 <h1>{{ gestore.nome }}</h1>
 <div id="tabs">
-  <ul>
-    {% if prima_pagina|length > 0 %}
-        <li><a href="#tabs-pp">Prima pagina</a></li>
-    {% endif %}
-    {% if attenzione|length > 0 %}
-        <li><a href="#tabs-i">Importanti</a></li>
-    {% endif %}
-    {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-        <li><a href="#tabs-nr">Nuovi e riattivati</a></li>
-    {% endif %}
-    {% for tab in tabs %}
-        {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
-            <li><a href="#tabs-{{ tab.id }}">{{ tab.stato|capitalize }}</a></li>
+    <ul>
+        {% if prima_pagina|length > 0 %}
+            <li><a href="#tabs-pp">Prima pagina</a></li>
         {% endif %}
-    {% endfor%}
-  </ul>
+        {% if attenzione|length > 0 %}
+            <li><a href="#tabs-i">Importanti</a></li>
+        {% endif %}
+        {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
+            <li><a href="#tabs-nr">Nuovi e riattivati</a></li>
+        {% endif %}
+        {% for tab in tabs %}
+            {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
+                <li><a href="#tabs-{{ tab.id }}">{{ tab.stato|capitalize }}</a></li>
+            {% endif %}
+        {% endfor%}
+    </ul>
 {% if prima_pagina|length > 0 %}
-    <div id="tabs-pp">
+    <div id="tabs-pp" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
     </div>
 {% endif %}
 {% if attenzione|length > 0 %}
-    <div id="tabs-i">
+    <div id="tabs-i" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
     </div>
 {% endif %}
 {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-    <div id="tabs-nr">
+    <div id="tabs-nr" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
     </div>
 {% endif %}
 {% for tab in tabs %}
     {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
-        <div id="tabs-{{ tab.id }}">
+        <div id="tabs-{{ tab.id }}" style="display: none">
             {% if attribute(pubbliche, tab.id)|length > 0 %}
                 <h3>Personali</h3>
                 {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id)} %}
@@ -90,6 +90,9 @@ Profilo
 
     $(function() {
         $( "#tabs" ).tabs();
+        $( "#tabs ul li a" ).click(function(){
+            alert($(this).attr('href'));
+        });
     });
 </script>
 {% endblock %}
