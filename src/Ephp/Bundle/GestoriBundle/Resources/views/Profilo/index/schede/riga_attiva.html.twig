@@ -4,7 +4,7 @@
     <td id="star_{{ entity.id }}" style="background-color: transparent;" class="{% if entity.primaPagina %}cal_important{% else %}cal_normal{% endif %}" onclick="primaPagina({{ entity.id }})"></td>
     <td style="text-align: center">{{ entity.ospedale.sigla|upper }}/{{ entity.anno2 }}/{{ entity.tpa }}</td>
     <td>{{ entity.claimant }}</td>
-    <td style="text-align: center"><textarea class="autoupdate" style="height: 32px; width: 250px;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
+    <td style="text-align: center"><textarea class="autoupdate" style="height: 32px; width: 100%;" pratica="{{ entity.id }}" name="note">{{ entity.note }}</textarea></td>
     {% if gest is defined %}
         <td>{{ entity.gestore.sigla }}</td>
     {% endif %}
