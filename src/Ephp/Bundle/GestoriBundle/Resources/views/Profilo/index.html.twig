@@ -8,14 +8,14 @@ Profilo
 <h1>{{ gestore.nome }}</h1>
 <div id="tabs">
     <ul>
+        {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
+            <li><a href="#tabs-nr">Nuovi e riattivati</a></li>
+        {% endif %}
         {% if prima_pagina|length > 0 %}
             <li><a href="#tabs-pp">Prima pagina</a></li>
         {% endif %}
         {% if attenzione|length > 0 %}
             <li><a href="#tabs-i">Importanti</a></li>
-        {% endif %}
-        {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-            <li><a href="#tabs-nr">Nuovi e riattivati</a></li>
         {% endif %}
         {% for tab in tabs %}
             {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
@@ -23,6 +23,11 @@ Profilo
             {% endif %}
         {% endfor%}
     </ul>
+{% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
+    <div id="tabs-nr" style="display: none">
+        {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
+    </div>
+{% endif %}
 {% if prima_pagina|length > 0 %}
     <div id="tabs-pp" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
@@ -31,11 +36,6 @@ Profilo
 {% if attenzione|length > 0 %}
     <div id="tabs-i" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
-    </div>
-{% endif %}
-{% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-    <div id="tabs-nr" style="display: none">
-        {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
     </div>
 {% endif %}
 {% for tab in tabs %}
