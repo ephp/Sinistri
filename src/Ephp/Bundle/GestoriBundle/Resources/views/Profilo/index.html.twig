@@ -9,17 +9,17 @@ Profilo
 <div id="tabs">
   <ul>
     {% if prima_pagina|length > 0 %}
-        <li href="#tabs-pp">Prima pagina</li>
+        <li><a href="#tabs-pp">Prima pagina</a></li>
     {% endif %}
     {% if attenzione|length > 0 %}
-        <li href="#tabs-i">Importanti</li>
+        <li><a href="#tabs-i">Importanti</a></li>
     {% endif %}
     {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-        <li href="#tabs-nr">Nuovi e riattivati</li>
+        <li><a href="#tabs-nr">Nuovi e riattivati</a></li>
     {% endif %}
     {% for tab in tabs %}
         {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
-            <li href="#tabs-{{ tab.id }}">{{ tab.stato|capitalize }}</li>
+            <li><a href="#tabs-{{ tab.id }}">{{ tab.stato|capitalize }}</a></li>
         {% endif %}
     {% endfor%}
   </ul>
@@ -57,7 +57,7 @@ Profilo
 
 <div style="display: none" id="fb_assegna_gestore">
     <form id="assegna_gestore_scheda">
-        <li>Assegna il gestore a <span id="assegna_gestore_a"></span></li>
+        <li>Assegna il gestore a <span id="assegna_gestore_a"></span></a></li>
         <div style="clear: both"></div>
         <select name="scheda[gestore]" id="scheda_gestore">
             <option value="">Nessuno</option>
