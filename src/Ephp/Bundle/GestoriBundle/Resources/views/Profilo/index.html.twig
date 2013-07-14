@@ -94,6 +94,16 @@ Profilo
             $( "#tabs div" ).hide();
             $($(this).attr('href')).show();
         });
+        $( "#tabs div:first" ).show();
     });
+    $('.autoupdate').change(function(){
+        val = $(this).val();
+        pratica = $(this).attr('pratica');
+        field = $(this).attr('name');
+        $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
+            checkUm();
+        });
+    });
+
 </script>
 {% endblock %}
