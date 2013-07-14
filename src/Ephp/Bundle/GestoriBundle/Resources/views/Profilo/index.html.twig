@@ -91,7 +91,8 @@ Profilo
     $(function() {
         $( "#tabs" ).tabs();
         $( "#tabs ul li a" ).click(function(){
-            alert($(this).attr('href'));
+            $( "#tabs ul li a" ).hide();
+            $($(this).attr('href')).show();
         });
     });
 </script>
