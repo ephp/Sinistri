@@ -41,13 +41,13 @@ Profilo
 {% for tab in tabs %}
     {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
         <div id="tabs-{{ tab.id }}" style="display: none">
-            {% if attribute(pubbliche, tab.id)|length > 0 %}
-                <h3>Personali</h3>
-                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id)} %}
-            {% endif %}
             {% if attribute(private, tab.id)|length > 0 %}
-                <h3>Tutte</h3>
+                <h3>Personali</h3>
                 {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(private, tab.id)} %}
+            {% endif %}
+            {% if attribute(pubbliche, tab.id)|length > 0 %}
+                <h3>Tutte</h3>
+                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id, 'gest': true)} %}
             {% endif %}
         </div>
     {% endif %}
