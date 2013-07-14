@@ -91,7 +91,7 @@ Profilo
     $(function() {
         $( "#tabs" ).tabs();
         $( "#tabs ul li a" ).click(function(){
-            $( "#tabs ul li a" ).hide();
+            $( "#tabs div" ).hide();
             $($(this).attr('href')).show();
         });
     });
