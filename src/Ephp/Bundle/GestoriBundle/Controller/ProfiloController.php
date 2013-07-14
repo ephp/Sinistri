@@ -37,7 +37,19 @@ class ProfiloController extends Controller {
         $prima_pagina = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'prima_pagina' => true), array('claimant' => 'ASC'));
         $attenzione = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'priorita' => $priorita), array('claimant' => 'ASC'));
         $nuove = $this->findBy('EphpSinistriBundle:Scheda', array('priorita' => $priorita_adm), array('claimant' => 'ASC'));
+        
+        $tabs = $this->findBy('EphpSinistriBundle:StatoOperativo', array('tab' => true));
+        $private = array();
+        $pubbliche = array();
+        foreach($tabs as $tab) {
+            $private[$tab->getId()] = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'stato_operativo' => $tab->getId()), array('claimant' => 'ASC'));
+            $pubbliche[$tab->getId()] = $this->findBy('EphpSinistriBundle:Scheda', array('stato_operativo' => $tab->getId()), array('claimant' => 'ASC'));
+        }
+        
         return array(
+            'tabs' => $tabs,
+            'private' => $private,
+            'pubbliche' => $pubbliche,
             'gestore' => $gestore,
             'oggi' => new \DateTime(),
             'prima_pagina' => $prima_pagina,

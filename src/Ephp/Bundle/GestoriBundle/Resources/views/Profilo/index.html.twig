@@ -6,23 +6,58 @@ Profilo
 
 {% block content %}
 <h1>{{ gestore.nome }}</h1>
-
+<div id="tabs">
+  <ul>
+    {% if prima_pagina|length > 0 %}
+        <li href="#tabs-pp">Prima pagina</li>
+    {% endif %}
+    {% if attenzione|length > 0 %}
+        <li href="#tabs-i">Importanti</li>
+    {% endif %}
+    {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
+        <li href="#tabs-nr">Nuovi e riattivati</li>
+    {% endif %}
+    {% for tab in tabs %}
+        {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
+            <li href="#tabs-{{ tab.id }}">{{ tab.stato|capitalize }}</li>
+        {% endif %}
+    {% endfor%}
+  </ul>
 {% if prima_pagina|length > 0 %}
-    <h2>Prima pagina</h2>
-    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
+    <div id="tabs-pp">
+        {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
+    </div>
 {% endif %}
 {% if attenzione|length > 0 %}
-    <h2>Importanti</h2>
-    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
+    <div id="tabs-i">
+        {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
+    </div>
 {% endif %}
 {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-    <h2>Nuovi e riattivati</h2>
-    {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
+    <div id="tabs-nr">
+        {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
+    </div>
 {% endif %}
+{% for tab in tabs %}
+    {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
+        <div id="tabs-{{ tab.id }}">
+            {% if attribute(pubbliche, tab.id)|length > 0 %}
+                <h3>Personali</h3>
+                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id)} %}
+            {% endif %}
+            {% if attribute(private, tab.id)|length > 0 %}
+                <h3>Tutte</h3>
+                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(private, tab.id)} %}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endfor%}
+</div>
+
 
 <div style="display: none" id="fb_assegna_gestore">
     <form id="assegna_gestore_scheda">
-        <h2>Assegna il gestore a <span id="assegna_gestore_a"></span></h2>
+        <li>Assegna il gestore a <span id="assegna_gestore_a"></span></li>
         <div style="clear: both"></div>
         <select name="scheda[gestore]" id="scheda_gestore">
             <option value="">Nessuno</option>
@@ -52,5 +87,7 @@ Profilo
             window.location = out.redirect;
         });
     }
+
+    $( "#tabs" ).tabs();
 </script>
 {% endblock %}
