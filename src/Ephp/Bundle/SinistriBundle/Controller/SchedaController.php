@@ -1669,6 +1669,7 @@ class SchedaController extends DragDropController {
                                 $old->setApplicableDeductable($scheda->getApplicableDeductable());
                                 $old->setSoi($scheda->getSoi());
                                 $old->setStato($scheda->getStato());
+                                $old->setGiudiziale($scheda->getGiudiziale());
                                 $em->persist($old);
                                 $em->flush();
                                 $schede_aggiornate++;
