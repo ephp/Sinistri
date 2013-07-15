@@ -1630,7 +1630,7 @@ class SchedaController extends DragDropController {
                                                     $scheda->setGiudiziale('A');
                                                     break;
                                                 default:
-                                                    $scheda->setGiudiziale(null);
+                                                    $scheda->setGiudiziale(' ');
                                                     break;
                                             }
                                         }
