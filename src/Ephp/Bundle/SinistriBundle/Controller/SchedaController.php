@@ -1500,8 +1500,8 @@ class SchedaController extends DragDropController {
                     'POSSIBLE RECOVERY',
                     'AMOUNT SETTLED',
                     'DEDUC. PAID',
-                    'PROFESS. FEES PAID',
                     'LT FEES PAID',
+                    'PROFESS. FEES PAID',
                     'TOTAL PAID',
                     'RECOVERED',
                     'TOTAL INCURRED',
@@ -1509,6 +1509,7 @@ class SchedaController extends DragDropController {
                     'M.P.L.',
                     'S. OF I.',
                     'STATUS',
+                    'COURT',
                     'COMMENTS',
                 );
                 $doc = new \DOMDocument();
@@ -1610,6 +1611,28 @@ class SchedaController extends DragDropController {
                                     case 'TYPE OF LOSS':
                                         if ($td->nodeValue) {
                                             $scheda->setServiceProvider($td->nodeValue);
+                                        }
+                                        break;
+                                    case 'COURT':
+                                        if ($td->nodeValue) {
+                                            switch($td->nodeValue) {
+                                                case "Civil":
+                                                    $scheda->setGiudiziale('C');
+                                                    $scheda->setGiudiziale('Y');
+                                                    break;
+                                                case "Criminal":
+                                                    $scheda->setGiudiziale('J');
+                                                    $scheda->setGiudiziale('Y');
+                                                    break;
+                                                case "Civil and criminal":
+                                                case "Criminal and civil":
+                                                    $scheda->setGiudiziale('A');
+                                                    $scheda->setGiudiziale('Y');
+                                                    break;
+                                                default:
+                                                    $scheda->setGiudiziale('Y');
+                                                    break;
+                                            }
                                         }
                                         break;
                                     case 'STATUS':
