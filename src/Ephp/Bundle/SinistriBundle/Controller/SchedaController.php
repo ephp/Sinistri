@@ -1617,17 +1617,17 @@ class SchedaController extends DragDropController {
                                         if ($td->nodeValue) {
                                             switch($td->nodeValue) {
                                                 case "Civil":
-                                                    $scheda->setGiudiziale('C');
                                                     $scheda->setGiudiziale('Y');
+                                                    $scheda->setGiudiziale('C');
                                                     break;
                                                 case "Criminal":
-                                                    $scheda->setGiudiziale('J');
                                                     $scheda->setGiudiziale('Y');
+                                                    $scheda->setGiudiziale('J');
                                                     break;
                                                 case "Civil and criminal":
                                                 case "Criminal and civil":
-                                                    $scheda->setGiudiziale('A');
                                                     $scheda->setGiudiziale('Y');
+                                                    $scheda->setGiudiziale('A');
                                                     break;
                                                 default:
                                                     $scheda->setGiudiziale(null);
