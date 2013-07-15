@@ -57,6 +57,21 @@ class SchedaRepository extends EntityRepository {
                         break;
                 }
             }
+            if($find->getAmountReserved()) {
+                switch($find->getAmountReserved()) {
+                    case 'np':
+                        $qb->andWhere("s.amount_reserved = :ar")->setParameter('ar', -1);;
+                        break;
+                    case 'f':
+                        $qb->andWhere("s.amount_reserved >= :ar")->setParameter('ar', 0);;
+                        break;
+                    case '':
+                    case null:
+                    case false:
+                    default:
+                        break;
+                }
+            }
         }
         if(is_string($find)) {
             $qb->andWhere('s.claimant like :q')->setParameter('q', "%{$find}%");

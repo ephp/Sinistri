@@ -39,11 +39,21 @@ class ProfiloController extends Controller {
         $nuove = $this->findBy('EphpSinistriBundle:Scheda', array('priorita' => $priorita_adm), array('claimant' => 'ASC'));
         
         $tabs = $this->findBy('EphpSinistriBundle:StatoOperativo', array('tab' => true));
-        $private = array();
-        $pubbliche = array();
+        $private = $pubbliche = array();
         foreach($tabs as $tab) {
-            $private[$tab->getId()] = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'stato_operativo' => $tab->getId()), array('claimant' => 'ASC'));
-            $pubbliche[$tab->getId()] = $this->findBy('EphpSinistriBundle:Scheda', array('stato_operativo' => $tab->getId()), array('claimant' => 'ASC'));
+            $pu = $pr = array();
+            $all = $this->findBy('EphpSinistriBundle:Scheda', array('stato_operativo' => $tab->getId()), array('claimant' => 'ASC'));
+            foreach($all as $one) {
+                /* @var $one \Ephp\Bundle\SinistriBundle\Entity\Scheda */
+                if($one->getGestore()->getId() == $gestore->getId()) {
+                    $pr[] = $one;
+                } else {
+                    $pu[] = $one;
+                }
+            }
+            
+            $private[$tab->getId()] = $pr;
+            $pubbliche[$tab->getId()] = $pu;
         }
         
         return array(

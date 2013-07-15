@@ -17,7 +17,7 @@ class SchedaType extends AbstractType
             ->add('claimant', null, array('required' => false))
             ->add('soi', null, array('required' => false, 'attr' => array('style' => 'width: 30px;', 'maxlength' => '2')))
 //            ->add('first_reserve')
-//            ->add('amount_reserved')
+            ->add('amount_reserved', 'choice', array('required' => false, 'choices' => array('' => '-', 'np' => 'NP', 'f' => 'Non NP')))
 //            ->add('franchigia')
 //            ->add('sa')
 //            ->add('offerta_nostra')
