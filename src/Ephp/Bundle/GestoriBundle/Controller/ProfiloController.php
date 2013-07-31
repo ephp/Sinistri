@@ -55,6 +55,8 @@ class ProfiloController extends Controller {
             $private[$tab->getId()] = $pr;
             $pubbliche[$tab->getId()] = $pu;
         }
+        $miei_ritardi = $this->getRepository('EphpSinistriBundle:Scheda')->ritardi($gestore->getId());
+        $tutti_ritardi = $this->getRepository('EphpSinistriBundle:Scheda')->ritardi();
         
         return array(
             'tabs' => $tabs,
@@ -65,6 +67,8 @@ class ProfiloController extends Controller {
             'prima_pagina' => $prima_pagina,
             'attenzione' => $attenzione,
             'nuove' => $nuove,
+            'miei_ritardi' => $miei_ritardi,
+            'tutti_ritardi' => $tutti_ritardi,
             'gestori' => $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC')),
         );
     }

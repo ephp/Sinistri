@@ -23,25 +23,25 @@ class SchedaRepository extends EntityRepository {
         if ($anno) {
             $qb->andWhere('s.anno = :anno')->setParameter('anno', $anno);
         }
-        if($find instanceof Scheda) {
+        if ($find instanceof Scheda) {
             /* @var $find Scheda */
-            if($find->getClaimant()) {
+            if ($find->getClaimant()) {
                 $qb->andWhere('s.claimant like :q')->setParameter('q', "%{$find->getClaimant()}%");
             }
-            if($find->getSoi()) {
+            if ($find->getSoi()) {
                 $qb->andWhere('s.soi = :s')->setParameter('s', $find->getSoi());
             }
-            if($find->getStato()) {
+            if ($find->getStato()) {
                 $qb->andWhere('s.stato = :st')->setParameter('st', $find->getStato()->getId());
             }
-            if($find->getPriorita()) {
+            if ($find->getPriorita()) {
                 $qb->andWhere('s.priorita = :pr')->setParameter('pr', $find->getPriorita()->getId());
             }
-            if($find->getStatoOperativo()) {
+            if ($find->getStatoOperativo()) {
                 $qb->andWhere('s.stato_operativo = :so')->setParameter('so', $find->getStatoOperativo()->getId());
             }
-            if($find->getGiudiziale()) {
-                switch($find->getGiudiziale()) {
+            if ($find->getGiudiziale()) {
+                switch ($find->getGiudiziale()) {
                     case '':
                     case null:
                     case false:
@@ -57,13 +57,15 @@ class SchedaRepository extends EntityRepository {
                         break;
                 }
             }
-            if($find->getAmountReserved()) {
-                switch($find->getAmountReserved()) {
+            if ($find->getAmountReserved()) {
+                switch ($find->getAmountReserved()) {
                     case 'np':
-                        $qb->andWhere("s.amount_reserved = :ar")->setParameter('ar', -1);;
+                        $qb->andWhere("s.amount_reserved = :ar")->setParameter('ar', -1);
+                        ;
                         break;
                     case 'f':
-                        $qb->andWhere("s.amount_reserved >= :ar")->setParameter('ar', 0);;
+                        $qb->andWhere("s.amount_reserved >= :ar")->setParameter('ar', 0);
+                        ;
                         break;
                     case '':
                     case null:
@@ -73,10 +75,29 @@ class SchedaRepository extends EntityRepository {
                 }
             }
         }
-        if(is_string($find)) {
+        if (is_string($find)) {
             $qb->andWhere('s.claimant like :q')->setParameter('q', "%{$find}%");
         }
         return $qb->getQuery()->execute();
+    }
+
+    public function ritardi($gestore_id = null) {
+        $connection = $this->getEntityManager()->getConnection();
+        $q = "   SELECT * FROM sx_ritardi r " .
+                " WHERE r.priorita != :priorita ".
+                "   AND r.giorni > :giorni ".
+                ($gestore_id ? " AND r.gestore_id = :id " : "" )
+        ;
+        $params = array(
+            'priorita' => 'definita',
+            'giorni' => 60,
+            );
+        
+        if($gestore_id) {
+            $params['id'] = $gestore_id;
+        }
+        $stmt = $connection->executeQuery($q, $params);
+        return $stmt->fetchAll();
     }
 
 }

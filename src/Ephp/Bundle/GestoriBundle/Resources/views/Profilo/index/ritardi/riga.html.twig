@@ -1,0 +1,17 @@
+<tr id="riga_{{ entity.id }}" class="r cg ca bg-{% if entity.priorita_css %}{{ entity.priorita_css }}{% else %}white{% endif %}" >
+    <th style="text-align: right;">{{ index }}</th>
+    <td style="text-align: right">{{ entity.giorni }}</td>
+    <td style="text-align: center">{{ entity.tpa }}</td>
+    <td>{{ entity.claimant }}</td>
+    {% if gest is defined %}
+        <td>{{ entity.gestore }}</td>
+    {% endif %}
+    <td>{{ entity.priorita }}</td>
+    <td>{{ entity.stato }}</td>
+    <td>{{ entity.stato_operativo }}</td>
+    <td>
+        <button type="button" onclick="javascript:window.location='{{ path('tabellone_show', {'id': entity.id}) }}'">
+            Apri
+        </button>
+    </td>
+</tr>

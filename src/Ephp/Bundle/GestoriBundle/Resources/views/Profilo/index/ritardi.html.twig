@@ -1,0 +1,21 @@
+{% set small = true %}
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Giorni</th>
+            <th>Tpa</th>
+            <th>Claimant</th>
+            {% if gest is defined %}
+                <th>Gestore</th>
+            {% endif %}
+            <th>Priorità</th>
+            <th>Stato</th>
+            <th>Stato Operativo</th>
+            <th>Apri</th>
+        </tr>
+    </thead>
+    <tbody id="tb_container">
+        {% include 'EphpGestoriBundle:Profilo:index/ritardi/tbody.html.twig' %}
+    </tbody>
+</table>            
