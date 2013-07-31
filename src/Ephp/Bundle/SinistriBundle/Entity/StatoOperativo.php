@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * StatoOperativo
  *
- * @ORM\Table()
+ * @ORM\Table(name="sx_stati_operativi")
  * @ORM\Entity(repositoryClass="Ephp\Bundle\SinistriBundle\Entity\StatoOperativoRepository")
  */
 class StatoOperativo
