@@ -20,6 +20,7 @@
         "jms/di-extra-bundle": "1.1.*",
         "kriswallsmith/assetic": "1.1.*@dev",
 	"ephp/acl": "master",
+	"ephp/imap": "master",
         "stof/doctrine-extensions-bundle": "dev-master",
         "knplabs/knp-menu-bundle":"dev-master",
         "juliendidier/buzz-bundle": "dev-master"
