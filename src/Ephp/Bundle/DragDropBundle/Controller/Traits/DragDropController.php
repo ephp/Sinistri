@@ -1,13 +1,7 @@
 <?php
+namespace Ephp\Bundle\DragDropBundle\Controller\Traits;
 
-namespace Ephp\Bundle\DragDropBundle\Controller;
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-abstract class DragDropController extends Controller {
+trait DragDropController  {
 
     public function singleFile() {
         $request = $this->getRequest();
@@ -100,13 +94,6 @@ abstract class DragDropController extends Controller {
             'delete' => json_encode($_delete),
             'n' => count($_tmb),
         );
-    }
-    
-    /**
-     * @return \Doctrine\ORM\EntityManager 
-     */
-    protected function getEm() {
-        return $this->getDoctrine()->getEntityManager();
     }
 
 }

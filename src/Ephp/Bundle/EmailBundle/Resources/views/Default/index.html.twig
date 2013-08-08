@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Test
+{% endblock %}
+
+{% block content %}
+<h1>Test</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Subject</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Size</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+            <tr>
+                <td>{{ message.subject }}</td>
+                <td>{{ message.fromName }}<br/>{{ message.fromAddress }}</td>
+                <td>{{ message.toName }}<br/>{{ message.toAddress }}</td>
+                <td>{{ message.size}}</td>
+                <td>{{ message.date|date('d/m/Y')}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

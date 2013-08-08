@@ -13,7 +13,7 @@ security:
         ROLE_ADMIN:       [ROLE_GEST, ROLE_COORD]
         ROLE_SUPERADMIN:  ROLE_ADMIN
         ROLE_ASS:         ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_ASS, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: [ROLE_ASS, ROLE_SUPERADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
         chainprovider:

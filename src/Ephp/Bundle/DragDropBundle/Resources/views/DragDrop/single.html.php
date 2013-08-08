@@ -1,13 +1,3 @@
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/css/FileUpload/bootstrap.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/css/FileUpload/bootstrap-image-gallery.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/css/FileUpload/jquery.fileupload-ui.css') ?>">
-<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/blueimp/tmpl.min.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/blueimp/load-image.min.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.iframe-transport.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.fileupload.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.fileupload-fp.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/jquery.fileupload-ui.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('/bundles/ephpdragdrop/js/FileUpload/locale.js') ?>"></script>
 <style type="text/css">
     
     #<?php echo $id ?>row, #<?php echo $field ?>_tmb {
@@ -25,7 +15,7 @@
         background: url(/images/user_placeholder.jpg) no-repeat 5px 5px;
     }
     #<?php echo $id ?>row:before {
-        content: "Trascina quì una tua fotografia";
+        content: "Trascina quì il file";
         font-size: 12px;
         font-style: italic;
         color: #666;

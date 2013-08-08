@@ -1,6 +1,10 @@
 {% if app.user %}
     <ul class="menu">
         <li><a href="{{ path('profilo') }}">Profilo</a></li>
+        {% if app.user.hasRole('ROLE_GEST') %}
+            <li><a href="{{ path('ritardi') }}">Ritardi</a></li>
+        {% endif %}
+        <li><a href="{{ path('countdown') }}">Countdown</a></li>
         {% if gestore is defined and gestore %}
             <li><a href="{{ path('tabellone_gestore', {'gestore': gestore.sigla}) }}">Tabellone</a></li>
             <li><a href="{{ path('calendario_sinistri', {'gestore': gestore.sigla}) }}">Calendario</a></li>
@@ -8,7 +12,7 @@
             <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
             <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
         {% endif %}
-        {% if app.user.hasRole('ROLE_ADMIN') %}
+        {% if app.user.hasRole('ROLE_SUPERADMIN') %}
             <li><a href="{{ path('strumenti') }}">Contabilità</a></li>
         {% endif %}
         <li><a href="{{ path('strumenti') }}">Strumenti</a></li>

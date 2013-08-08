@@ -15,6 +15,7 @@
         }
     </script>
     <input type="hidden" id="documento" name="documento" value="" />
+    {% render 'EphpSinistriBundle:Scheda:uploadJs' %}
     {% render 'EphpSinistriBundle:Scheda:uploadSingle' with {
                 'field': 'documento',
                 'values': '',

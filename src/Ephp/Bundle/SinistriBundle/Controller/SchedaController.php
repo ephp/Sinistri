@@ -2,7 +2,7 @@
 
 namespace Ephp\Bundle\SinistriBundle\Controller;
 
-use Ephp\Bundle\DragDropBundle\Controller\DragDropController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -25,9 +25,10 @@ use Ephp\UtilityBundle\Utility\Time;
  *
  * @Route("/tabellone")
  */
-class SchedaController extends DragDropController {
+class SchedaController extends Controller {
 
-    use \Ephp\UtilityBundle\Controller\Traits\BaseController;
+    use \Ephp\UtilityBundle\Controller\Traits\BaseController,
+        \Ephp\Bundle\DragDropBundle\Controller\Traits\DragDropController;
 
     /**
      * Lists all Scheda entities.
@@ -806,6 +807,16 @@ class SchedaController extends DragDropController {
      */
     public function uploadSingleAction() {
         return $this->singleFile();
+    }
+
+    /**
+     * Lists all Scheda entities.
+     *
+     * @Route("-uploadJs", name="tabellone_upload_js")
+     * @Template("EphpDragDropBundle:DragDrop:js.html.php")
+     */
+    public function uploadJsAction() {
+        return array();
     }
 
     /**
@@ -1615,7 +1626,7 @@ class SchedaController extends DragDropController {
                                         break;
                                     case 'COURT':
                                         if ($td->nodeValue) {
-                                            switch($td->nodeValue) {
+                                            switch ($td->nodeValue) {
                                                 case "Civil":
                                                     $scheda->setGiudiziale('Y');
                                                     $scheda->setGiudiziale('C');

@@ -17,10 +17,6 @@ Profilo
         {% if attenzione|length > 0 %}
             <li><a href="#tabs-i">Importanti</a></li>
         {% endif %}
-        <li><a href="#tabs-r">Ritardi</a></li>
-        {% if app.user.hasRole('ROLE_ADMIN') %}
-            <li><a href="#tabs-ru">Ritardi ufficio</a></li>
-        {% endif %}
         {% for tab in tabs %}
             {% if attribute(private, tab.id)|length + attribute(pubbliche, tab.id)|length > 0 %}
                 <li><a href="#tabs-{{ tab.id }}">{{ tab.stato|capitalize }}</a></li>
@@ -40,14 +36,6 @@ Profilo
 {% if attenzione|length > 0 %}
     <div id="tabs-i" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
-    </div>
-{% endif %}
-<div id="tabs-r" style="display: none">
-    {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': miei_ritardi} %}
-</div>
-{% if app.user.hasRole('ROLE_ADMIN') %}
-    <div id="tabs-ru" style="display: none">
-        {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': tutti_ritardi, 'gest': true} %}
     </div>
 {% endif %}
 {% for tab in tabs %}

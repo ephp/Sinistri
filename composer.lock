@@ -669,17 +669,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ephp/imap.git",
-                "reference": "00227c243b8a10e92dbe246c03655e4d2acc02b9"
+                "reference": "24390a2391ad2efceb03bbc4d252a27816dff8e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ephp/imap/zipball/00227c243b8a10e92dbe246c03655e4d2acc02b9",
-                "reference": "00227c243b8a10e92dbe246c03655e4d2acc02b9",
+                "url": "https://api.github.com/repos/ephp/imap/zipball/24390a2391ad2efceb03bbc4d252a27816dff8e1",
+                "reference": "24390a2391ad2efceb03bbc4d252a27816dff8e1",
                 "shasum": ""
             },
             "require": {
                 "ephp/utility": "master",
-                "php": ">=5.3.2"
+                "php": ">=5.4"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -698,13 +698,13 @@
                 }
             ],
             "description": "Funzioni per interagire via imap con la posta",
-            "homepage": "https://github.com/ephp/Node",
+            "homepage": "https://github.com/ephp/imap",
             "keywords": [
                 "Node.js",
                 "ephp",
                 "symfony-2.1"
             ],
-            "time": "2013-08-01 11:43:54"
+            "time": "2013-08-01 14:13:38"
         },
         {
             "name": "ephp/utility",

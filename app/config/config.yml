@@ -84,6 +84,13 @@ fos_user:
         username_canonicalizer: fos_user.util.canonicalizer.default
         user_manager:           fos_user.user_manager.default
         
+ephp_imap:
+    server: imap.gmail.com
+    port: 993
+    protocol: imap/ssl/novalidate-cert
+    username: gestione@studiolegalecarlesi.com
+    password: aleantasc
+  
 ephp_acl:
   user_class: Ephp\Bundle\GestoriBundle\Entity\Gestore
   access_log:

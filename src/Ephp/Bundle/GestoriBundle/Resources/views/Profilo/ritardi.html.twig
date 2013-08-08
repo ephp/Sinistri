@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+Profilo
+{% endblock %}
+
+{% block content %}
+<h1>{{ gestore.nome }}</h1>
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-r">Ritardi</a></li>
+        {% if app.user.hasRole('ROLE_ADMIN') %}
+            <li><a href="#tabs-ru">Ritardi ufficio</a></li>
+        {% endif %}
+    </ul>
+<div id="tabs-r" style="display: none">
+    {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': miei_ritardi} %}
+</div>
+{% if app.user.hasRole('ROLE_ADMIN') %}
+    <div id="tabs-ru" style="display: none">
+        {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': tutti_ritardi, 'gest': true} %}
+    </div>
+{% endif %}
+
+<div style="display: none" id="fb_assegna_gestore">
+    <form id="assegna_gestore_scheda">
+        <li>Assegna il gestore a <span id="assegna_gestore_a"></span></a></li>
+        <div style="clear: both"></div>
+        <select name="scheda[gestore]" id="scheda_gestore">
+            <option value="">Nessuno</option>
+            {% for ges in gestori %}
+                <option value="{{ ges.sigla }}">{{ges.nome}}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="scheda[id]" id="scheda_id" value="" />    
+        <button type="button" onclick="assegnaGestore()">Assegna</button>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $( "#tabs" ).tabs();
+        $( "#tabs ul li a" ).click(function(){
+            $( "#tabs div" ).hide();
+            $($(this).attr('href')).show();
+        });
+        $( "#tabs div:first" ).show();
+    });
+</script>
+{% endblock %}

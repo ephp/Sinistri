@@ -27,42 +27,42 @@ class Gestore extends BaseUser {
      *
      * @ORM\Column(name="sigla", type="string", length=3)
      */
-    protected $sigla;
+    private $sigla;
 
     /**
      * @var string
      *
      * @ORM\Column(name="nome", type="string", length=255)
      */
-    protected $nome;
+    private $nome;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="superadmin", type="boolean", nullable=true)
      */
-    protected $superadmin;
+    private $superadmin;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="admin", type="boolean", nullable=true)
      */
-    protected $admin;
+    private $admin;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="coordinatore", type="boolean", nullable=true)
      */
-    protected $coordinatore;
+    private $coordinatore;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="gestore", type="boolean", nullable=true)
      */
-    protected $gestore;
+    private $gestore;
 
     /**
      * Get id
@@ -115,95 +115,4 @@ class Gestore extends BaseUser {
         return $this->nome;
     }
 
-    /**
-     * Set superadmin
-     *
-     * @param boolean $superadmin
-     * @return Gestore
-     */
-    public function setSuperadmin($superadmin)
-    {
-        $this->superadmin = $superadmin;
-    
-        return $this;
-    }
-
-    /**
-     * Get superadmin
-     *
-     * @return boolean 
-     */
-    public function getSuperadmin()
-    {
-        return $this->superadmin;
-    }
-
-    /**
-     * Set admin
-     *
-     * @param boolean $admin
-     * @return Gestore
-     */
-    public function setAdmin($admin)
-    {
-        $this->admin = $admin;
-    
-        return $this;
-    }
-
-    /**
-     * Get admin
-     *
-     * @return boolean 
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
-    }
-
-    /**
-     * Set coordinatore
-     *
-     * @param boolean $coordinatore
-     * @return Gestore
-     */
-    public function setCoordinatore($coordinatore)
-    {
-        $this->coordinatore = $coordinatore;
-    
-        return $this;
-    }
-
-    /**
-     * Get coordinatore
-     *
-     * @return boolean 
-     */
-    public function getCoordinatore()
-    {
-        return $this->coordinatore;
-    }
-
-    /**
-     * Set gestore
-     *
-     * @param boolean $gestore
-     * @return Gestore
-     */
-    public function setGestore($gestore)
-    {
-        $this->gestore = $gestore;
-    
-        return $this;
-    }
-
-    /**
-     * Get gestore
-     *
-     * @return boolean 
-     */
-    public function getGestore()
-    {
-        return $this->gestore;
-    }
 }

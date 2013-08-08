@@ -25,12 +25,14 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new B2S\Bundle\PortletBundle\B2SPortletBundle(),
             new Ephp\ACLBundle\EphpACLBundle(),
+            new Ephp\ImapBundle\EphpImapBundle(),
             new Ephp\UtilityBundle\EphpUtilityBundle(),
             new Ephp\Bundle\DragDropBundle\EphpDragDropBundle(),
             new Ephp\Bundle\SinistriBundle\EphpSinistriBundle(),
             new Ephp\Bundle\GestoriBundle\EphpGestoriBundle(),
             new Ephp\Bundle\CalendarBundle\EphpCalendarBundle(),
             new Ephp\Bundle\StrumentiBundle\EphpStrumentiBundle(),
+            new Ephp\Bundle\EmailBundle\EphpEmailBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

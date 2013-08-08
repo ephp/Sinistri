@@ -1,18 +1,4 @@
-<?php if(false): ?>
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('ephpdragdrop/css/FileUpload/bootstrap.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('ephpdragdrop/css/FileUpload/bootstrap-image-gallery.min.css') ?>">
-<link rel="stylesheet" href="<?php echo $view['assets']->getUrl('ephpdragdrop/css/FileUpload/jquery.fileupload-ui.css') ?>">
-<script src="<?php echo $view['assets']->getUrl('/js/jquery/jquery.ui.widget.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/blueimp/tmpl.min.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/blueimp/load-image.min.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.iframe-transport.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.fileupload.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.fileupload-fp.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/jquery.fileupload-ui.js') ?>"></script>
-<script src="<?php echo $view['assets']->getUrl('ephpdragdrop/js/FileUpload/locale.js') ?>"></script>
-<?php endif; ?>
 <style type="text/css">
-    
     #<?php echo $id ?>row, #<?php echo $field ?>_tmb {
         border: 1px dashed #999;
         padding: 5px;
@@ -26,22 +12,20 @@
     }
     #<?php echo $id ?>row {
         background: url(/images/user_placeholder.jpg) no-repeat 5px 5px;
+        margin-left: 25px;
     }
     #<?php echo $id ?>row:before {
-        content: "Trascina quì una tua fotografia";
+        content: "Trascina quì i file";
         font-size: 12px;
         font-style: italic;
         color: #666;
     }
-    
-    
 </style>
 <?php
 // Questo DIV è quello che compare quando è stata caricata l'immagine
 ?>
-<div id="cont_<?php echo $field ?>_tmb">
-    <div id="<?php echo $field ?>_tmb" class="colmono left rounded-5">
-    </div>
+<div id="cont_<?php echo $field ?>_tmb" class="tmb">
+    <div id="<?php echo $field ?>_tmb" class="colmono left rounded-5"></div>
 </div>
 <?php
 // Questo DIV è la progress bar
@@ -49,7 +33,9 @@
 
 <div class="row fileuploadrow <?php echo $id ?>_row rounded-5" id="<?php echo $id ?>row">
     <div class="fileupload-buttonbar">
-        <div class="progressbar fileupload-progressbar"><div style="width:0%;"></div></div>
+        <div class="progressbar fileupload-progressbar">
+            <div style="width:0%;"></div>
+        </div>
         <input type="hidden" name="d" value="<?php echo $dir ?>">
         <input type="hidden" name="x" value="<?php echo $x ?>">
         <input type="hidden" name="y" value="<?php echo $y ?>">
@@ -58,11 +44,8 @@
     </div>
 </div>
 <div class="btn success fileinput-button left" id="<?php echo $id ?>_bt_add">
-    <button class="button-cyan smaller">oppure seleziona da quì un file</button>
+    <a href="javascrip:void(0)" class="button-cyan smaller">oppure seleziona da qui i file</a>
     <input type="file" name="files[]" multiple>
-</div>
-<div class="btn success fileinput-button left" id="<?php echo $id ?>_bt_del">
-    <button class="button-cyan smaller">Cancella file selezionati</button>
 </div>
 <?php
 // Questo DIV contiene la tabella con lo stato di caricamento
@@ -127,6 +110,7 @@
         drag_drop_form_id = '<?php echo $id ?>';
     });
     $('#<?php echo $id ?>').fileupload({
+        dropZone: $('#<?php echo $id ?>row'),
         dataType: 'json',
         url: '/upload.php',
         autoUpload: true,
@@ -148,10 +132,13 @@
             $('#<?php echo $field ?>_delete').show();
 //            $('#<?php echo $id ?>_bt_add').hide();
             delete_url = response.delete_url;
-            $('.<?php echo $id ?>_row').hide();
+//            $('.<?php echo $id ?>_row').hide();
             $('#<?php echo $id ?>_bt_reset').hide();
             $('#table_files_<?php echo $field ?>').html('');
             n_file++;
+            if(testFunction('multiUploadDoneCB')) {
+                multiUploadDoneCB(response);
+            }
         }
     })
     .bind('fileuploadfail', function (e, data) {
