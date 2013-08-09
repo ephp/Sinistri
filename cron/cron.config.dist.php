@@ -3,7 +3,7 @@
 $cron = 'http://jf-claims.studiolegalecarlesi.com';
 $prod = 'http://jf-claims.studiolegalecarlesi.com';
 
-$imap = array(
+$agenda = array(
     'prod' => array(
         'send' => '/calendario-sinistri-cron',
     ),
