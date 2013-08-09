@@ -2,5 +2,12 @@
 
 *{{titolo}}*
 
+{% if entity|length > 0 %}
 | # | * | Data | Tpa | Claimant | Titolo | Note |
 {% include 'EphpSinistriBundle:Calendar:email/agenda_giornaliera/tbody.txt.twig' %}
+{% endif %}
+
+{% if countdown|length > 0 %}
+| # | Giorni | Mittente | Subject | TPA | 
+{% include 'EphpSinistriBundle:Calendar:email/agenda_giornaliera/cbody.txt.twig' %}
+{% endif %}

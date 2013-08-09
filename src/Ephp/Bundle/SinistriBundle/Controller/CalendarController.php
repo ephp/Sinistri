@@ -219,6 +219,7 @@ class CalendarController extends Controller {
         $em = $this->getEm();
         $calendario = $this->getCalendar();
         $eventi = $em->getRepository('EphpSinistriBundle:Evento')->prossimiEventi($calendario, $gestore);
+        $countdown = $this->findBy('EphpEmailBundle:Countdown', array('stato' => 'A', 'gestore' => $gestore->getId()), array('sended_at' => 'ASC'));
         $oggi = new \DateTime();
         $send = array();
         foreach ($eventi as $evento) {
@@ -228,19 +229,19 @@ class CalendarController extends Controller {
                 $send[] = $evento;
             }
         }
-        if (count($send) > 0) {
+        if (count($send) > 0 || count($countdown) > 0) {
             $message = \Swift_Message::newInstance()
                     ->setSubject("[JFCLAIMS] agenda {$gestore->getNome()} " . date('d-m-Y', $oggi->getTimestamp()))
                     ->setFrom($this->container->getParameter('email_robot'))
                     ->setTo(trim($gestore->getEmail()))
                     ->setReplyTo($this->container->getParameter('email_robot'), "No-Reply")
-                    ->setBody($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.txt.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)))
-                    ->addPart($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.html.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi)), 'text/html');
+                    ->setBody($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.txt.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi, 'countdown' => $countdown)))
+                    ->addPart($this->renderView("EphpSinistriBundle:Calendar:email/agenda_giornaliera.html.twig", array('gestore' => $gestore, 'entities' => $send, 'oggi' => $oggi, 'countdown' => $countdown)), 'text/html');
             ;
             $message->getHeaders()->addTextHeader('X-Mailer', 'PHP v' . phpversion());
             $this->get('mailer')->send($message);
         }
-        return array($gestore->getSigla() => count($send));
+        return array('gestore' => $gestore->getSigla(), 'calendario' => count($send), 'countdown' => count($countdown));
     }
 
     private function getCalendar() {
