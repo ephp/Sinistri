@@ -48,6 +48,27 @@ class Tipo
      */
     private $colore;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cancellabile", type="boolean", nullable=true)
+     */
+    private $cancellabile;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="modificabile", type="boolean", nullable=true)
+     */
+    private $modificabile;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="pubblico", type="boolean", nullable=true)
+     */
+    private $pubblico;
+
 
     /**
      * Get id
@@ -149,5 +170,74 @@ class Tipo
     public function getColore()
     {
         return $this->colore;
+    }
+
+    /**
+     * Set cancellabile
+     *
+     * @param boolean $cancellabile
+     * @return Tipo
+     */
+    public function setCancellabile($cancellabile)
+    {
+        $this->cancellabile = $cancellabile;
+    
+        return $this;
+    }
+
+    /**
+     * Get cancellabile
+     *
+     * @return boolean 
+     */
+    public function getCancellabile()
+    {
+        return $this->cancellabile;
+    }
+
+    /**
+     * Set modificabile
+     *
+     * @param boolean $modificabile
+     * @return Tipo
+     */
+    public function setModificabile($modificabile)
+    {
+        $this->modificabile = $modificabile;
+    
+        return $this;
+    }
+
+    /**
+     * Get modificabile
+     *
+     * @return boolean 
+     */
+    public function getModificabile()
+    {
+        return $this->modificabile;
+    }
+
+    /**
+     * Set pubblico
+     *
+     * @param boolean $pubblico
+     * @return Tipo
+     */
+    public function setPubblico($pubblico)
+    {
+        $this->pubblico = $pubblico;
+    
+        return $this;
+    }
+
+    /**
+     * Get pubblico
+     *
+     * @return boolean 
+     */
+    public function getPubblico()
+    {
+        return $this->pubblico;
     }
 }

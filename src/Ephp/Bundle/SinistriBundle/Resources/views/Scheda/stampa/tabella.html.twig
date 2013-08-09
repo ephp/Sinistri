@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         {% for evento in entity.eventi %}
-            {% if evento.titolo|trim != '' and evento.tipo.sigla != 'RIS' %}
+            {% if evento.titolo|trim != '' and evento.tipo.pubblico %}
                 <tr>
                     <td nowrap>{{ evento.dataOra|date('d/m/Y') }}</td>
                     <td>{{ evento.titolo }}</td>

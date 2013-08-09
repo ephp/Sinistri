@@ -1915,19 +1915,19 @@ class SchedaController extends Controller {
             $cal = $_cal->createCalendario('JFC-SX', 'JF-Claims Sinistri');
             $_tipo = $this->getEm()->getRepository('EphpCalendarBundle:Tipo');
             /* @var $_tipo \Ephp\Bundle\CalendarBundle\Entity\TipoRepository */
-            $_tipo->createTipo('ASC', 'Analisi Sinistri e Copertura', 'aaffaa', $cal);
-            $_tipo->createTipo('VIM', 'Verifica Incarichi e Medici', 'aaffaa', $cal);
-            $_tipo->createTipo('RPM', 'Ricerca Polizze e Medici', 'aaffaa', $cal);
-            $_tipo->createTipo('RER', 'Relazione e Riserva', 'aaffaa', $cal);
-            $_tipo->createTipo('RSA', 'Richiesta di SA', 'aaffaa', $cal);
-            $_tipo->createTipo('TAX', 'Trattative e Aggiornamenti', 'aaffaa', $cal);
+            $_tipo->createTipo('ASC', 'Analisi Sinistri e Copertura', 'aaffaa', $cal, false);
+            $_tipo->createTipo('VIM', 'Verifica Incarichi e Medici', 'aaffaa', $cal, false);
+            $_tipo->createTipo('RPM', 'Ricerca Polizze e Medici', 'aaffaa', $cal, false);
+            $_tipo->createTipo('RER', 'Relazione e Riserva', 'aaffaa', $cal, false);
+            $_tipo->createTipo('RSA', 'Richiesta di SA', 'aaffaa', $cal, false);
+            $_tipo->createTipo('TAX', 'Trattative e Aggiornamenti', 'aaffaa', $cal, false);
             $_tipo->createTipo('JWB', 'J-Web Claims', 'ffaaaa', $cal);
             $_tipo->createTipo('CNT', 'Cancelleria Telematiche', 'aaffff', $cal);
             $_tipo->createTipo('RVP', 'Ravinale Piemonte', 'ffaaff', $cal);
             $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
-            $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal);
+            $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal, true, false, false);
             $_tipo->createTipo('VER', 'Verifica periodica', 'aaffaa', $cal);
-            $_tipo->createTipo('CHS', 'Cambio Stato Operativo', 'aaaaff', $cal);
+            $_tipo->createTipo('CHS', 'Cambio Stato Operativo', 'aaaaff', $cal, true, false, false);
         }
         return $cal;
     }
