@@ -18,6 +18,18 @@ $crons = array(
         'titolo' => 'Verifica a 30 giorni',
         'desc' => "Verifica che i sinistri attivi e genera gli eventi di verifica a 30 giorni",
     ),
+    'imap_countdown' => array(
+        'sf' => 'countdown',
+        'log' => 'countdown',
+        'titolo' => 'Ricerca Countdown',
+        'desc' => "Verifica la presenza di nuove richieste di countdown nella casella di posta",
+    ),
+    'imap_risposte' => array(
+        'sf' => 'risposte',
+        'log' => 'risposte',
+        'titolo' => 'Ricerca Risposte Countdown',
+        'desc' => "Verifica la presenza di nuove risposte di countdown nella casella di posta",
+    ),
 );
 ?>
 <!DOCTYPE html>

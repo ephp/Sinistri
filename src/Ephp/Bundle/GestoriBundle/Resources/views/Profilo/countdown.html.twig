@@ -24,7 +24,7 @@ Profilo
             <li><a href="#tabs-aa">Countdown aperti ufficio</a></li>
         {% endif %}
         {% if app.user.hasRole('ROLE_ADMIN') and chiusi|length > 0 %}
-            <li><a href="#tabs-ca">Chiusi</a></li>
+            <li><a href="#tabs-ca">Countdown chiusi ufficio</a></li>
         {% endif %}
     </ul>
 {% if app.user.hasRole('ROLE_ADMIN') and nuovi|length > 0 %}
@@ -38,7 +38,7 @@ Profilo
     </div>
 {% endif %}
 {% if miei_chiusi|length > 0 %}
-    <div id="tabs-a" style="display: none">
+    <div id="tabs-c" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/countdown.html.twig' with {'prefisso': 'c', 'entities': miei_chiusi} %}
     </div>
 {% endif %}
@@ -49,7 +49,7 @@ Profilo
 {% endif %}
 {% if app.user.hasRole('ROLE_ADMIN') and chiusi|length > 0 %}
     <div id="tabs-ca" style="display: none">
-        {% include 'EphpGestoriBundle:Profilo:index/countdown.html.twig' with {'prefisso': 'r', 'entities': chiusi} %}
+        {% include 'EphpGestoriBundle:Profilo:index/countdown.html.twig' with {'prefisso': 'r', 'entities': chiusi, 'gest': true} %}
     </div>
 {% endif %}
 </div>

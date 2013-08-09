@@ -285,7 +285,9 @@ class Countdown
             $oggi = new \DateTime();
             $oggi->setTime(0, 0, 0);
             $this->sended_at->setTime(0, 0, 0);
-            $scadenza = $this->sended_at->add(new \DateInterval('P15D'));
+            $scadenza = new \DateTime();
+            $scadenza->setTimestamp($this->sended_at->getTimestamp());
+            $scadenza->add(new \DateInterval('P15D'));
             return $scadenza->diff($oggi, false)->format('%r%a');
         }
     }

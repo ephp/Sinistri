@@ -2,7 +2,7 @@
 
 include 'cron.fx.php';
 include 'cron.config.php';
-$log = $imap['log']['send'];
+$log = $imap['log']['countodown'];
 
 $d = new DateTime();
 
@@ -16,7 +16,7 @@ if (!checkHistory($log)) {
 $output = '';
 try {
     $ch = curl_init();
-    $output = callCurl(generateUrl($prod, $imap['prod']['send'], $imap['params']['send']), 'eph:livorno');
+    $output = callCurl(generateUrl($prod, $imap['prod']['countodown'], $imap['params']['countodown']), 'eph:livorno');
     curl_close($ch);
     writeLog($output);
 } catch (Exception $e) {

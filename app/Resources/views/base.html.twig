@@ -58,7 +58,7 @@
                 {% block content %}
                     {% if app.user %}
                         <h1>Benvenuto {{ app.user.nome }}.</h1>
-                        <p>È iniziato lo sviluppo della versione 2.0 della piattaforma (ultimo aggiornamento 31/07/2013 ore 16:30)</p>
+                        <p>È iniziato lo sviluppo della versione 2.0 della piattaforma (ultimo aggiornamento 09/08/2013 ore 12:00)</p>
                         <dl>
                             <dt>Tabellone</dt>
                             <dd>Nascosti i sinistri in stato "definito"<br/>
@@ -67,9 +67,20 @@
                                     <li style="padding-bottom: 0px">Aggiunta colonna Giudiziale, con possibilità di ricerca</li>
                                 </ul>
                             </dd>
-                            <dt>Profilo</dt>
-                            <dd style="color: red;">Creati i tab per i Ritardi<br/>
+                            <dt>Ritardi</dt>
+                            <dd style="color: red;">Creata la gestione delle pratiche sospese da oltre 60 giorni</dd>
+                            <dt>Countdown</dt>
+                            <dd style="color: red;">Meccanismo per la gestione delle richieste da espletare entro 15 giorni con:<br/>
+                                <ul>
+                                    <li style="padding-bottom: 0px; color: red;">Lettura casella email seguendo il filtro "Richiesta" impostato su GMail per aprire nuove richieste</li>
+                                    <li style="padding-bottom: 0px; color: red;">Riconoscimento automatica della pratica associata</li>
+                                    <li style="padding-bottom: 0px; color: red;">Pannello di gestione (associazione a gestore o cancellazione)</li>
+                                    <li style="padding-bottom: 0px; color: red;">Lettura email di richieste via web</li>
+                                    <li style="padding-bottom: 0px; color: red;">Possibilità di rispondere e chiudere le richieste via web (con possibilità di allegare file)</li>
+                                    <li style="padding-bottom: 0px; color: red;">Lettura casella email seguendo il filtro "Risposta" impostato su GMail per chiudere definitivamente la richiesta</li>
+                                </ul>
                             </dd>
+                            <dt>Profilo</dt>
                             <dd>Creati i tab per Stati operativi<br/>
                             </dd>
                             <dt>Report</dt>

@@ -3,7 +3,7 @@
 $cron = 'http://jf-claims.studiolegalecarlesi.com';
 $prod = 'http://jf-claims.studiolegalecarlesi.com';
 
-$agenda_giornaliera = array(
+$imap = array(
     'prod' => array(
         'send' => '/calendario-sinistri-cron',
     ),
@@ -29,5 +29,23 @@ $verifica_30_giorni = array(
     ),
     'log' => array(
         'send' => 'verifica_30_giorni',
+    ),
+);
+$imap = array(
+    'prod' => array(
+        'countdown' => '/email/countdown-cron',
+        'risposte'  => '/email/risposte-cron',
+    ),
+    'params' => array(
+        'countdown' => array(),
+        'risposte'  => array(),
+    ),
+    'semafori' => array(
+        'countdown' => 'countdown',
+        'risposte'  => 'risposte',
+    ),
+    'log' => array(
+        'countdown' => 'countdown',
+        'risposte'  => 'risposte',
     ),
 );

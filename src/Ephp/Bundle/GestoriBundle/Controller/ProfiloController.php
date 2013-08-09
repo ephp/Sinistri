@@ -186,10 +186,15 @@ class ProfiloController extends Controller {
             $message->attach(\Swift_Attachment::fromPath($this->dir() . $doc));
         }
 
+        
         $message->getHeaders()->addTextHeader('X-Mailer', 'PHP v' . phpversion());
         $this->get('mailer')->send($message);
         
         $countdown->setStato('C');
+        $countdown->setResponsedAt(new \DateTime());
+        if(!$countdown->getGestore()) {
+            $countdown->setGestore($gestore);
+        }
         $this->persist($countdown);
         
         return $this->redirect($this->generateUrl('countdown'));

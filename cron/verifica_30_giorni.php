@@ -18,6 +18,7 @@ try {
     $ch = curl_init();
     $output = callCurl(generateUrl($prod, $verifica_30_giorni['prod']['send'], $verifica_30_giorni['params']['send']), 'eph:livorno');
     curl_close($ch);
+    writeLog($output);
 } catch (Exception $e) {
     writeError($e->getMessage());
 }

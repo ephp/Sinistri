@@ -16,6 +16,7 @@ class CronController extends Controller {
         \Ephp\UtilityBundle\Controller\Traits\BaseController;
 
     const TPA = "/[a-z]{2}[a-z0-9]{1}( [a-z.]+[a-z]{1})?(\/|\-)[0-9]{2}\/[0-9]{1,3}/i";
+    const RECD = "/RECD\-[0-9]+/i";
 
     /**
      * @Route("/countdown-cron", name="imap_countdown_cron", defaults={"_format"="json"})
@@ -56,6 +57,65 @@ class CronController extends Controller {
                 $countdown->setSendedAt($header->getDate());
                 $countdown->setScheda($scheda);
                 $countdown->setStato('N');
+                $this->persist($countdown);
+                $this->getEm()->commit();
+            } catch (\Exception $e) {
+                $this->getEm()->rollback();
+                throw $e;
+            }
+        }
+        for ($i = $n; $i > 0; $i--) {
+            $this->deteteEmail($i);
+        }
+        $this->closeImap();
+
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
+    }
+
+    /**
+     * @Route("/risposte-cron", name="imap_risposte_cron", defaults={"_format"="json"})
+     */
+    public function risposteAction() {
+        $this->openImap(null, null, null, null, null, 'Risposta');
+        $n = $this->countMessages();
+        $out = array(
+            'risposte' => $n,
+            'subjects' => array(),
+        );
+        for ($i = 1; $i <= $n; $i++) {
+            try {
+                $this->getEm()->beginTransaction();
+                $body = $this->getBody($i);
+                $out['subjects'][] = $body->getSubject();
+                $subject = $body->getSubject();
+                $s = $countdown = null;
+                preg_match(self::RECD, $subject, $s);
+                if (isset($s[0])) {
+                    $token = substr($s[0], 5);
+                    $countdown = $this->find('EphpEmailBundle:Countdown', $token);
+                } else {
+                    break;
+                }
+                /* @var $countdown \Ephp\Bundle\EmailBundle\Entity\Countdown */
+                $header = $body->getHeader();
+                $this->persist($header);
+                $body->setHeader($header);
+                $attachs = $body->getAttach();
+//                $body->getAttach()->clear();
+                if (false) {
+                    foreach ($attachs as $attach) {
+                        /* @var $attach \Ephp\ImapBundle\Entity\Attach */
+                        $attach->setData('');
+                        $body->addAttach($attach);
+                    }
+                }
+                $this->persist($body);
+                foreach ($attachs as $attach) {
+                    /* @var $attach \Ephp\ImapBundle\Entity\Attach */
+                    $attach->setBody($body);
+                    $this->persist($attach);
+                }
+                $countdown->setRisposta($header);
                 $this->persist($countdown);
                 $this->getEm()->commit();
             } catch (\Exception $e) {
