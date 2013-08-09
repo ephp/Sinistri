@@ -18,7 +18,6 @@ try {
     $ch = curl_init();
     $output = callCurl(generateUrl($prod, $imap['prod']['send'], $imap['params']['send']), 'eph:livorno');
     curl_close($ch);
-    writeLog($output);
 } catch (Exception $e) {
     writeError($e->getMessage());
 }
