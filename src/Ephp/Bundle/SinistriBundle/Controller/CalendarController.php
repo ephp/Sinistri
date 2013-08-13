@@ -15,7 +15,8 @@ use Ephp\Bundle\CalendarBundle\Vendor\ICalCreator\ICalUtilityFunctions;
  */
 class CalendarController extends Controller {
 
-    use \Ephp\UtilityBundle\Controller\Traits\BaseController;
+    use \Ephp\UtilityBundle\Controller\Traits\BaseController,
+        \Ephp\Bundle\SinistriBundle\Controller\Traits\SxCalendarController;
 
     /**
      * Lists all Scheda entities.
@@ -24,7 +25,7 @@ class CalendarController extends Controller {
      * @Template()
      */
     public function indexAction($gestore) {
-        if(!$this->hasRole('ROLE_COORD') || $gestore == '') {
+        if (!$this->hasRole('ROLE_COORD') || $gestore == '') {
             $gestore = $this->getUser();
         } else {
             $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $gestore));
@@ -243,30 +244,4 @@ class CalendarController extends Controller {
         }
         return array('gestore' => $gestore->getSigla(), 'calendario' => count($send), 'countdown' => count($countdown));
     }
-
-    private function getCalendar() {
-        $_cal = $this->getEm()->getRepository('EphpCalendarBundle:Calendario');
-        /* @var $_cal \Ephp\Bundle\CalendarBundle\Entity\CalendarioRepository */
-        $cal = $_cal->findOneBy(array('sigla' => 'JFC-SX'));
-        if (!$cal) {
-            $cal = $_cal->createCalendario('JFC-SX', 'JF-Claims Sinistri');
-            $_tipo = $this->getEm()->getRepository('EphpCalendarBundle:Tipo');
-            /* @var $_tipo \Ephp\Bundle\CalendarBundle\Entity\TipoRepository */
-            $_tipo->createTipo('ASC', 'Analisi Sinistri e Copertura', 'aaffaa', $cal, false);
-            $_tipo->createTipo('VIM', 'Verifica Incarichi e Medici', 'aaffaa', $cal, false);
-            $_tipo->createTipo('RPM', 'Ricerca Polizze e Medici', 'aaffaa', $cal, false);
-            $_tipo->createTipo('RER', 'Relazione e Riserva', 'aaffaa', $cal, false);
-            $_tipo->createTipo('RSA', 'Richiesta di SA', 'aaffaa', $cal, false);
-            $_tipo->createTipo('TAX', 'Trattative e Aggiornamenti', 'aaffaa', $cal, false);
-            $_tipo->createTipo('JWB', 'J-Web Claims', 'ffaaaa', $cal);
-            $_tipo->createTipo('CNT', 'Cancelleria Telematiche', 'aaffff', $cal);
-            $_tipo->createTipo('RVP', 'Ravinale Piemonte', 'ffaaff', $cal);
-            $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
-            $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal, true, false, false);
-            $_tipo->createTipo('VER', 'Verifica periodica', 'aaffaa', $cal);
-            $_tipo->createTipo('CHS', 'Cambio Stato Operativo', 'aaaaff', $cal, true, false, false);
-        }
-        return $cal;
-    }
-
 }

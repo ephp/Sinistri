@@ -12,6 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class TipoRepository extends EntityRepository {
 
+    /**
+     * 
+     * @param type $sigla
+     * @param type $nome
+     * @param type $colore
+     * @param \Ephp\Bundle\CalendarBundle\Entity\Calendario $calendario
+     * @param type $cancellabile
+     * @param type $modificabile
+     * @param type $pubblico
+     * @return \Ephp\Bundle\CalendarBundle\Entity\Tipo
+     */
     public function createTipo($sigla, $nome, $colore, Calendario $calendario, $cancellabile = true, $modificabile = true, $pubblico = true) {
         $tipo = new Tipo();
         $tipo->setNome($nome);

@@ -28,7 +28,8 @@ use Ephp\UtilityBundle\Utility\Time;
 class SchedaController extends Controller {
 
     use \Ephp\UtilityBundle\Controller\Traits\BaseController,
-        \Ephp\Bundle\DragDropBundle\Controller\Traits\DragDropController;
+        \Ephp\Bundle\DragDropBundle\Controller\Traits\DragDropController,
+        \Ephp\Bundle\SinistriBundle\Controller\Traits\SxCalendarController;
 
     /**
      * Lists all Scheda entities.
@@ -381,14 +382,14 @@ class SchedaController extends Controller {
                 $em->beginTransaction();
                 $cal = $this->getCalendar();
                 $generatore = array(
-                    array('tipo' => 'ASC', 'giorni' => 0),
-                    array('tipo' => 'VIM', 'giorni' => 10),
-                    array('tipo' => 'RPM', 'giorni' => 25),
-                    array('tipo' => 'RER', 'giorni' => 14),
-                    array('tipo' => 'RSA', 'giorni' => 14),
-                    array('tipo' => 'TAX', 'giorni' => 30),
-                    array('tipo' => 'TAX', 'giorni' => 14),
-                    array('tipo' => 'TAX', 'giorni' => 14)
+                    array('tipo' => $this->ANALISI_SINISTRI_COPERTURA, 'giorni' => 0),
+                    array('tipo' => $this->VERIFICA_INCARICHI_MEDICI,  'giorni' => 10),
+                    array('tipo' => $this->RICERCA_POLIZZE_MEDICI,     'giorni' => 25),
+                    array('tipo' => $this->RELAZIONE_RISERVA,          'giorni' => 14),
+                    array('tipo' => $this->RICHIESTA_SA,               'giorni' => 14),
+                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI,   'giorni' => 30),
+                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI,   'giorni' => 14),
+                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI,   'giorni' => 14)
                 );
                 if (!$entity->getDasc()) {
                     $entity->setDasc(new \DateTime());
@@ -398,19 +399,12 @@ class SchedaController extends Controller {
                 $data = $entity->getDasc();
                 foreach ($generatore as $i => $gen) {
                     $data = Time::calcolaData($data, $gen['giorni']);
-                    $tipo = $this->getTipoEvento($gen['tipo']);
-                    $evento = new Evento();
-                    $evento->setCalendario($cal);
+                    $evento = $this->newEvento($gen['tipo'], $entity);
                     $evento->setDataOra($data);
                     $evento->setDeltaG($gen['giorni']);
-                    $evento->setGiornoIntero(true);
                     $evento->setImportante(true);
-                    $evento->setNote('');
                     $evento->setOrdine($i + 1);
                     $evento->setRischedulazione(true);
-                    $evento->setScheda($entity);
-                    $evento->setTipo($tipo);
-                    $evento->setTitolo($tipo->getNome());
                     $em->persist($evento);
                     $em->flush();
                 }
@@ -510,21 +504,8 @@ class SchedaController extends Controller {
             $scheda->setStatoOperativo($stato);
             $em->persist($scheda);
             $em->flush();
-            $cal = $this->getCalendar();
-            $data = new \DateTime();
-            $tipo = $this->getTipoEvento('CHS');
-            $evento = new Evento();
-            $evento->setCalendario($cal);
-            $evento->setDataOra($data);
-            $evento->setDeltaG(0);
-            $evento->setGiornoIntero(true);
+            $evento = $this->newEvento($this->CAMBIO_STATO_OPERATIVO, $scheda, null, 'Da "' . $old->getStato() . '" a "' . $stato->getStato() . '"');
             $evento->setImportante(true);
-            $evento->setNote('Da "' . $old->getStato() . '" a "' . $stato->getStato() . '"');
-            $evento->setOrdine(0);
-            $evento->setRischedulazione(false);
-            $evento->setScheda($scheda);
-            $evento->setTipo($tipo);
-            $evento->setTitolo($tipo->getNome());
             $em->persist($evento);
             $em->flush();
         } catch (\Exception $e) {
@@ -684,21 +665,8 @@ class SchedaController extends Controller {
                             if ($evento->getTipo()->getSigla() == $gen['tipo']) {
                                 if (!$rischedulato) {
                                     $rischedulato = true;
-                                    $oggi = new \DateTime();
-                                    $cal = $this->getCalendar();
-                                    $tipo = $this->getTipoEvento('RIS');
-                                    $eventoR = new Evento();
-                                    $eventoR->setCalendario($cal);
-                                    $eventoR->setDataOra($oggi);
-                                    $eventoR->setDeltaG(0);
-                                    $eventoR->setGiornoIntero(true);
-                                    $eventoR->setImportante(false);
-                                    $eventoR->setNote("{$evento->getTipo()->getNome()} (da " . date('d-m-Y', $old_data->getTimestamp()) . " a " . date('d-m-Y', $data->getTimestamp()) . ")");
+                                    $eventoR = $this->newEvento($this->RISCHEDULAZIONE, $evento->getScheda(), 'Rischedulazione', "{$evento->getTipo()->getNome()} (da " . date('d-m-Y', $old_data->getTimestamp()) . " a " . date('d-m-Y', $data->getTimestamp()) . ")");
                                     $eventoR->setOrdine($i + 1);
-                                    $eventoR->setRischedulazione(false);
-                                    $eventoR->setScheda($evento->getScheda());
-                                    $eventoR->setTipo($tipo);
-                                    $eventoR->setTitolo('Rischedulazione');
                                     $em->persist($eventoR);
                                     $em->flush();
                                     $req['reload'] = 1;
@@ -731,7 +699,6 @@ class SchedaController extends Controller {
         $oggi = new \DateTime();
         $oggi->setTime(5, 0, 0);
         $em = $this->getEm();
-        $tipo = $this->getTipoEvento('VER');
         $cal = $this->getCalendar();
         $verifiche = 0;
         do {
@@ -752,18 +719,11 @@ class SchedaController extends Controller {
                     $delta_g += 30;
                     $dasc = \Ephp\UtilityBundle\Utility\Time::calcolaData($dasc, $delta_g);
                     while ($oggi->getTimestamp() > $dasc->getTimestamp()) {
-                        $eventoVerifica = new Evento();
-                        $eventoVerifica->setCalendario($cal);
+                        $eventoVerifica = $this->newEvento($this->VERIFICA_PERIODICA, $scheda, 'Verifica');
                         $eventoVerifica->setDataOra($dasc);
                         $eventoVerifica->setDeltaG($delta_g);
-                        $eventoVerifica->setGiornoIntero(true);
                         $eventoVerifica->setImportante(true);
-                        $eventoVerifica->setNote("");
                         $eventoVerifica->setOrdine($delta_g / 30);
-                        $eventoVerifica->setRischedulazione(false);
-                        $eventoVerifica->setScheda($scheda);
-                        $eventoVerifica->setTipo($tipo);
-                        $eventoVerifica->setTitolo('Verifica');
                         $em->persist($eventoVerifica);
                         $em->flush();
                         $verifiche++;
@@ -949,20 +909,8 @@ class SchedaController extends Controller {
         }
 
         $data = \DateTime::createFromFormat('d/m/Y', $req['data']);
-        $cal = $this->getCalendar();
-        $tipo = $this->getTipoEvento('OTH');
-        $evento = new Evento();
-        $evento->setCalendario($cal);
+        $evento = $this->newEvento($this->ATTIVITA_MANUALE, $entity, $req['titolo'], $req['note']);
         $evento->setDataOra($data);
-        $evento->setDeltaG(0);
-        $evento->setGiornoIntero(true);
-        $evento->setImportante(false);
-        $evento->setNote($req['note']);
-        $evento->setOrdine(0);
-        $evento->setRischedulazione(false);
-        $evento->setScheda($entity);
-        $evento->setTipo($tipo);
-        $evento->setTitolo($req['titolo']);
         $em->persist($evento);
         $em->flush();
         return array('entity' => $em->getRepository('EphpSinistriBundle:Scheda')->find($id));
@@ -1081,22 +1029,11 @@ class SchedaController extends Controller {
                     $conn->beginTransaction();
                     $data = \DateTime::createFromFormat('d/m/Y', substr($dati[0], 0, 10));
                     /* @var $data \DateTime */
-                    $tipo = $this->getTipoEvento('JWB');
-                    $evento = new Evento();
-                    $evento->setCalendario($cal);
+                    $evento = $this->newEvento($this->JWEB, $entity, $dati[2], $dati[3] . ($dati[1] ? "({$dati[1]})" : ''));
                     $evento->setDataOra($data);
-                    $evento->setDeltaG(0);
-                    $evento->setGiornoIntero(true);
-                    $evento->setImportante(false);
-                    $evento->setNote($dati[3] . ($dati[1] ? "({$dati[1]})" : ''));
-                    $evento->setOrdine(0);
-                    $evento->setRischedulazione(false);
-                    $evento->setScheda($entity);
-                    $evento->setTipo($tipo);
-                    $evento->setTitolo($dati[2]);
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
                         'calendario' => $cal->getId(),
-                        'tipo' => $tipo->getId(),
+                        'tipo' => $evento->getTipo()->getId(),
                         'scheda' => $entity->getId(),
                         'titolo' => $evento->getTitolo(),
                         'note' => $evento->getNote(),
@@ -1158,22 +1095,11 @@ class SchedaController extends Controller {
                     $conn->beginTransaction();
                     $data = \DateTime::createFromFormat('d/m/Y', substr($dati[0], 0, 10));
                     /* @var $data \DateTime */
-                    $tipo = $this->getTipoEvento('CNT');
-                    $evento = new Evento();
-                    $evento->setCalendario($cal);
+                    $evento = $this->newEvento($this->CANCELLERIA_TELEMATICA, $entity, $dati[1], $dati[2]);
                     $evento->setDataOra($data);
-                    $evento->setDeltaG(0);
-                    $evento->setGiornoIntero(true);
-                    $evento->setImportante(false);
-                    $evento->setNote($dati[2]);
-                    $evento->setOrdine(0);
-                    $evento->setRischedulazione(false);
-                    $evento->setScheda($entity);
-                    $evento->setTipo($tipo);
-                    $evento->setTitolo($dati[1]);
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
                         'calendario' => $cal->getId(),
-                        'tipo' => $tipo->getId(),
+                        'tipo' => $evento->getTipo()->getId(),
                         'scheda' => $entity->getId(),
                         'titolo' => $evento->getTitolo(),
                         'note' => $evento->getNote(),
@@ -1235,22 +1161,11 @@ class SchedaController extends Controller {
                     $conn->beginTransaction();
                     $data = \DateTime::createFromFormat('d/m/Y', substr($dati[0], 0, 10));
                     /* @var $data \DateTime */
-                    $tipo = $this->getTipoEvento('RVP');
-                    $evento = new Evento();
-                    $evento->setCalendario($cal);
+                    $evento = $this->newEvento($this->RAVINALE, $entity, 'Ravinale Piemonte', $dati[1]);
                     $evento->setDataOra($data);
-                    $evento->setDeltaG(0);
-                    $evento->setGiornoIntero(true);
-                    $evento->setImportante(false);
-                    $evento->setNote($dati[1]);
-                    $evento->setOrdine(0);
-                    $evento->setRischedulazione(false);
-                    $evento->setScheda($entity);
-                    $evento->setTipo($tipo);
-                    $evento->setTitolo('Ravinale Piemonte');
                     $olds = $em->getRepository('EphpSinistriBundle:Evento')->findBy(array(
                         'calendario' => $cal->getId(),
-                        'tipo' => $tipo->getId(),
+                        'tipo' => $evento->getTipo()->getId(),
                         'scheda' => $entity->getId(),
                         'note' => $evento->getNote(),
                     ));
@@ -1900,37 +1815,4 @@ class SchedaController extends Controller {
         return str_replace(array('€', '.', ',', ' '), array('', '', '.', ''), $euro);
     }
 
-    private function getTipoEvento($sigla) {
-        $cal = $this->getCalendar();
-        $_tipo = $this->getEm()->getRepository('EphpCalendarBundle:Tipo');
-        /* @var $_tipo \Ephp\Bundle\CalendarBundle\Entity\TipoRepository */
-        return $_tipo->findOneBy(array('sigla' => $sigla, 'calendario' => $cal->getId()));
-    }
-
-    private function getCalendar() {
-        $_cal = $this->getEm()->getRepository('EphpCalendarBundle:Calendario');
-        /* @var $_cal \Ephp\Bundle\CalendarBundle\Entity\CalendarioRepository */
-        $cal = $_cal->findOneBy(array('sigla' => 'JFC-SX'));
-        if (!$cal) {
-            $cal = $_cal->createCalendario('JFC-SX', 'JF-Claims Sinistri');
-            $_tipo = $this->getEm()->getRepository('EphpCalendarBundle:Tipo');
-            /* @var $_tipo \Ephp\Bundle\CalendarBundle\Entity\TipoRepository */
-            $_tipo->createTipo('ASC', 'Analisi Sinistri e Copertura', 'aaffaa', $cal, false);
-            $_tipo->createTipo('VIM', 'Verifica Incarichi e Medici', 'aaffaa', $cal, false);
-            $_tipo->createTipo('RPM', 'Ricerca Polizze e Medici', 'aaffaa', $cal, false);
-            $_tipo->createTipo('RER', 'Relazione e Riserva', 'aaffaa', $cal, false);
-            $_tipo->createTipo('RSA', 'Richiesta di SA', 'aaffaa', $cal, false);
-            $_tipo->createTipo('TAX', 'Trattative e Aggiornamenti', 'aaffaa', $cal, false);
-            $_tipo->createTipo('JWB', 'J-Web Claims', 'ffaaaa', $cal);
-            $_tipo->createTipo('CNT', 'Cancelleria Telematiche', 'aaffff', $cal);
-            $_tipo->createTipo('RVP', 'Ravinale Piemonte', 'ffaaff', $cal);
-            $_tipo->createTipo('OTH', 'Attività manuali', 'ffffaa', $cal);
-            $_tipo->createTipo('RIS', 'Rischedulazione', 'aaaaaa', $cal, true, false, false);
-            $_tipo->createTipo('VER', 'Verifica periodica', 'aaffaa', $cal);
-            $_tipo->createTipo('CHS', 'Cambio Stato Operativo', 'aaaaff', $cal, true, false, false);
-        }
-        return $cal;
-    }
-
 }
-

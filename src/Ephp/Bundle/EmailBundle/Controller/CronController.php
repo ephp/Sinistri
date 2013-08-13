@@ -13,7 +13,8 @@ use Ephp\UtilityBundle\Utility\Debug;
 class CronController extends Controller {
 
     use \Ephp\ImapBundle\Controller\Traits\ImapController,
-        \Ephp\UtilityBundle\Controller\Traits\BaseController;
+        \Ephp\UtilityBundle\Controller\Traits\BaseController,
+        \Ephp\Bundle\SinistriBundle\Controller\Traits\SxCalendarController;
 
     const TPA = "/[a-z]{2}[a-z0-9]{1}( [a-z.]+[a-z]{1})?(\/|\-)[0-9]{2}\/[0-9]{1,3}/i";
     const RECD = "/RECD\-[0-9]+/i";
@@ -135,27 +136,124 @@ class CronController extends Controller {
      * @Route("/tpa-cron", name="imap_tpa", defaults={"_format"="json"})
      */
     public function tpaAction() {
-        $this->openImap();
-        $n = $this->countMessages();
-        $messages = $this->getHeaders($n, min(25, $n));
-        $body = $this->getBody($n);
-        $subject = $body->getSubject();
-        // Test TPA su subject
-        preg_match(self::TPA, $subject, $tpa);
-        if ($tpa) {
-            Debug::vd('TPA', true);
-            Debug::vd($tpa, true);
-            Debug::vd($subject, true);
-        }
-//        Debug::vd($body);
-
-
-        return array(
-            'messages' => $messages,
+        $out = array(
+            'contec' => 0,
+            'contec_subjects' => array(),
+            'ravinale' => 0,
+            'ravinale_subjects' => array(),
+            'email' => 0,
+            'email_subjects' => array(),
         );
+        $this->openImap(null, null, null, null, null, 'Contec');
+        $n = $this->countMessages();
+        $out['contec'] = $n;
+        for ($i = 1; $i <= $n; $i++) {
+            try {
+                $this->getEm()->beginTransaction();
+                $body = $this->getBody($i);
+                $out['contec_subjects'][] = $body->getSubject();
+                $scheda = $this->findScheda($body, self::CLAIMANT_CONTEC);
+                if ($scheda) {
+                    if (is_array($scheda)) {
+                        $schede = $scheda;
+                        foreach ($schede as $scheda) {
+                            $evento = $this->newEvento($this->EMAIL_JWEB, $scheda, $body->getSubject(), $body->getTxt());
+                            $evento->setDataOra($body->getHeader()->getDate());
+                            $this->persist($evento);
+                        }
+                    } else {
+                        $evento = $this->newEvento($this->EMAIL_JWEB, $scheda, $body->getSubject(), $body->getTxt());
+                        $evento->setDataOra($body->getHeader()->getDate());
+                        $this->persist($evento);
+                    }
+                }
+                $this->getEm()->commit();
+            } catch (\Exception $e) {
+                $this->getEm()->rollback();
+                throw $e;
+            }
+        }
+        for ($i = $n; $i > 0; $i--) {
+            $this->deteteEmail($i);
+        }
+        $this->closeImap();
+
+        $this->openImap(null, null, null, null, null, 'Ravinale');
+        $n = $this->countMessages();
+        $out['ravinale'] = $n;
+        for ($i = 1; $i <= $n; $i++) {
+            try {
+                $this->getEm()->beginTransaction();
+                $body = $this->getBody($i);
+                $out['ravinale_subjects'][] = $body->getSubject();
+                $scheda = $this->findScheda($body, self::CLAIMANT_RAVINALE);
+                if ($scheda) {
+                    if (is_array($scheda)) {
+                        $schede = $scheda;
+                        foreach ($schede as $scheda) {
+                            $evento = $this->newEvento($this->EMAIL_RAVINALE, $scheda, $body->getSubject(), $body->getTxt());
+                            $evento->setDataOra($body->getHeader()->getDate());
+                            $this->persist($evento);
+                        }
+                    } else {
+                        $evento = $this->newEvento($this->EMAIL_RAVINALE, $scheda, $body->getSubject(), $body->getTxt());
+                        $evento->setDataOra($body->getHeader()->getDate());
+                        $this->persist($evento);
+                    }
+                }
+                $this->getEm()->commit();
+            } catch (\Exception $e) {
+                $this->getEm()->rollback();
+                throw $e;
+            }
+        }
+        for ($i = $n; $i > 0; $i--) {
+            $this->deteteEmail($i);
+        }
+        $this->closeImap();
+
+        $this->openImap(null, null, null, null, null, 'TPA');
+        $n = $this->countMessages();
+        $out['email'] = $n;
+        for ($i = 1; $i <= $n; $i++) {
+            try {
+                $this->getEm()->beginTransaction();
+                $body = $this->getBody($i);
+                $out['email_subjects'][] = $body->getSubject();
+                $scheda = $this->findScheda($body, self::CLAIMANT_TUTTI);
+                if ($scheda) {
+                    if (is_array($scheda)) {
+                        $schede = $scheda;
+                        foreach ($schede as $scheda) {
+                            $evento = $this->newEvento($this->EMAIL_MANUALE, $scheda, $body->getSubject(), $body->getTxt());
+                            $evento->setDataOra($body->getHeader()->getDate());
+                            $this->persist($evento);
+                        }
+                    } else {
+                        $evento = $this->newEvento($this->EMAIL_MANUALE, $scheda, $body->getSubject(), $body->getTxt());
+                        $evento->setDataOra($body->getHeader()->getDate());
+                        $this->persist($evento);
+                    }
+                }
+                $this->getEm()->commit();
+            } catch (\Exception $e) {
+                $this->getEm()->rollback();
+                throw $e;
+            }
+        }
+        for ($i = $n; $i > 0; $i--) {
+            $this->deteteEmail($i);
+        }
+        $this->closeImap();
+
+        return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
     }
 
-    private function findScheda(\Ephp\ImapBundle\Entity\Body $body) {
+    const CLAIMANT_CONTEC = "Contec";
+    const CLAIMANT_RAVINALE = "Ravinale";
+    const CLAIMANT_TUTTI = true;
+
+    private function findScheda(\Ephp\ImapBundle\Entity\Body $body, $claimant = null) {
         $subject = $body->getSubject();
         $tpa = null;
         preg_match(self::TPA, $subject, $tpa);
@@ -171,6 +269,23 @@ class CronController extends Controller {
             $ospedale = $this->findOneBy('EphpSinistriBundle:Ospedale', array('sigla' => $token[0]));
             $scheda = $this->findOneBy('EphpSinistriBundle:Scheda', array('ospedale' => $ospedale->getId(), 'anno' => $token[1], 'tpa' => $token[2]));
             return $scheda;
+        }
+        if ($claimant) {
+            $nomi = $this->getRepository('EphpSinistriBundle:Scheda')->nomi($claimant);
+            $regexp = '/(' . implode('|', $nomi) . ')/i';
+            $tpa = null;
+            preg_match($regexp, $subject, $tpa);
+            if (!$tpa) {
+                $txt = $body->getTxt();
+                preg_match($regexp, $txt, $tpa);
+            }
+            if (isset($tpa[0])) {
+                $schede = $this->findBy('EphpSinistriBundle:Scheda', array('claimant' => $tpa[0]));
+                if (count($schede) == 1) {
+                    return $schede[0];
+                }
+                return $schede;
+            }
         }
         return null;
     }

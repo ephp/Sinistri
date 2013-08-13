@@ -84,20 +84,50 @@ class SchedaRepository extends EntityRepository {
     public function ritardi($gestore_id = null) {
         $connection = $this->getEntityManager()->getConnection();
         $q = "   SELECT * FROM sx_ritardi r " .
-                " WHERE r.priorita != :priorita ".
-                "   AND r.giorni > :giorni ".
+                " WHERE r.priorita != :priorita " .
+                "   AND r.giorni > :giorni " .
                 ($gestore_id ? " AND r.gestore_id = :id " : "" )
         ;
         $params = array(
             'priorita' => 'definita',
             'giorni' => 60,
-            );
-        
-        if($gestore_id) {
+        );
+
+        if ($gestore_id) {
             $params['id'] = $gestore_id;
         }
         $stmt = $connection->executeQuery($q, $params);
         return $stmt->fetchAll();
+    }
+
+    public function nomi($tpa) {
+        $connection = $this->getEntityManager()->getConnection();
+        if (is_string($tpa)) {
+            $q = "
+SELECT s.claimant
+  FROM sx_tabellone s
+ INNER JOIN sx_ospedali o ON o.id = s.ospedale_id
+ WHERE o.tpa = :tpa
+        ";
+            $params = array(
+                'tpa' => $tpa,
+            );
+        } else {
+            $q = "
+SELECT s.claimant
+  FROM sx_tabellone s
+        ";
+            $params = array(
+            );
+        }
+
+        $stmt = $connection->executeQuery($q, $params);
+        $rows = $stmt->fetchAll();
+        $out = array();
+        foreach ($rows as $row) {
+            $out[] = str_replace('  ', ' ', $row['claimant']);
+        }
+        return array_unique($out);
     }
 
 }
