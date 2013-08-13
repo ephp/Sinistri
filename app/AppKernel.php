@@ -23,7 +23,6 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new B2S\Bundle\PortletBundle\B2SPortletBundle(),
             new Ephp\ACLBundle\EphpACLBundle(),
             new Ephp\ImapBundle\EphpImapBundle(),
             new Ephp\UtilityBundle\EphpUtilityBundle(),
