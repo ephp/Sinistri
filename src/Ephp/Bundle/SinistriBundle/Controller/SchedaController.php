@@ -462,24 +462,26 @@ class SchedaController extends Controller {
      */
     public function cambiaPrioritaAction() {
         $req = $this->getRequest()->get('priorita');
-        $em = $this->getEm();
 
-        $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
-        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
-
-        $scheda = $_scheda->find($req['id']);
+        $scheda = $this->find('EphpSinistriBundle:Scheda', $req['id']);
         /* @var $scheda Scheda */
-        $priorita = $_priorita->find($req['priorita']);
+        $priorita = $this->find('EphpSinistriBundle:Priorita', $req['priorita']);
         /* @var $priorita Priorita */
 
         try {
+            $this->getEm()->beginTransaction();
+            if($priorita->getOnChange() == 'cal') {
+                $evento = $this->newEvento($this->PRIORITA, $scheda, $priorita->getPriorita(), "Cambio priorità da {$scheda->getPriorita()->getPriorita()} a {$priorita->getPriorita()}");
+                $this->persist($evento);
+            }
             $scheda->setPriorita($priorita);
-            $em->persist($scheda);
-            $em->flush();
+            $this->persist($scheda);
+            $this->getEm()->commit();
         } catch (\Exception $e) {
+            $this->getEm()->rollback();
             throw $e;
         }
-        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $priorita->getId(), 'label' => $priorita->getPriorita(), 'css' => 'bg-' . $priorita->getCss(), 'js' => $priorita->getOnChange())));
+        return new \Symfony\Component\HttpFoundation\Response(json_encode(array('id' => $priorita->getId(), 'label' => $priorita->getPriorita(), 'css' => 'bg-' . $priorita->getCss(), 'js' => '')));
     }
 
     /**

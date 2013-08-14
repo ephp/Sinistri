@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new Ephp\Bundle\CalendarBundle\EphpCalendarBundle(),
             new Ephp\Bundle\StrumentiBundle\EphpStrumentiBundle(),
             new Ephp\Bundle\EmailBundle\EphpEmailBundle(),
+            new Ephp\Bundle\StatsBundle\EphpStatsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

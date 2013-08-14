@@ -1,0 +1,34 @@
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Sigla</th>
+            <th>Normale</th>
+            <th>Attenzione</th>
+            <th>Alta</th>
+            <th>Nuovi</th>
+            <th>Riattivati</th>
+            <th>Assegnati</th>
+            <th>Definiti</th>
+            <th>Tot. Aperti</th>
+            <th>Con DASC</th>
+            <th>Senza DASC</th>
+        </tr>
+    </thead>
+    <tbody id="tb_container">
+        {% for ospedale in ospedali %}
+            <tr id="riga_s_{{ ospedale.sigla }}">
+                <td style="text-align: center;"><a href="{{ path('tabellone', {'ospedale': ospedale.gruppo}) }}">{{ ospedale.sigla }}</a></td>
+                <td style="text-align: right;">{{ ospedale.normali }}</td>
+                <td style="text-align: right;">{{ ospedale.attenzione }}</td>
+                <td style="text-align: right;">{{ ospedale.alta }}</td>
+                <td style="text-align: right;">{{ ospedale.nuovi }}</td>
+                <td style="text-align: right;">{{ ospedale.riattivati }}</td>
+                <td style="text-align: right;">{{ ospedale.assegnati }}</td>
+                <td style="text-align: right;">{{ ospedale.definiti }} {% if ospedale.totali > 0 %}({{ (ospedale.definiti * 100 / ospedale.totali)|number_format(0) }} %){% endif %}</td>
+                <td style="text-align: right; font-weight: bold;">{{ ospedale.totali }}</td>
+                <td style="text-align: right;">{{ ospedale.non_assegnati }}</td>
+                <td style="text-align: right;">{{ ospedale.senza_dasc }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>            

@@ -1,0 +1,28 @@
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Gestore</th>
+            <th>Ultimo Mese<br><small>(chiusure pulite)</small></th>
+            <th>Ultimo Mese<br><small>(compreso da riattivato a definito)</small></th>
+            <th>Ultimo Definito<br><small>(chiusure pulite)</small></th>
+            <th>Ultimo Definito<br><small>(compreso da riattivato a definito)</small></th>
+            <th>Totali</th>
+        </tr>
+    </thead>
+    <tbody id="tb_container">
+        {% for definito in definiti %}
+            <tr id="riga_d_{{ definito.sigla }}">
+                {% if definito.sigla != 'Vecchio' %}
+                    <td style="text-align: center;"><a href="{{ path('tabellone_gestore', {'gestore': definito.sigla}) }}">{{ definito.sigla }}</a></td>
+                {% else %}
+                    <td style="text-align: center;">{{ definito.sigla }}</td>
+                {% endif %}
+                <td style="text-align: right;">{{ definito.ultimo_mese }}</td>
+                <td style="text-align: right;">{{ definito.ultimo_mese_tutto }}</td>
+                <td style="text-align: right;">{% if definito.ultimo_definito %}{{ definito.giorni }} giorni fa ({{ definito.ultimo_definito|date('d-m-Y') }}){% endif %}</td>
+                <td style="text-align: right;">{% if definito.ultimo_definito_tutto %}{{ definito.giorni_tutto }} giorni fa ({{ definito.ultimo_definito_tutto|date('d-m-Y') }}){% endif %}</td>
+                <td style="text-align: right;">{{ definito.totali }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>            

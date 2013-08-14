@@ -1,0 +1,31 @@
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Stato</th>
+            {% for gestore in stati_operativi.gestori %}
+                <th>{{ gestore }}</th>
+            {% endfor %}
+            <th>Totale</th>
+        </tr>
+    </thead>
+    <tbody id="tb_container">
+        {% for id, stato in stati_operativi.stats %}
+            <tr id="riga_so_{{ id }}">
+                <td style="text-align: left;">{{ stato.stato|capitalize }}</td>
+                {% for gestore in stati_operativi.gestori %}
+                    <td style="text-align: right;">{{ stato[gestore] }}</td>
+                {% endfor %}
+                <td style="text-align: right; font-weight: bold;">{{ stato.totali }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+        <tr id="riga_so_tot">
+            <th style="text-align: left;">Totali per gestori</th>
+            {% for gestore in stati_operativi.gestori %}
+                <td style="text-align: right; font-weight: bold;">{{ stati_operativi.totali[gestore] }}</td>
+            {% endfor %}
+            <th style="text-align: right;">&nbsp;</th>
+        </tr>
+    <tfoot>
+    </tfoot>
+</table>            

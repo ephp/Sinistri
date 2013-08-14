@@ -12,10 +12,11 @@
             <li><a href="{{ path('tabellone') }}">Tabellone</a></li>
             <li><a href="{{ path('calendario_sinistri') }}">Calendario</a></li>
         {% endif %}
+        <li><a href="{{ path('strumenti') }}">Strumenti</a></li>
         {% if app.user.hasRole('ROLE_SUPERADMIN') %}
             <li><a href="{{ path('strumenti') }}">Contabilità</a></li>
+            <li><a href="{{ path('stats') }}">Statistiche</a></li>
         {% endif %}
-        <li><a href="{{ path('strumenti') }}">Strumenti</a></li>
     </ul>
     <div style="clear: both"></div>
     <ul class="menu">

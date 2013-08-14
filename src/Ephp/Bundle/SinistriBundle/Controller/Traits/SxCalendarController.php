@@ -20,6 +20,7 @@ trait SxCalendarController {
     protected $RISCHEDULAZIONE            = "RIS";
     protected $VERIFICA_PERIODICA         = "VER";
     protected $CAMBIO_STATO_OPERATIVO     = "CHS";
+    protected $PRIORITA                   = "PRI";
     
     /**
      * @return \Ephp\Bundle\CalendarBundle\Entity\Calendario
@@ -47,6 +48,7 @@ trait SxCalendarController {
             $_tipo->createTipo($this->ATTIVITA_MANUALE, 'Attività manuali', 'ffffaa', $cal);
             $_tipo->createTipo($this->EMAIL_MANUALE, 'Email', 'ffff88', $cal, true, false, true);
             $_tipo->createTipo($this->RISCHEDULAZIONE, 'Rischedulazione', 'aaaaaa', $cal, true, false, false);
+            $_tipo->createTipo($this->PRIORITA, 'Priorita', 'aaaaaa', $cal, false, false, false);
             $_tipo->createTipo($this->VERIFICA_PERIODICA, 'Verifica periodica', 'aaffaa', $cal);
             $_tipo->createTipo($this->CAMBIO_STATO_OPERATIVO, 'Cambio Stato Operativo', 'aaaaff', $cal, true, false, false);
         }
@@ -105,6 +107,9 @@ trait SxCalendarController {
                     break;
                 case $this->RISCHEDULAZIONE:
                     $tipo = $_tipo->createTipo($this->RISCHEDULAZIONE, 'Rischedulazione', 'aaaaaa', $cal, true, false, false);
+                    break;
+                case $this->PRIORITA:
+                    $_tipo->createTipo($this->PRIORITA, 'Priorita', 'aaaaaa', $cal, false, false, false);
                     break;
                 case $this->VERIFICA_PERIODICA:
                     $tipo = $_tipo->createTipo($this->VERIFICA_PERIODICA, 'Verifica periodica', 'aaffaa', $cal);
