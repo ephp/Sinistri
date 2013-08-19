@@ -14,3 +14,72 @@
         {% include 'EphpSinistriBundle:Scheda:formRicerca.html.twig' %}
     {% endif %}
 </div>
+<script type="text/javascript">
+    var filtro = {'.r': true, '.na': false, '.ng': false};
+    var filtro_nome = '';
+    
+    $('#find_claimant').change(function(){
+        q = $(this).val().toLowerCase();
+        if(q != '') {
+            url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('__query__', q);
+        } else {
+            {% if gestore is defined and gestore %}
+                url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__/', '-gestore_');
+            {% else %}
+                url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__', '').replace('tabellone/TUTTI', 'tabellone');
+            {% endif %}
+        }
+        window.location =  url ;
+    });
+    function resetQ() {
+        {% if gestore is defined and gestore %}
+            url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__/', '-gestore_');
+        {% else %}
+            url = '{{ path('tabellone_cerca', params_cerca) }}'.replace('-cerca-__query__', '').replace('tabellone/TUTTI', 'tabellone');;
+        {% endif %}
+        window.location =  url ;
+    }
+        function avanzata(url) {
+        $.post(url, function(html) {
+            $('#ricerca_avanzata').html(html);
+        });
+    }
+    function filtra(filter) {
+        $('#find_claimant').val('');
+        filtro_nome = '';
+        filtro = filter;
+        runFiltro();
+    }
+    function runFiltro() {
+        if(filtro_nome != '') {
+            $('.r').hide().each(function() {
+               t = $(this).attr('titolo').toLowerCase();
+               if(t.search(filtro_nome) >= 0) {
+                   $(this).show();
+               }
+            });
+        } else {
+            oef = Object.extended(filtro);
+            oef.keys().each(function(key){
+                show = filtro[key];
+                if(show) {
+                    $(key).show();
+                } else {
+                    $(key).hide();
+                }
+            });
+        }
+        $('.detail').hide();
+        sanitizeCurrency([$('.currency')]);
+        sanitizeDate([$('.dasc_date')]);
+        if (cambiaGestore) {
+            cambiaGestore();
+        }
+        if (cambiaPriorita) {
+            cambiaPriorita();
+        }
+        if (cambiaStatoOperativo) {
+            cambiaStatoOperativo();
+        }
+    }
+</script>

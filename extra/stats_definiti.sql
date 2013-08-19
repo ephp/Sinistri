@@ -5,7 +5,7 @@ SELECT IF(g.sigla IS NULL, 'Vecchi', g.sigla) as sigla,
 		    LEFT JOIN cal_eventi_sx es on es.id = e.id
 			WHERE e.tipo_id = 38
 			  AND e.titolo = 'definita'
-			  AND e.data_ora > date_format(NOW() - INTERVAL 1 MONTH, '%Y-%m-01') 
+			  AND e.data_ora > date_format(NOW() - INTERVAL 1 MONTH, '%Y-%m-%d') 
 			  AND es.scheda_id IN (SELECT t.id
 			                         FROM sx_tabellone t
 											WHERE t.gestore_id = g.id)) as ultimo_mese_tutto,
@@ -15,7 +15,7 @@ SELECT IF(g.sigla IS NULL, 'Vecchi', g.sigla) as sigla,
 			WHERE e.tipo_id = 38
 			  AND e.titolo = 'definita'
 			  AND e.note NOT LIKE '%riattivato%'
-			  AND e.data_ora > date_format(NOW() - INTERVAL 1 MONTH, '%Y-%m-01') 
+			  AND e.data_ora > date_format(NOW() - INTERVAL 1 MONTH, '%Y-%m-%d') 
 			  AND es.scheda_id IN (SELECT t.id
 			                         FROM sx_tabellone t
 											WHERE t.gestore_id = g.id)) as ultimo_mese,

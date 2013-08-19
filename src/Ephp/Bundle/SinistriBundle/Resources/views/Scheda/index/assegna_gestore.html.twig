@@ -1,0 +1,32 @@
+<div style="display: none" id="fb_assegna_gestore">
+    <form id="assegna_gestore_scheda">
+        <h2>Assegna il gestore a <span id="assegna_gestore_a"></span></h2>
+        <div style="clear: both"></div>
+        <select name="scheda[gestore]" id="scheda_gestore">
+            <option value="">Nessuno</option>
+            {% for ges in gestori %}
+            <option value="{{ ges.sigla }}">{{ges.nome}}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="scheda[id]" id="scheda_id" value="" />    
+        <button type="button" onclick="assegnaGestore()">Assegna</button>
+    </form>
+</div>
+<script type="text/javascript">
+    function cambiaGestore() {
+        $('.chg').click(function() {
+            tr = $(this).closest('tr');
+            $('#assegna_gestore_a').text(tr.attr('titolo'));
+            $('#scheda_id').val(tr.attr('riga'));
+            $('#scheda_gestore').val(tr.attr('gestore'));
+        });
+    }
+    cambiaGestore();
+
+    function assegnaGestore() {
+        form = $('#assegna_gestore_scheda');
+        $.post('{{ path('tabellone_assegna_gestore') }}', form.serialize(), function(out) {
+            window.location = out.redirect;
+        });
+    }
+</script>

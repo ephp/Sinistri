@@ -30,12 +30,14 @@ Profilo
 {% endif %}
 {% if prima_pagina|length > 0 %}
     <div id="tabs-pp" style="display: none">
-        {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %}
+        {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': prima_pagina} %}
+        {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %#}
     </div>
 {% endif %}
 {% if attenzione|length > 0 %}
     <div id="tabs-i" style="display: none">
-        {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %}
+        {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': attenzione} %}
+        {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %#}
     </div>
 {% endif %}
 {% for tab in tabs %}
@@ -43,51 +45,26 @@ Profilo
         <div id="tabs-{{ tab.id }}" style="display: none">
             {% if attribute(private, tab.id)|length > 0 %}
                 <h3>Personali</h3>
-                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(private, tab.id)} %}
+                {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': attribute(private, tab.id)} %}
+                {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(private, tab.id)} %#}
             {% endif %}
             {% if attribute(pubbliche, tab.id)|length > 0 %}
                 <h3>Tutte</h3>
-                {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id), 'gest': true} %}
+                {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': attribute(pubbliche, tab.id)} %}
+                {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id), 'gest': true} %#}
             {% endif %}
         </div>
     {% endif %}
 {% endfor%}
 </div>
 
+{% include 'EphpSinistriBundle:Scheda:index/assegna_gestore.html.twig' %}
+{% include 'EphpSinistriBundle:Scheda:index/cambia_priorita.html.twig' %}
+{% include 'EphpSinistriBundle:Scheda:index/cambia_stato_operativo.html.twig' %}
 
-<div style="display: none" id="fb_assegna_gestore">
-    <form id="assegna_gestore_scheda">
-        <li>Assegna il gestore a <span id="assegna_gestore_a"></span></a></li>
-        <div style="clear: both"></div>
-        <select name="scheda[gestore]" id="scheda_gestore">
-            <option value="">Nessuno</option>
-            {% for ges in gestori %}
-                <option value="{{ ges.sigla }}">{{ges.nome}}</option>
-            {% endfor %}
-        </select>
-        <input type="hidden" name="scheda[id]" id="scheda_id" value="" />    
-        <button type="button" onclick="assegnaGestore()">Assegna</button>
-    </form>
-</div>
+{% include 'EphpSinistriBundle:Scheda:index/table.js.html.twig' %}
 
 <script type="text/javascript">
-    function cambiaGestore() {
-        $('.chg').click(function(){
-            tr = $(this).closest('tr');
-            $('#assegna_gestore_a').text(tr.attr('titolo'));
-            $('#scheda_id').val(tr.attr('riga'));
-            $('#scheda_gestore').val(tr.attr('gestore'));
-        });
-    }
-    cambiaGestore();
-
-    function assegnaGestore() {
-        form = $('#assegna_gestore_scheda');
-        $.post('{{ path('tabellone_assegna_gestore') }}', form.serialize(), function(out) {
-            window.location = out.redirect;
-        });
-    }
-
     $(function() {
         $( "#tabs" ).tabs();
         $( "#tabs ul li a" ).click(function(){
@@ -96,14 +73,5 @@ Profilo
         });
         $( "#tabs div:first" ).show();
     });
-    $('.autoupdate').change(function(){
-        val = $(this).val();
-        pratica = $(this).attr('pratica');
-        field = $(this).attr('name');
-        $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
-            checkUm();
-        });
-    });
-
 </script>
 {% endblock %}

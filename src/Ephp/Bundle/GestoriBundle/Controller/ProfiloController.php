@@ -57,7 +57,9 @@ class ProfiloController extends Controller {
             $private[$tab->getId()] = $pr;
             $pubbliche[$tab->getId()] = $pu;
         }
-
+        $prioritas = $this->findBy('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatoOperativo', array());
+        
         return array(
             'tabs' => $tabs,
             'private' => $private,
@@ -67,6 +69,8 @@ class ProfiloController extends Controller {
             'prima_pagina' => $prima_pagina,
             'attenzione' => $attenzione,
             'nuove' => $nuove,
+            'priorita' => $prioritas,
+            'stati_operativi' => $stati_operativi,
             'gestori' => $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC')),
         );
     }

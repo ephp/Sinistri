@@ -1,0 +1,52 @@
+<script type="text/javascript">
+    sanitizeCurrency([$('.currency')]);
+    sanitizeDate([$('.dasc_date')]);
+    $('.autoupdate').change(function(){
+        val = $(this).val();
+        pratica = $(this).attr('pratica');
+        field = $(this).attr('name');
+        $.post('{{ path('tabellone_autoupdate') }}', {'pratica': {'id': pratica, 'field': field, 'value': val}}, function(out) {
+            checkUm();
+        });
+    });
+    function checkUm() {
+        $('.um').each(function(){
+            val = $('#'+$(this).attr('target')).val();
+            console.log(val);
+            if(val) {
+                if(parseFloat(val) <= 100){
+                    $(this).text('%');
+                } else {
+                    $(this).text('€');
+                }
+            } else {
+                $(this).text('');
+            }
+        });
+    }
+    checkUm();
+    
+    function primaPagina(id) {
+        $.post('{{ path('tabellone_prima_pagina') }}', {'scheda': {'id': id}}, function(out) {
+            $('#'+out.id).removeClass(out.remove);
+            $('#'+out.id).addClass(out.add);
+        });
+    }    
+    {% if scroll is defined and scroll %}
+        $(function(){
+            var $container = $('#tb_container');
+            $container.infinitescroll({
+                navSelector  : '#page_nav',    // selector for the paged navigation 
+                nextSelector : '#page_nav a',  // selector for the NEXT link (to page 2)
+                itemSelector : '.r',     // selector for all items you'll retrieve
+                loading: {
+                    finishedMsg: 'Fine',
+                    msgText: 'Attendere',
+                    img: 'http://i.imgur.com/qkKy8.gif'
+                }
+            }, function() {
+                setTimeout(function(){runFiltro();}, 10);
+            });
+        });
+    {% endif %}
+</script>

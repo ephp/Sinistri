@@ -1,0 +1,33 @@
+<div style="display: none" id="fb_stato_operativo">
+    <form id="cambia_stato_operativo">
+        <h2>Cambia stato operativo <span id="cambia_stato_operativo_a"></span></h2>
+        <div style="clear: both"></div>
+        <select name="stato_operativo[stato]" id="stato_operativo_stato">
+            {% for so in stati_operativi %}
+                <option value="{{ so.id }}">{{so.stato}}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="stato_operativo[id]" id="stato_operativo_id" value="" />    
+        <button type="button" onclick="assegnaStatoOperativo()">Cambia</button>
+    </form>
+</div>
+<script type="text/javascript">
+    function cambiaStatoOperativo() {
+        $('.chs').click(function(){
+            tr = $(this).closest('tr');
+            $('#cambia_stato_operativo_a').text(tr.attr('titolo'));
+            $('#stato_operativo_id').val(tr.attr('riga'));
+            $('#stato_operativo_stato').val(tr.attr('stato'));
+        });
+    }
+    function assegnaStatoOperativo() {
+        form = $('#cambia_stato_operativo');
+        $.post('{{ path('tabellone_cambia_stato_operativo') }}', form.serialize(), function(out) {
+            riga = $('#riga_'+$('#stato_operativo_id').val());
+            riga.attr('stato', out.id);
+            td = riga.find('.chs a');
+            td.html(out.label);
+            $.fancybox.close();
+        });
+    }
+</script>
