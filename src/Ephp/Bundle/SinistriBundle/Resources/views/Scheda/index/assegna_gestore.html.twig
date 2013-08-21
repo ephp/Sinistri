@@ -22,7 +22,6 @@
         });
     }
     cambiaGestore();
-
     function assegnaGestore() {
         form = $('#assegna_gestore_scheda');
         $.post('{{ path('tabellone_assegna_gestore') }}', form.serialize(), function(out) {
