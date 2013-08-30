@@ -26,7 +26,9 @@ SELECT IF(g.sigla IS NULL, 'Vecchi', g.sigla) as sigla,
 			  AND e.titolo = 'definita'
 			  AND es.scheda_id IN (SELECT t.id
 			                         FROM sx_tabellone t
-											WHERE t.gestore_id = g.id)) as ultimo_definito_tutto,
+											WHERE t.gestore_id = g.id)
+			ORDER BY e.data_ora DESC
+			LIMIT 1) as ultimo_definito_tutto,
        (SELECT e.data_ora
 		    FROM cal_eventi e
 		    LEFT JOIN cal_eventi_sx es on es.id = e.id
@@ -35,7 +37,9 @@ SELECT IF(g.sigla IS NULL, 'Vecchi', g.sigla) as sigla,
 			  AND e.note NOT LIKE '%riattivato%'
 			  AND es.scheda_id IN (SELECT t.id
 			                         FROM sx_tabellone t
-											WHERE t.gestore_id = g.id)) as ultimo_definito,
+											WHERE t.gestore_id = g.id)
+			ORDER BY e.data_ora DESC
+			LIMIT 1) as ultimo_definito,
 		 datediff(now(), (SELECT e.data_ora
                 		     FROM cal_eventi e
 		                    LEFT JOIN cal_eventi_sx es on es.id = e.id
@@ -43,7 +47,9 @@ SELECT IF(g.sigla IS NULL, 'Vecchi', g.sigla) as sigla,
 			                  AND e.titolo = 'definita'
 			                  AND es.scheda_id IN (SELECT t.id
 			                                         FROM sx_tabellone t
-							              				    WHERE t.gestore_id = g.id))) as giorni_tutto,
+							              				    WHERE t.gestore_id = g.id)
+		                 	 ORDER BY e.data_ora DESC
+			                LIMIT 1)) as giorni_tutto,
 		 datediff(now(), (SELECT e.data_ora
                 		     FROM cal_eventi e
 		                    LEFT JOIN cal_eventi_sx es on es.id = e.id
@@ -52,7 +58,9 @@ SELECT IF(g.sigla IS NULL, 'Vecchi', g.sigla) as sigla,
 			                  AND e.note NOT LIKE '%riattivato%'
 			                  AND es.scheda_id IN (SELECT t.id
 			                                         FROM sx_tabellone t
-							              				    WHERE t.gestore_id = g.id))) as giorni,
+							              				    WHERE t.gestore_id = g.id)
+			                ORDER BY e.data_ora DESC
+			               LIMIT 1)) as giorni,
        count(*) as totali
   FROM sx_tabellone s
   LEFT JOIN acl_gestori g ON s.gestore_id = g.id

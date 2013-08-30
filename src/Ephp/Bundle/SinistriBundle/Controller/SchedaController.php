@@ -703,6 +703,7 @@ class SchedaController extends Controller {
         $em = $this->getEm();
         $cal = $this->getCalendar();
         $verifiche = 0;
+        $tipo = $this->findOneBy('EphpCalendarBundle:Tipo', array('sigla' => 'VER', 'calendario' => $cal->getId()));
         do {
             $schede = $em->getRepository('EphpSinistriBundle:Scheda')->findBy(array(), array(), 200, $i * 200);
             foreach ($schede as $scheda) {
