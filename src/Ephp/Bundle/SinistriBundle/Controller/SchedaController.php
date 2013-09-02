@@ -437,7 +437,7 @@ class SchedaController extends Controller {
 
         try {
             if ($scheda->getGestore()) {
-                $evento = $this->newEvento('CHG', $scheda, null, "da {$scheda->getGestore()->getFullName()} a {$gestore->getFullName()}");
+                $evento = $this->newEvento('CHG', $scheda, null, "da {$scheda->getGestore()->getNome()} a {$gestore->getNome()}");
                 $this->persist($evento);
             } else {
                 $scheda->setPriorita($this->findOneBy('EphpSinistriBundle:Priorita', array('priorita' => 'assegnato')));
