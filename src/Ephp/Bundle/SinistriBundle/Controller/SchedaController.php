@@ -383,13 +383,13 @@ class SchedaController extends Controller {
                 $cal = $this->getCalendar();
                 $generatore = array(
                     array('tipo' => $this->ANALISI_SINISTRI_COPERTURA, 'giorni' => 0),
-                    array('tipo' => $this->VERIFICA_INCARICHI_MEDICI,  'giorni' => 10),
-                    array('tipo' => $this->RICERCA_POLIZZE_MEDICI,     'giorni' => 25),
-                    array('tipo' => $this->RELAZIONE_RISERVA,          'giorni' => 14),
-                    array('tipo' => $this->RICHIESTA_SA,               'giorni' => 14),
-                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI,   'giorni' => 30),
-                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI,   'giorni' => 14),
-                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI,   'giorni' => 14)
+                    array('tipo' => $this->VERIFICA_INCARICHI_MEDICI, 'giorni' => 10),
+                    array('tipo' => $this->RICERCA_POLIZZE_MEDICI, 'giorni' => 25),
+                    array('tipo' => $this->RELAZIONE_RISERVA, 'giorni' => 14),
+                    array('tipo' => $this->RICHIESTA_SA, 'giorni' => 14),
+                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI, 'giorni' => 30),
+                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI, 'giorni' => 14),
+                    array('tipo' => $this->TRATTATIVE_AGGIORNAMENTI, 'giorni' => 14)
                 );
                 if (!$entity->getDasc()) {
                     $entity->setDasc(new \DateTime());
@@ -429,26 +429,32 @@ class SchedaController extends Controller {
      */
     public function assegnaGestoreAction() {
         $req = $this->getRequest()->get('scheda');
-        $em = $this->getEm();
 
-        $_scheda = $em->getRepository('EphpSinistriBundle:Scheda');
-        $_priorita = $em->getRepository('EphpSinistriBundle:Priorita');
-        $_gestore = $em->getRepository('EphpGestoriBundle:Gestore');
-
-        $scheda = $_scheda->find($req['id']);
+        $scheda = $this->find('EphpSinistriBundle:Scheda', $req['id']);
         /* @var $scheda Scheda */
-        $gestore = $_gestore->findOneBy(array('sigla' => $req['gestore']));
+        $gestore = $this->findOneBy('EphpGestoriBundle:Gestore', array('sigla' => $req['gestore']));
         /* @var $gestore Gestore */
 
-        $genera = is_null($scheda->getGestore());
         try {
-            $scheda->setGestore($gestore);
-            $scheda->setPriorita($_priorita->findOneBy(array('priorita' => 'assegnato')));
-            $em->persist($scheda);
-            $em->flush();
-            if ($genera) {
-                // TODO
+            if ($scheda->getGestore()) {
+                $evento = $this->newEvento('CHG', $scheda, null, "da {$scheda->getGestore()->getFullName()} a {$gestore->getFullName()}");
+                $this->persist($evento);
+            } else {
+                $scheda->setPriorita($this->findOneBy('EphpSinistriBundle:Priorita', array('priorita' => 'assegnato')));
             }
+            $scheda->setGestore($gestore);
+            $this->persist($scheda);
+
+            $message = \Swift_Message::newInstance()
+                    ->setSubject("[JFCLAIMS] assegnazione sinistro {$scheda->getClaimant()} ($scheda)")
+                    ->setFrom($this->container->getParameter('email_robot'))
+                    ->setTo(trim($gestore->getEmail()))
+                    ->setReplyTo($this->container->getParameter('email_robot'), "No-Reply")
+                    ->setBody($this->renderView("EphpSinistriBundle:Scheda:email/nuovo_sinistro.txt.twig", array('gestore' => $gestore, 'scheda' => $scheda)))
+                    ->addPart($this->renderView("EphpSinistriBundle:Scheda:email/nuovo_sinistro.html.twig", array('gestore' => $gestore, 'scheda' => $scheda)), 'text/html');
+            ;
+            $message->getHeaders()->addTextHeader('X-Mailer', 'PHP v' . phpversion());
+            $this->get('mailer')->send($message);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -470,7 +476,7 @@ class SchedaController extends Controller {
 
         try {
             $this->getEm()->beginTransaction();
-            if($priorita->getOnChange() == 'cal') {
+            if ($priorita->getOnChange() == 'cal') {
                 $evento = $this->newEvento($this->PRIORITA, $scheda, $priorita->getPriorita(), "Cambio priorità da {$scheda->getPriorita()->getPriorita()} a {$priorita->getPriorita()}");
                 $this->persist($evento);
             }

@@ -1,0 +1,26 @@
+{% extends '::email.html.twig' %}
+{% set titolo = 'Sinistro '~scheda.claimant~' ('~scheda~') assegnato a '~gestore.nome %}
+
+{% block content %}
+<h1>{{titolo}}</h1>
+
+{% if entity|length > 0 %}
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>&nbsp;</th>
+                <th>Data</th>
+                <th>Titolo</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody id="tb_container">
+            {% include 'EphpSinistriBundle:Scheda:email/nuovo_sinistro/tbody.html.twig' %}
+        </tbody>
+    </table>
+{% endif %}
+
+<a href="{{ url('tabellone_show', {'id': entity.scheda.id}) }}">Apri scheda sinistro</a>
+
+{% endblock %}

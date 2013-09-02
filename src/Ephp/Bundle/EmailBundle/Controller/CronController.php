@@ -267,6 +267,9 @@ class CronController extends Controller {
                 $token = array_merge(explode('-', $token[0]), array($token[1]));
             }
             $ospedale = $this->findOneBy('EphpSinistriBundle:Ospedale', array('sigla' => $token[0]));
+            if(!$ospedale) {
+                return null;
+            }
             $scheda = $this->findOneBy('EphpSinistriBundle:Scheda', array('ospedale' => $ospedale->getId(), 'anno' => $token[1], 'tpa' => $token[2]));
             return $scheda;
         }

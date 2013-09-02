@@ -20,6 +20,7 @@ trait SxCalendarController {
     protected $RISCHEDULAZIONE            = "RIS";
     protected $VERIFICA_PERIODICA         = "VER";
     protected $CAMBIO_STATO_OPERATIVO     = "CHS";
+    protected $CAMBIO_GESTORE             = "CHG";
     protected $PRIORITA                   = "PRI";
     
     /**
@@ -51,6 +52,7 @@ trait SxCalendarController {
             $_tipo->createTipo($this->PRIORITA, 'Priorita', 'aaaaaa', $cal, false, false, false);
             $_tipo->createTipo($this->VERIFICA_PERIODICA, 'Verifica periodica', 'aaffaa', $cal);
             $_tipo->createTipo($this->CAMBIO_STATO_OPERATIVO, 'Cambio Stato Operativo', 'aaaaff', $cal, true, false, false);
+            $_tipo->createTipo($this->CAMBIO_GESTORE, 'Cambio Gestore', 'aaaaaa', $cal, false, false, false);
         }
         return $cal;
     }
@@ -116,6 +118,9 @@ trait SxCalendarController {
                     break;
                 case $this->CAMBIO_STATO_OPERATIVO:
                     $tipo = $_tipo->createTipo($this->CAMBIO_STATO_OPERATIVO, 'Cambio Stato Operativo', 'aaaaff', $cal, true, false, false);
+                    break;
+                case $this->CAMBIO_GESTORE:
+                    $tipo = $_tipo->createTipo($this->CAMBIO_GESTORE, 'Cambio Gestore', 'aaaaaa', $cal, false, false, false);
                     break;
             }
         }

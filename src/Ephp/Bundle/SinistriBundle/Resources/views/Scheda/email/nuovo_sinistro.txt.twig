@@ -1,0 +1,8 @@
+{% set titolo = 'Sinistro '~scheda.claimant~' ('~scheda~') assegnato a '~gestore.nome %}
+
+*{{titolo}}*
+
+{% if scheda.eventi|length > 0 %}
+| # | * | Data | Titolo | Note |
+{% include 'EphpSinistriBundle:Scheda:email/nuovo_sinistro/tbody.txt.twig' %}
+{% endif %}
