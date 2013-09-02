@@ -446,7 +446,7 @@ class SchedaController extends Controller {
             $this->persist($scheda);
 
             $message = \Swift_Message::newInstance()
-                    ->setSubject("[JFCLAIMS] assegnazione sinistro {$scheda->getClaimant()} ($scheda)")
+                    ->setSubject("[JFCLAIMS] assegnazione sinistro $scheda")
                     ->setFrom($this->container->getParameter('email_robot'))
                     ->setTo(trim($gestore->getEmail()))
                     ->setReplyTo($this->container->getParameter('email_robot'), "No-Reply")

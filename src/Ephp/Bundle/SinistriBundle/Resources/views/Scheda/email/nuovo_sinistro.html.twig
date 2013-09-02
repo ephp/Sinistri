@@ -1,10 +1,10 @@
 {% extends '::email.html.twig' %}
-{% set titolo = 'Sinistro '~scheda.claimant~' ('~scheda~') assegnato a '~gestore.nome %}
+{% set titolo = 'Sinistro '~scheda~' assegnato a '~gestore.nome %}
 
 {% block content %}
 <h1>{{titolo}}</h1>
 
-{% if entity|length > 0 %}
+{% if scheda.eventi|length > 0 %}
     <table class="records_list">
         <thead>
             <tr>
@@ -21,6 +21,6 @@
     </table>
 {% endif %}
 
-<a href="{{ url('tabellone_show', {'id': entity.scheda.id}) }}">Apri scheda sinistro</a>
+<a href="{{ url('tabellone_show', {'id': scheda.id}) }}">Apri scheda sinistro</a>
 
 {% endblock %}
