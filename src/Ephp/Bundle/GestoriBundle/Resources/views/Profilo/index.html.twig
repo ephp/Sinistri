@@ -9,7 +9,10 @@ Profilo
 <div id="tabs">
     <ul>
         {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-            <li><a href="#tabs-nr">Nuovi e riattivati</a></li>
+            <li><a href="#tabs-nn">Nuovi</a></li>
+        {% endif %}
+        {% if app.user.hasRole('ROLE_ADMIN') and riattivate|length > 0 %}
+            <li><a href="#tabs-rr">Riattivati</a></li>
         {% endif %}
         {% if prima_pagina|length > 0 %}
             <li><a href="#tabs-pp">Prima pagina</a></li>
@@ -24,20 +27,23 @@ Profilo
         {% endfor%}
     </ul>
 {% if app.user.hasRole('ROLE_ADMIN') and nuove|length > 0 %}
-    <div id="tabs-nr" style="display: none">
+    <div id="tabs-nn" style="display: none">
         {% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': nuove} %}
+    </div>
+{% endif %}
+{% if app.user.hasRole('ROLE_ADMIN') and riattivate|length > 0 %}
+    <div id="tabs-rr" style="display: none">
+        {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': riattivate} %}
     </div>
 {% endif %}
 {% if prima_pagina|length > 0 %}
     <div id="tabs-pp" style="display: none">
         {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': prima_pagina} %}
-        {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': prima_pagina} %#}
     </div>
 {% endif %}
 {% if attenzione|length > 0 %}
     <div id="tabs-i" style="display: none">
         {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': attenzione} %}
-        {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attenzione} %#}
     </div>
 {% endif %}
 {% for tab in tabs %}
@@ -46,12 +52,10 @@ Profilo
             {% if attribute(private, tab.id)|length > 0 %}
                 <h3>Personali</h3>
                 {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': attribute(private, tab.id)} %}
-                {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(private, tab.id)} %#}
             {% endif %}
             {% if attribute(pubbliche, tab.id)|length > 0 %}
                 <h3>Tutte</h3>
                 {% include 'EphpSinistriBundle:Scheda:index/table.html.twig' with {'entities': attribute(pubbliche, tab.id)} %}
-                {#% include 'EphpGestoriBundle:Profilo:index/schede.html.twig' with {'entities': attribute(pubbliche, tab.id), 'gest': true} %#}
             {% endif %}
         </div>
     {% endif %}

@@ -32,13 +32,16 @@ class ProfiloController extends Controller {
             $this->findOneBy('EphpSinistriBundle:Priorita', array('priorita' => 'alta'))->getId(),
             $this->findOneBy('EphpSinistriBundle:Priorita', array('priorita' => 'assegnato'))->getId(),
         );
-        $priorita_adm = array(
+        $priorita_new = array(
             $this->findOneBy('EphpSinistriBundle:Priorita', array('priorita' => 'nuovo'))->getId(),
+        );
+        $priorita_rea = array(
             $this->findOneBy('EphpSinistriBundle:Priorita', array('priorita' => 'riattivato'))->getId(),
         );
         $prima_pagina = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'prima_pagina' => true), array('claimant' => 'ASC'));
         $attenzione = $this->findBy('EphpSinistriBundle:Scheda', array('gestore' => $gestore->getId(), 'priorita' => $priorita), array('claimant' => 'ASC'));
-        $nuove = $this->findBy('EphpSinistriBundle:Scheda', array('priorita' => $priorita_adm), array('claimant' => 'ASC'));
+        $nuove = $this->findBy('EphpSinistriBundle:Scheda', array('priorita' => $priorita_new), array('claimant' => 'ASC'));
+        $riattivate = $this->findBy('EphpSinistriBundle:Scheda', array('priorita' => $priorita_rea), array('claimant' => 'ASC'));
 
         $tabs = $this->findBy('EphpSinistriBundle:StatoOperativo', array('tab' => true));
         $private = $pubbliche = array();
@@ -69,6 +72,7 @@ class ProfiloController extends Controller {
             'prima_pagina' => $prima_pagina,
             'attenzione' => $attenzione,
             'nuove' => $nuove,
+            'riattivate' => $riattivate,
             'priorita' => $prioritas,
             'stati_operativi' => $stati_operativi,
             'gestori' => $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC')),
