@@ -256,7 +256,7 @@ class CronController extends Controller {
     }
 
     private function notificaTpa(\Ephp\Bundle\SinistriBundle\Entity\Scheda $scheda, \Ephp\Bundle\SinistriBundle\Entity\Evento $evento) {
-        if ($scheda->getGestore()) {
+        if (false && $scheda->getGestore()) {
             $message = \Swift_Message::newInstance()
                     ->setSubject("[NS] Nuova nota nella scheda " . $scheda)
                     ->setFrom($this->container->getParameter('email_robot'))
