@@ -377,7 +377,13 @@ class SchedaController extends Controller {
             throw $this->createNotFoundException('Unable to find Scheda entity.');
         }
 
-        if (count($entity->getEventi()) == 0) {
+        if ($this->countSql('cal_eventi e, 
+                             cal_eventi_sx es, 
+                             cal_tipi t 
+                       WHERE es.id = e.id
+                         AND e.tipo_id = t.id
+                         AND es.scheda_id = :scheda
+                         AND t.sigla = :sigla', array('scheda' => $entity->getId(), 'sigla' => 'ASC')) == 0) {
             try {
                 $em->beginTransaction();
                 $cal = $this->getCalendar();

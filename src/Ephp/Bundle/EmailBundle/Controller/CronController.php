@@ -256,15 +256,17 @@ class CronController extends Controller {
     }
 
     private function notificaTpa(\Ephp\Bundle\SinistriBundle\Entity\Scheda $scheda, \Ephp\Bundle\SinistriBundle\Entity\Evento $evento) {
-        $message = \Swift_Message::newInstance()
-                ->setSubject("[NS] Nuova nota nella scheda " . $scheda)
-                ->setFrom($this->container->getParameter('email_robot'))
-                ->setTo(trim($scheda->getGestore()->getEmail()))
-                ->setBody($this->renderView("EphpEmailBundle:email:notifica_tpa.txt.twig", array('scheda' => $scheda, 'evento' => $evento)))
-                ->addPart($this->renderView("EphpEmailBundle:email:notifica_tpa.html.twig", array('scheda' => $scheda, 'evento' => $evento)), 'text/html');
-        ;
-        $message->getHeaders()->addTextHeader('X-Mailer', 'PHP v' . phpversion());
-        $this->get('mailer')->send($message);
+        if ($scheda->getGestore()) {
+            $message = \Swift_Message::newInstance()
+                    ->setSubject("[NS] Nuova nota nella scheda " . $scheda)
+                    ->setFrom($this->container->getParameter('email_robot'))
+                    ->setTo(trim($scheda->getGestore()->getEmail()))
+                    ->setBody($this->renderView("EphpEmailBundle:email:notifica_tpa.txt.twig", array('scheda' => $scheda, 'evento' => $evento)))
+                    ->addPart($this->renderView("EphpEmailBundle:email:notifica_tpa.html.twig", array('scheda' => $scheda, 'evento' => $evento)), 'text/html');
+            ;
+            $message->getHeaders()->addTextHeader('X-Mailer', 'PHP v' . phpversion());
+            $this->get('mailer')->send($message);
+        }
     }
 
     const CLAIMANT_CONTEC = "Contec";
