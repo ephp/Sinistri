@@ -271,7 +271,7 @@ class CronController extends Controller {
 
     const CLAIMANT_CONTEC = "Contec";
     const CLAIMANT_RAVINALE = "Ravinale";
-    const CLAIMANT_TUTTI = array("Contec", "Ravinale");
+    const CLAIMANT_TUTTI = 'ALL';
 
     private function findScheda(\Ephp\ImapBundle\Entity\Body $body, $claimant = null) {
         $subject = $body->getSubject();
@@ -294,8 +294,8 @@ class CronController extends Controller {
             return $scheda;
         }
         if ($claimant) {
-            if (!is_array($claimant)) {
-                $claimant = array($claimant);
+            if ($claimant == self::CLAIMANT_TUTTI) {
+                $claimant = array(self::CLAIMANT_CONTEC, self::CLAIMANT_RAVINALE);
             }
             $claimants = $claimant;
             foreach ($claimants as $claimant) {
