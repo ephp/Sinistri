@@ -271,7 +271,7 @@ class CronController extends Controller {
 
     const CLAIMANT_CONTEC = "Contec";
     const CLAIMANT_RAVINALE = "Ravinale";
-    const CLAIMANT_TUTTI = true;
+    const CLAIMANT_TUTTI = array("Contec", "Ravinale");
 
     private function findScheda(\Ephp\ImapBundle\Entity\Body $body, $claimant = null) {
         $subject = $body->getSubject();
@@ -294,20 +294,26 @@ class CronController extends Controller {
             return $scheda;
         }
         if ($claimant) {
-            $nomi = $this->getRepository('EphpSinistriBundle:Scheda')->nomi($claimant);
-            $regexp = '/(' . implode('|', $nomi) . ')/i';
-            $tpa = null;
-            preg_match($regexp, $subject, $tpa);
-            if (!$tpa) {
-                $txt = $body->getTxt();
-                preg_match($regexp, $txt, $tpa);
+            if (!is_array($claimant)) {
+                $claimant = array($claimant);
             }
-            if (isset($tpa[0])) {
-                $schede = $this->findBy('EphpSinistriBundle:Scheda', array('claimant' => $tpa[0]));
-                if (count($schede) == 1) {
-                    return $schede[0];
+            $claimants = $claimant;
+            foreach ($claimants as $claimant) {
+                $nomi = $this->getRepository('EphpSinistriBundle:Scheda')->nomi($claimant);
+                $regexp = '/(' . implode('|', $nomi) . ')/i';
+                $tpa = null;
+                preg_match($regexp, $subject, $tpa);
+                if (!$tpa) {
+                    $txt = $body->getTxt();
+                    preg_match($regexp, $txt, $tpa);
                 }
-                return $schede;
+                if (isset($tpa[0])) {
+                    $schede = $this->findBy('EphpSinistriBundle:Scheda', array('claimant' => $tpa[0]));
+                    if (count($schede) == 1) {
+                        return $schede[0];
+                    }
+                    return $schede;
+                }
             }
         }
         return null;
