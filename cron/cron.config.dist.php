@@ -35,17 +35,21 @@ $imap = array(
     'prod' => array(
         'countdown' => '/email/countdown-cron',
         'risposte'  => '/email/risposte-cron',
+        'tpa'       => '/email/tpa-cron',
     ),
     'params' => array(
         'countdown' => array(),
         'risposte'  => array(),
+        'tpa'       => array(),
     ),
     'semafori' => array(
         'countdown' => 'countdown',
         'risposte'  => 'risposte',
+        'tpa'       => 'tpa',
     ),
     'log' => array(
         'countdown' => 'countdown',
         'risposte'  => 'risposte',
+        'tpa'       => 'tpa',
     ),
 );
