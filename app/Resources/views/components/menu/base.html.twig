@@ -1,7 +1,7 @@
 {% if app.user %}
     <ul class="menu">
         <li><a href="{{ path('profilo') }}">Profilo</a></li>
-        {% if app.user.hasRole('ROLE_GEST') or app.user.hasRole('ROLE_ADMIN') %}
+        {% if false and (app.user.hasRole('ROLE_GEST') or app.user.hasRole('ROLE_ADMIN')) %}
             <li><a href="{{ path('ritardi') }}">Ritardi</a></li>
         {% endif %}
         <li><a href="{{ path('countdown') }}">Countdown</a></li>

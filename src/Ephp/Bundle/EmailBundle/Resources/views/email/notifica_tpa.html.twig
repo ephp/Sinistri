@@ -1,0 +1,26 @@
+{% extends '::email_vuota.html.twig' %}
+{% set titolo = 'Nuova nota nella scheda '~scheda %}
+
+{% block content %}
+<div>
+    <h1>{{ titolo }}</h1>
+    {{ testo|nl2br }}
+    <br/>
+    <table class="records_list">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>&nbsp;</th>
+            <th>Data</th>
+            <th>Tpa</th>
+            <th>Claimant</th>
+            <th>Titolo</th>
+            <th>Note</th>
+        </tr>
+    </thead>
+    <tbody id="tb_container">
+        {% include 'EphpSinistriBundle:Calendar:email/agenda_giornaliera/tbody.html.twig' with {'entities': [evento]} %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

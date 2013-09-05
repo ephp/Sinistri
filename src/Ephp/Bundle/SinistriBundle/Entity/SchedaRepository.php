@@ -97,7 +97,11 @@ class SchedaRepository extends EntityRepository {
             $params['id'] = $gestore_id;
         }
         $stmt = $connection->executeQuery($q, $params);
-        return $stmt->fetchAll();
+        $out = $stmt->fetchAll();
+        foreach($out as $i => $row) {
+            $out[$i]['entity'] = $this->find($row['id']);
+        }
+        return $out;
     }
 
     public function nomi($tpa) {

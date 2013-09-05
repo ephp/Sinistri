@@ -14,28 +14,20 @@ Profilo
         {% endif %}
     </ul>
 <div id="tabs-r" style="display: none">
-    {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': miei_ritardi} %}
+    {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': miei_ritardi, 'gestore': true} %}
 </div>
 {% if app.user.hasRole('ROLE_ADMIN') %}
     <div id="tabs-ru" style="display: none">
-        {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': tutti_ritardi, 'gest': true} %}
+        {% include 'EphpGestoriBundle:Profilo:index/ritardi.html.twig' with {'entities': tutti_ritardi, 'gestore': false} %}
     </div>
 {% endif %}
 
-<div style="display: none" id="fb_assegna_gestore">
-    <form id="assegna_gestore_scheda">
-        <li>Assegna il gestore a <span id="assegna_gestore_a"></span></a></li>
-        <div style="clear: both"></div>
-        <select name="scheda[gestore]" id="scheda_gestore">
-            <option value="">Nessuno</option>
-            {% for ges in gestori %}
-                <option value="{{ ges.sigla }}">{{ges.nome}}</option>
-            {% endfor %}
-        </select>
-        <input type="hidden" name="scheda[id]" id="scheda_id" value="" />    
-        <button type="button" onclick="assegnaGestore()">Assegna</button>
-    </form>
-</div>
+{% include 'EphpSinistriBundle:Scheda:index/assegna_gestore.html.twig' %}
+{% include 'EphpSinistriBundle:Scheda:index/cambia_priorita.html.twig' %}
+{% include 'EphpSinistriBundle:Scheda:index/cambia_stato_operativo.html.twig' %}
+
+{% include 'EphpSinistriBundle:Scheda:index/table.js.html.twig' %}
+
 
 <script type="text/javascript">
     $(function() {

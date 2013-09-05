@@ -25,7 +25,6 @@ class ProfiloController extends Controller {
      * @Template()
      */
     public function indexAction() {
-
         $gestore = $this->getUser();
         $priorita = array(
             $this->findOneBy('EphpSinistriBundle:Priorita', array('priorita' => 'attenzione'))->getId(),
@@ -91,11 +90,17 @@ class ProfiloController extends Controller {
         $miei_ritardi = $this->getRepository('EphpSinistriBundle:Scheda')->ritardi($gestore->getId());
         $tutti_ritardi = $this->getRepository('EphpSinistriBundle:Scheda')->ritardi();
 
+        $gestori = $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC'));
+        $priorita = $this->findBy('EphpSinistriBundle:Priorita', array());
+        $stati_operativi = $this->findBy('EphpSinistriBundle:StatoOperativo', array());
+        
         return array(
             'gestore' => $gestore,
             'miei_ritardi' => $miei_ritardi,
             'tutti_ritardi' => $tutti_ritardi,
-            'gestori' => $this->findBy('EphpGestoriBundle:Gestore', array(), array('sigla' => 'ASC')),
+            'gestori' => $gestori,
+            'priorita' => $priorita,
+            'stati_operativi' => $stati_operativi,
         );
     }
 

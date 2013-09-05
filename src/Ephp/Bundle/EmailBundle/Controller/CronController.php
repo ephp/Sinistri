@@ -160,11 +160,13 @@ class CronController extends Controller {
                             $evento = $this->newEvento($this->EMAIL_JWEB, $scheda, $body->getSubject(), $body->getTxt());
                             $evento->setDataOra($body->getHeader()->getDate());
                             $this->persist($evento);
+                            $this->notificaTpa($scheda, $evento);
                         }
                     } else {
                         $evento = $this->newEvento($this->EMAIL_JWEB, $scheda, $body->getSubject(), $body->getTxt());
                         $evento->setDataOra($body->getHeader()->getDate());
                         $this->persist($evento);
+                        $this->notificaTpa($scheda, $evento);
                     }
                 }
                 $this->getEm()->commit();
@@ -194,11 +196,13 @@ class CronController extends Controller {
                             $evento = $this->newEvento($this->EMAIL_RAVINALE, $scheda, $body->getSubject(), $body->getTxt());
                             $evento->setDataOra($body->getHeader()->getDate());
                             $this->persist($evento);
+                            $this->notificaTpa($scheda, $evento);
                         }
                     } else {
                         $evento = $this->newEvento($this->EMAIL_RAVINALE, $scheda, $body->getSubject(), $body->getTxt());
                         $evento->setDataOra($body->getHeader()->getDate());
                         $this->persist($evento);
+                        $this->notificaTpa($scheda, $evento);
                     }
                 }
                 $this->getEm()->commit();
@@ -228,11 +232,13 @@ class CronController extends Controller {
                             $evento = $this->newEvento($this->EMAIL_MANUALE, $scheda, $body->getSubject(), $body->getTxt());
                             $evento->setDataOra($body->getHeader()->getDate());
                             $this->persist($evento);
+                            $this->notificaTpa($scheda, $evento);
                         }
                     } else {
                         $evento = $this->newEvento($this->EMAIL_MANUALE, $scheda, $body->getSubject(), $body->getTxt());
                         $evento->setDataOra($body->getHeader()->getDate());
                         $this->persist($evento);
+                        $this->notificaTpa($scheda, $evento);
                     }
                 }
                 $this->getEm()->commit();
@@ -247,6 +253,18 @@ class CronController extends Controller {
         $this->closeImap();
 
         return new \Symfony\Component\HttpFoundation\Response(json_encode($out));
+    }
+
+    private function notificaTpa(\Ephp\Bundle\SinistriBundle\Entity\Scheda $scheda, \Ephp\Bundle\SinistriBundle\Entity\Evento $evento) {
+        $message = \Swift_Message::newInstance()
+                ->setSubject("[NS] Nuova nota nella scheda " . $scheda)
+                ->setFrom($this->container->getParameter('email_robot'))
+                ->setTo(trim($scheda->getGestore()->getEmail()))
+                ->setBody($this->renderView("EphpEmailBundle:email:notifica_tpa.txt.twig", array('scheda' => $scheda, 'evento' => $evento)))
+                ->addPart($this->renderView("EphpEmailBundle:email:notifica_tpa.html.twig", array('scheda' => $scheda, 'evento' => $evento)), 'text/html');
+        ;
+        $message->getHeaders()->addTextHeader('X-Mailer', 'PHP v' . phpversion());
+        $this->get('mailer')->send($message);
     }
 
     const CLAIMANT_CONTEC = "Contec";
@@ -267,7 +285,7 @@ class CronController extends Controller {
                 $token = array_merge(explode('-', $token[0]), array($token[1]));
             }
             $ospedale = $this->findOneBy('EphpSinistriBundle:Ospedale', array('sigla' => $token[0]));
-            if(!$ospedale) {
+            if (!$ospedale) {
                 return null;
             }
             $scheda = $this->findOneBy('EphpSinistriBundle:Scheda', array('ospedale' => $ospedale->getId(), 'anno' => $token[1], 'tpa' => $token[2]));
