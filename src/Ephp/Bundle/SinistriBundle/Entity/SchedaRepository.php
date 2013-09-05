@@ -129,7 +129,7 @@ SELECT s.claimant
         $rows = $stmt->fetchAll();
         $out = array();
         foreach ($rows as $row) {
-            $out[] = str_replace('  ', ' ', $row['claimant']);
+            $out[] = trim(str_replace(array('  ', '+'), array(' ', ''), $row['claimant']));
         }
         return array_unique($out);
     }
