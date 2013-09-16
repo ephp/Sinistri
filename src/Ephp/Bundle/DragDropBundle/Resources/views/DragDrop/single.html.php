@@ -1,5 +1,4 @@
 <style type="text/css">
-    
     #<?php echo $id ?>row, #<?php echo $field ?>_tmb {
         border: 1px dashed #999;
         padding: 5px;
@@ -13,6 +12,7 @@
     }
     #<?php echo $id ?>row {
         background: url(/images/user_placeholder.jpg) no-repeat 5px 5px;
+        
     }
     #<?php echo $id ?>row:before {
         content: "Trascina quì il file";
@@ -20,8 +20,6 @@
         font-style: italic;
         color: #666;
     }
-    
-    
 </style>
 <?php
 // Questo DIV è quello che compare quando è stata caricata l'immagine
@@ -40,7 +38,9 @@
 
 <div class="row fileuploadrow <?php echo $id ?>_row rounded-5" id="<?php echo $id ?>row">
     <div class="fileupload-buttonbar">
-        <div class="progressbar fileupload-progressbar absolute" style="width: 140px; top: 0px; right: -150px;"><div style="width:0%;"></div></div>
+        <div class="progressbar fileupload-progressbar absolute" style="width: 140px; top: 0px; right: -150px;">
+            <div style="width:0%;"></div>
+        </div>
         <input type="hidden" name="d" value="<?php echo $dir ?>">
         <input type="hidden" name="x" value="<?php echo $x ?>">
         <input type="hidden" name="y" value="<?php echo $y ?>">
@@ -105,6 +105,7 @@
     {% } %}
 </script>
 <script type="text/javascript">  
+    
     var drag_drop_form_id = '';
     $('#<?php echo $field ?>_delete').<?php echo $value ? 'show' : 'hide' ?>();
     $('.<?php echo $id ?>_row').<?php echo $value ? 'hide' : 'show' ?>();

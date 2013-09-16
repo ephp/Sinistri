@@ -144,6 +144,7 @@ class CronController extends Controller {
             'email' => 0,
             'email_subjects' => array(),
         );
+
         $this->openImap(null, null, null, null, null, 'Contec');
         $n = $this->countMessages();
         $out['contec'] = $n;
@@ -286,7 +287,7 @@ class CronController extends Controller {
             if (count($token) == 2) {
                 $token = array_merge(explode('-', $token[0]), array($token[1]));
             }
-            $ospedale = $this->findOneBy('EphpSinistriBundle:Ospedale', array('sigla' => $token[0]));
+            $ospedale = $this->findOneBy('EphpSinistriBundle:Ospedale', array('sigla' => str_replace(array('TPA ', 'tpa ', 'REQ ', 'req '), array('', '', '', '' ), $token[0])));
             if (!$ospedale) {
                 return null;
             }
