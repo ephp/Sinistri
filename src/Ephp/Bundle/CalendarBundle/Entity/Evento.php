@@ -131,7 +131,7 @@ abstract class Evento
     /**
      * Get tipo
      *
-     * @return integer 
+     * @return Tipo 
      */
     public function getTipo()
     {
